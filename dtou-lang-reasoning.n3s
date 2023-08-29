@@ -1,0 +1,459 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix : <http://example.org/ns#>.
+
+######
+# Reasoning rules
+######
+
+# RelatedDataAppInput
+(_:usage _:data _:app _:input _:ai _:u) log:onNegativeSurface {
+	_:usage a :UsageContext;
+		:app _:ai.
+	_:ai :policy _:app.
+	_:app a :AppPolicy;
+		:input_spec _:input.
+	_:data a :Data;
+		:uri _:u.
+	_:input :data _:u.
+
+	() log:onNegativeSurface {
+		_:m a :RelatedDataAppInput;
+			:usage _:usage;
+			:data _:data;
+			:app _:app;
+			:input _:input.
+	}.
+}.
+
+# InputPolicyForOutput
+(_:q _:data _:input _:app _:output_spec _:inputPort _:policy) log:onNegativeSurface {
+	_:q a :RelatedDataAppInput;
+		:data _:data;
+		:input _:input;
+		:app _:app.
+
+	_:app :output_spec _:output_spec.
+	_:output_spec :from _:inputPort.
+	_:input :port _:inputPort.
+	_:data :policy _:policy.
+
+	() log:onNegativeSurface {
+		_:m a :InputPolicyForOutput;
+			:input _:input;
+			:policy _:policy;
+			:output_spec _:output_spec.
+	}.
+}.
+
+# DeletedAttribute
+(_:attr _:N _:AT _:V _:input _:inputPort _:output_spec _:re _:filter) log:onNegativeSurface {
+	_:attr a :Attribute;
+		:name _:N;
+		:class _:AT;
+		:value _:V.
+	_:input a :InputSpec;
+		:port _:inputPort.
+
+		_:output_spec a :OutputSpec;
+			:refinement _:re.
+		_:re a :Delete;
+			:filter _:filter.
+		_:filter a :Filter.
+		# TODO: Fix filter for "any" filtering target value; example works because all attributes are deleted. Maybe using subclass, because we are using N3 and that's easy to support?
+#		_:filter a :Filter;
+#			:input _:inputPort;
+#			:name _:N;
+#			:class _:AT;
+#			:value _:V.
+
+	() log:onNegativeSurface {
+		_:m a :DeletedAttribute;
+			:attribute _:attr;
+			:output _:output_spec.
+	}.
+}.
+
+# UnsatisfiedRequirement
+(_:x _:data _:input _:policy _:requirement _:T _:N) log:onNegativeSurface {
+	_:x a :RelatedDataAppInput;
+		:data _:data;
+		:input _:input.
+
+	_:data :policy _:policy.
+	_:policy :requirement _:requirement.
+	_:requirement
+		:type _:T;
+		:name _:N.
+
+    # # Won't work, because RDF Surfaces hold open world asumption, and negation/negative surface is also in this sense... Patrick suggested using N3's scoped negation instead, as shown below.
+	# (_:provide) log:onNegativeSurface {
+	# 	_:input :provide _:provide.
+	# 	_:provide
+	# 		:type _:T;
+	# 		:name _:N.
+	# }.
+    (_:provide _:scope) log:onPositiveSurface {
+        ( () { _:input :provide _:provide. _:provide :type _:T; :name _:N} ()) log:collectAllIn _:scope.
+    }.
+
+	() log:onNegativeSurface {
+		_:m a :UnsatisfiedRequirement;
+            :input _:input;
+            :data _:data;
+			:type _:T;
+			:name _:N.
+
+	}.
+}.
+
+# UnmatchedExpectation
+(_:x _:input _:data _:expect _:T _:N) log:onNegativeSurface {
+    _:x a :RelatedDataAppInput;
+        :input _:input;
+        :data _:data.
+    _:input :expect _:expect.
+    _:expect
+        :type _:T;
+        :name _:N.
+    (_:policy _:tag _:scope) log:onPositiveSurface {
+        ( () {
+            _:data :policy _:policy.
+            _:policy :tag _:tag.
+            _:tag
+                :type _:T;
+                :name _:N.
+            } ()) log:collectAllIn _:scope.
+    }.
+
+    () log:onNegativeSurface {
+        _:m a :UnmatchedExpectation;
+            :input _:input;
+            :data _:data;
+            :type _:T;
+            :name _:N.
+    }.
+}.
+
+# ProhibitedUse
+# TODO: needs verification
+(_:x _:data _:app _:input _:ds _:N _:P _:policy _:prohibition _:ac _:ds) log:onNegativeSurface {
+	_:x a :RelatedDataAppInput;
+		:data _:data;
+		:app _:app;
+		:input _:input.
+	
+	_:data :policy _:policy.
+	_:policy :prohibition _:prohibition.
+	_:prohibition
+		:mode :Use;
+		:activation_condition _:ac.
+	_:ac
+		:app _:N;
+		:purpose _:P.
+
+	() log:onNegativeSurface {
+		() log:onNegativeSurface {
+			_:app :name _:N.
+			_:input :purpose _:P.
+		}.
+		() log:onNegativeSurface {
+			_:input :downsteram _:ds.
+			_:ds
+				:app_name _:N;
+				:purpose _:P.
+		}.
+	}.
+
+	() log:onNegativeSurface {
+		_:m a :ProhibitedUse;
+			:mode :Use;
+			:app _:N;
+			:purpose _:P.
+	}.
+}.
+
+:UnsatisfiedRequirement rdfs:subClassOf :Conflict.
+:UnmatchedExpectation rdfs:subClassOf :Conflict.
+:ProhibitedUse rdfs:subClassOf :Conflict.
+
+### Conflict
+## Not used. Use subclass instead. Kept here for historical reference.
+## Will create duplicates. Not useful. See below.
+# (_:T _:N _:ur _:ue _:pu _:M _:App) log:onNegativeSurface {
+# 	() log:onNegativeSurface {
+# 		() log:onNegativeSurface {
+# 			_:ur a :UnsatisfiedRequirement;
+# 				:type _:T;
+# 				:name _:N.
+# 		}.
+
+# 		() log:onNegativeSurface {
+# 			_:ue a :UnmatchedExpectation;
+# 				:type _:T;
+# 				:name _:N.
+# 		}.
+
+# 		() log:onNegativeSurface {
+# 			_:pu a :ProhibitedUse;
+# 				:mode _:M;
+# 				:app _:App;
+# 				:purpose _:P.
+# 		}.
+# 	}.
+
+# 	() log:onNegativeSurface {
+# 		_:m a :Conflict;
+# 			:unsatisfiedRequirement _:ur;
+# 			:unmatchedExpectation _:ue;
+# 			:prohibitedUse _:pu.
+
+# 	}.
+# }.
+
+## Won't reuse the same _:m.
+# (_:m) log:onPositiveSurface {
+# 	(_:ur _:T _:N) log:onNegativeSurface {
+# 		_:ur a :UnsatisfiedRequirement;
+# 			:type _:T;
+# 			:name _:N.
+
+# 		() log:onNegativeSurface {
+# 			_:m a :Conflict;
+# 				:unsatisfiedRequirement _:ur.
+
+# 		}.
+# 	}.
+# 	(_:ue _:T _:N) log:onNegativeSurface {
+# 		_:ue a :UnmatchedExpectation;
+# 			:type _:T;
+# 			:name _:N.
+
+# 		() log:onNegativeSurface {
+# 			_:m a :Conflict;
+# 				:unmatchedExpectation _:ue.
+# 		}
+# 	}
+# }.
+
+# ActivatedObligation
+(_:x _:usage _:data _:app _:input _:policy _:obligation _:ob _:args _:ac _:P) log:onNegativeSurface {
+	_:x a :RelatedDataAppInput;
+		:usage _:usage;
+		:data _:data;
+		:app _:app;
+		:input _:input.
+	_:data :policy _:policy.
+	_:policy :obligation _:obligation.
+	_:obligation
+		:obligation_class _:ob;
+		:argument _:args;
+		:activation_condition _:ac.
+
+	# TODO: Support more general checks, particularly the "any".
+	# Currently it's correct without the "any" part.
+	_:ac
+		# :user _:U;
+		# :app _:N;
+		:purpose _:P.	
+	
+	# _:usage :user _:U.
+	# _:app :name _:N.
+	_:input :purpose _:P.
+
+	() log:onNegativeSurface {
+		_:m a :ActivatedObligation;
+			:purpose _:P;
+			:class _:ob;
+			:args _:args.
+	}.
+}.
+
+# OutputAttribute
+(_:x _:input _:policy _:output_spec _:P _:attr _:N _:T _:V _:T1 _:V1) log:onNegativeSurface {
+
+	_:x a :InputPolicyForOutput;
+		:input _:input;
+		:policy _:policy;
+		:output_spec _:output_spec.
+	_:output_spec :port _:P.
+
+	() log:onNegativeSurface {
+		() log:onNegativeSurface {
+			_:policy :attribute _:attr.
+			_:attr
+				:name _:N;
+				:class _:T;
+				:value _:V.
+
+			(_:y _:scope) log:onPositiveSurface {
+				(
+					()
+					{
+						_:y a :DeletedAttribute;
+							:attribute _:attr.
+					}
+					()
+				) log:collectAllIn _:scope.
+			}.
+
+		}.
+		() log:onNegativeSurface {  # This branch is not checked
+			_:policy :attribute _:attr.
+			_:attr
+				:name _:N;
+				:class _:T1;
+				:value _:V1.
+
+			_:input :port _:inputPort.
+			
+			_:output_spec :refinement _:refinement.
+			_:refinement :filter _:filter.
+			_:filter a :Edit;
+				:input _:inputPort;
+				:name _:N;
+				:class _:T1;
+				:value _:V1;
+				:new_class _:T;
+				:new_value _:V.
+		}.
+	}.
+
+	() log:onNegativeSurface {
+		_:m a :OutputAttribute;
+			:name _:N;
+			:class _:T;
+			:value _:V;
+			:port _:P.
+	}.
+}.
+
+# OutputTagging
+(_:x _:input _:policy _:output_spec _:P _:tagging _:T _:ar _:vb) log:onNegativeSurface {
+	_:x a :InputPolicyForOutput;
+		:input _:input;
+		:policy _:policy;
+		:output_spec _:output_spec.
+	_:output_spec :port _:P.
+	_:policy :tagging _:tagging.
+	_:tagging
+		:type _:T;
+		:attribute_ref _:ar.
+		# :validity_binding _:vb.  # TODO: add it in -- list member (or \forall), and optional
+
+	# ( _:scope2) log:onPositiveSurface {
+	# 	(
+	# 		?v
+	# 		{
+	# 			_:tagging :validity_binding ?v.
+	# 		}
+	# 		_:vb
+	# 	) log:collectAllIn _:scope2.
+	# }.
+
+	# (_:da _:at _:scope) log:onPositiveSurface {
+	# 	(
+	# 		()
+	# 		{
+	# 			_:da a :DeletedAttribute;
+	# 				:attribute _:at;
+	# 				:output _:output_spec.
+	# 			_:at list:in _:vb.
+	# 		}
+	# 		()
+	# 	) log:collectAllIn _:scope.
+	# }.
+	
+	# (_:scope) log:onPositiveSurface {
+	# 	{
+	# 		# Meaning: collect all deleted attribute
+	# 		(
+	# 			{
+	# 				_:y a :DeletedAttribute;
+	# 					:attribute _:ar.
+	# 			}
+	# 			()
+	# 		) log:forAllIn _:scope.
+	# 	}
+	# }.
+
+	# (_:scope) log:onPositiveSurface {
+	# 	(
+	# 		()
+	# 		{
+	# 			_:y a :DeletedAttribute;
+	# 				:attribute _:vb.
+	# 		}
+	# 		()
+	# 	) log:collectAllIn _:scope.
+	# }.
+
+	() log:onNegativeSurface {
+		_:m a :OutputTagging;
+			:type _:T;
+			:attribute_ref _:ar;
+			# :validity_binding _:vb;
+			:port _:P.
+		# (_:vb2) log:onNegativeSurface {
+		# 	_:tagging :validity_binding _:vb2.  # TODO: add it in -- list member (or \forall), and optional
+		# 	() log:onNegativeSurface {
+		# 		_:m :validity_binding _:vb2.
+		# 		_:xx a :OutputTagging;
+		# 			:tagging _:tagging;
+		# 			:validity_binding _:vb2;
+		# 			:hah :wow.
+		# 	}.
+		# }.
+	}.
+}.
+
+#OutputObligation
+(_:x _:input _:policy _:output_spec _:P _:ob _:OC _:args _:vb _:ac) log:onNegativeSurface {
+	_:x a :InputPolicyForOutput;
+		:input _:input;
+		:policy _:policy;
+		:output_spec _:output_spec.
+	_:output_spec :port _:P.
+	_:policy :obligation _:ob.
+	_:ob
+		:obligation_class _:OC;
+		:argument _:args;
+		# :validity_binding _:vb;
+		:activation_condition _:ac.
+	# TODO: Handle _:vb & any member of _:vb is not deleted
+
+	() log:onNegativeSurface {
+		_:m a :OutputObligation;
+			:obligation_class _:OC;
+			:argument _:args;
+			:validity_binding _:vb;
+			:activation_condition _:ac;
+			:port _:P.
+
+	}.
+}.
+
+#OutputProhibition
+(_:x _:input _:policy _:output_spec _:P _:pr _:M _:VB _:AC) log:onNegativeSurface {
+	_:x a :InputPolicyForOutput;
+		:input _:input;
+		:policy _:policy;
+		:output_spec _:output_spec.
+	_:output_spec :port _:P.
+	_:policy :prohibition _:pr.
+	# _:pr 
+	# 	:use_mode _:M;
+	# 	:validity_binding _:VB;
+	# 	:activation_condition _:AC.
+	
+	# TODO: VB is deleted.
+
+	() log:onNegativeSurface {
+		_:m a :OutputProhibition;
+			:mode _:M;
+			:validity_binding _:VB;
+			:activation_condition _:AC;
+			:port _:P.
+	}.
+}.

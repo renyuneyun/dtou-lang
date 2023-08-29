@@ -1,0 +1,54 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <http://example.org/ns#>.
+
+######
+# General rules for subclass, etc, like OWL.
+######
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+# rdfs:subClassOf
+(_:S _:C _:P _:p _:o) log:onNegativeSurface {
+	_:S a _:C.
+	_:C rdfs:subClassOf _:P.
+	() log:onNegativeSurface {
+		_:S a _:P.  # Class information
+	}.
+#	() log:onNegativeSurface {  # On a separate surface because Property may not exist for the superclass. Seems incorrect, so using the separated one below.
+#		_:P _:p _:o.
+#		_:p a rdfs:Property.
+#		() log:onNegativeSurface {
+#			_:S _:p _:o.  # Property inheritance
+#		}.
+#	}.
+}.
+(_:S _:C _:P _:p _:o) log:onNegativeSurface {
+	_:S a _:C.
+	_:C rdfs:subClassOf _:P.
+	_:P _:p _:o.
+	_:p a rdfs:Property.
+	() log:onNegativeSurface {
+		_:S _:p _:o.  # Property inheritance
+	}.
+}.
+
+# rdfs:subPropertyOf
+(_:S _:P0 _:P1 _:o) log:onNegativeSurface {
+	_:P1 rdfs:subPropertyOf _:P0.
+	_:S _:P1 _:o.
+	() log:onNegativeSurface {
+		_:S _:P0 _:o.
+	}
+
+}.
+
+# :sameAs
+(_:C1 _:C2) log:onNegativeSurface {
+	_:C1 :sameAs _:C2.
+	() log:onNegativeSurface {
+		_:C1 rdfs:subClassOf _:C2.
+		_:C2 rdfs:subClassOf _:C1.
+	}.
+}.

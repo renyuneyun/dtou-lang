@@ -1,0 +1,62 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <http://example.org/ns#>.
+
+######
+# Domain knowledge -- classes and class relations
+######
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Common
+
+:TaggingType a rdfs:Class.
+:TagType rdfs:subClassOf :TaggingType.
+:IntegrityType rdfs:subClassOf :TagType.
+:PurposeType rdfs:subClassOf :TagType.
+:RequirementType rdfs:subClassOf :TaggingType.
+:SecurityType rdfs:subClassOf :RequirementType.
+
+:type a rdfs:Property.
+
+:TagName :sameAs :AttributeClass.
+
+# Data Policy
+
+:Tagging a rdfs:Class.
+:Tag rdfs:subClassOf :Tagging.
+:Integrity rdfs:subClassOf :Tag;
+	rdfs:subClassOf [:type :IntegrityType].
+:Purpose rdfs:subClassOf :Tag;
+	rdfs:subClassOf [:type :PurposeType].
+:Requirement rdfs:subClassOf :Tagging.
+:Security rdfs:subClassOf :Requirement;
+	rdfs:subClassOf [:type :SecurityType].
+
+(_:tagging _:attr_ref _:C) log:onNegativeSurface {
+	_:tagging a :Tagging;
+		:attribute_ref _:attr_ref.
+	_:attr_ref
+		:class _:C.
+	() log:onNegativeSurface {
+		_:tagging :name _:C.
+	}.
+}.
+
+:tagging a rdfs:Property.
+:tag rdfs:subPropertyOf :tagging.
+:requirement rdfs:subPropertyOf :tagging.
+
+
+# App Policy
+
+:TaggingInfo a rdfs:Class.
+:TagExpectation rdfs:subClassOf :TaggingInfo.
+:PurposeExpectation rdfs:subClassOf :TagExpectation;
+	rdfs:subClassOf [:type :PurposeType].
+:IntegrityExpectation rdfs:subClassOf :TagExpectation;
+	rdfs:subClassOf [:type :IntegrityType].
+:RequirementProvide rdfs:subClassOf :TaggingInfo.
+:SecurityProvide rdfs:subClassOf :RequirementProvide;
+	rdfs:subClassOf [:type :SecurityType].

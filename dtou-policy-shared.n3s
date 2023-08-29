@@ -1,0 +1,15 @@
+:complete a :TagName.
+
+:ada-p a :AttributeName.
+:person a :AttributeClass.
+:ada a :Value.
+
+:sec-attr a :AttributeName.
+:secure a :AttributeClass.
+:nil a :Value.
+
+:per-attr a :AttributeName.
+:personal a :AttributeClass.
+
+:acknowledge a :ObligationClass.
+:research a :Purpose.

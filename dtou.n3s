@@ -1,0 +1,93 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <http://example.org/ns#>.
+
+######
+# Query
+######
+
+# # Works
+# (_:s _:p _:o) log:onQuerySurface {
+# 	_:s a :RelatedDataAppInput.
+# 	_:s _:p _:o.
+# }.
+
+# # Works
+# (_:s _:p _:o) log:onQuerySurface {
+# 	_:s a :InputPolicyForOutput.
+# 	_:s _:p _:o.
+# }.
+
+# # Works; with TODO
+# (_:s _:p _:o) log:onQuerySurface {
+# 	_:s a :DeletedAttribute.
+# 	_:s _:p _:o.
+# }.
+
+# # Works
+# (_:s _:p _:o) log:onQuerySurface {
+# 	_:s a :UnsatisfiedRequirement.
+# 	_:s _:p _:o.
+# }.
+
+# # Works
+# (_:s _:p _:o) log:onQuerySurface {
+# 	_:s a :UnmatchedExpectation.
+# 	_:s _:p _:o.
+# }.
+
+# # TODO: Does it work?
+# (_:s _:p _:o) log:onQuerySurface {
+# 	_:s a :ProhibitedUse.
+# 	_:s _:p _:o.
+# }.
+
+# # Works
+# (_:s _:p _:o) log:onQuerySurface {
+# 	_:s a :Conflict.
+# 	_:s _:p _:o.
+# }.
+
+# # Seems to work
+# (_:s _:p _:o) log:onQuerySurface {
+# 	_:s a :ActivatedObligation.
+# 	_:s _:p _:o.
+# }.
+
+# # Seems to work
+# (_:s _:p _:o) log:onQuerySurface {
+# 	_:s a :OutputAttribute.
+# 	_:s _:p _:o.
+# }.
+
+# # Seems to work
+(_:s _:p _:o) log:onQuerySurface {
+	_:s a :OutputTagging.
+	_:s _:p _:o.
+}.
+
+# # Seems to work
+# (_:s _:p _:o) log:onQuerySurface {
+# 	_:s a :OutputObligation.
+# 	_:s _:p _:o.
+# }.
+
+# Nothing in input to test
+(_:s _:p _:o) log:onQuerySurface {
+	_:s a :OutputProhibition.
+	_:s _:p _:o.
+}.
+
+
+# Test
+
+#(_:a _:b _:u _:p _:o) log:onQuerySurface {
+#	_:b a :RelatedDataAppInput.
+##	_:a a :RelatedDataAppInput;
+##		:data _:b.
+#	_:b _:p _:o.
+##	() log:onNegativeSurface {
+##		_:a = _:b.
+##	}.
+#	#_:a :sameData _:u.
+#}.

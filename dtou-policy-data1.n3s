@@ -1,0 +1,75 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <http://example.org/ns#>.
+
+######
+# Data Policy
+######
+
+:attr1 a :Attribute;
+	:name :ada-p;
+	:class :person;
+	:value :ada.
+
+:attr2 a :Attribute;
+	:name :test;
+	:class :testClass;
+	:value :testValue.
+
+:sec-attr1 a :Attribute;
+	:name :sec-attr;
+	:class :secure;
+	:value :nil.
+
+:per-attr1 a :Attribute;
+	:name :per-attr;
+	:class :personal;
+	:value :nil.
+
+:compl-attr1 a :Attribute;
+	:name :compl-attr;
+	:class :complete;
+	:value :nil.
+
+:sec-tag1 a :Security;
+	:attribute_ref :sec-attr1;
+	:validity_binding :attr1, :attr2.
+
+:per-tag1 a :Security;
+	:attribute_ref :per-attr1;
+	:validity_binding :attr1.
+
+:compl-tag1 a :Integrity;
+	:attribute_ref :compl-attr1.
+
+:ob1 a :Obligation;
+	:obligation_class :acknowledge;
+	:argument (:attr1);
+	:activation_condition [
+		:purpose :research
+	].
+
+:data1 a :Data;
+	:uri <https://ada.site/id>;
+	:policy :policy1.
+
+:policy1 a :DataPolicy;
+	:attribute :attr1, :sec-attr1, :per-attr1, :compl-attr1, :attr2;
+	:requirement :sec-tag1, :per-tag1;
+	# :tag :compl-tag1;
+	:obligation :ob1.
+
+:data2 a :Data;
+	:uri <https://ada.site/email>;
+	:policy :policy2.
+
+:policy2 a :DataPolicy;
+	:tag :any-purpose.
+
+:any-purpose a :Purpose;
+	:attribute_ref :any-purpose-attr1.
+
+:any-purpose-attr1 a :Attribute;
+	:name _:a;
+	:class :Purpose;
+	:value :nil.
