@@ -91,3 +91,8 @@
 ##	}.
 #	#_:a :sameData _:u.
 #}.
+
+(_:s _:p _:o) log:onQuerySurface {
+	_:s a :DebugOutput.
+	_:s _:p _:o.
+}.

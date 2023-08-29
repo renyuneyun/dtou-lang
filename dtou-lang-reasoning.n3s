@@ -62,11 +62,11 @@
 			:filter _:filter.
 		_:filter a :Filter.
 		# TODO: Fix filter for "any" filtering target value; example works because all attributes are deleted. Maybe using subclass, because we are using N3 and that's easy to support?
-#		_:filter a :Filter;
+		_:filter a :Filter;
 #			:input _:inputPort;
-#			:name _:N;
-#			:class _:AT;
-#			:value _:V.
+			:name _:N;
+			:class _:AT;
+			:value _:V.
 
 	() log:onNegativeSurface {
 		_:m a :DeletedAttribute;
@@ -330,7 +330,7 @@
 }.
 
 # OutputTagging
-(_:x _:input _:policy _:output_spec _:P _:tagging _:T _:ar _:vb) log:onNegativeSurface {
+(_:x _:input _:policy _:output_spec _:P _:tagging _:T _:ar _:vbs) log:onNegativeSurface {
 	_:x a :InputPolicyForOutput;
 		:input _:input;
 		:policy _:policy;
@@ -340,71 +340,36 @@
 	_:tagging
 		:type _:T;
 		:attribute_ref _:ar.
-		# :validity_binding _:vb.  # TODO: add it in -- list member (or \forall), and optional
 
-	# ( _:scope2) log:onPositiveSurface {
-	# 	(
-	# 		?v
-	# 		{
-	# 			_:tagging :validity_binding ?v.
-	# 		}
-	# 		_:vb
-	# 	) log:collectAllIn _:scope2.
-	# }.
+	( _:scope) log:onPositiveSurface {
+		(
+			?v
+			{
+				_:tagging :validity_binding ?v.
+			}
+			_:vbs
+		) log:collectAllIn _:scope.
+	}.
 
-	# (_:da _:at _:scope) log:onPositiveSurface {
-	# 	(
-	# 		()
-	# 		{
-	# 			_:da a :DeletedAttribute;
-	# 				:attribute _:at;
-	# 				:output _:output_spec.
-	# 			_:at list:in _:vb.
-	# 		}
-	# 		()
-	# 	) log:collectAllIn _:scope.
-	# }.
-	
-	# (_:scope) log:onPositiveSurface {
-	# 	{
-	# 		# Meaning: collect all deleted attribute
-	# 		(
-	# 			{
-	# 				_:y a :DeletedAttribute;
-	# 					:attribute _:ar.
-	# 			}
-	# 			()
-	# 		) log:forAllIn _:scope.
-	# 	}
-	# }.
-
-	# (_:scope) log:onPositiveSurface {
-	# 	(
-	# 		()
-	# 		{
-	# 			_:y a :DeletedAttribute;
-	# 				:attribute _:vb.
-	# 		}
-	# 		()
-	# 	) log:collectAllIn _:scope.
-	# }.
+	(_:scope) log:onPositiveSurface {
+		(
+			()
+			{
+				?da a :DeletedAttribute;
+					:output _:output_spec;
+					:attribute ?at.
+				?at list:in _:vbs.
+			}
+			()
+		) log:collectAllIn _:scope.
+	}.
 
 	() log:onNegativeSurface {
 		_:m a :OutputTagging;
 			:type _:T;
 			:attribute_ref _:ar;
-			# :validity_binding _:vb;
+			:validity_binding _:vbs;
 			:port _:P.
-		# (_:vb2) log:onNegativeSurface {
-		# 	_:tagging :validity_binding _:vb2.  # TODO: add it in -- list member (or \forall), and optional
-		# 	() log:onNegativeSurface {
-		# 		_:m :validity_binding _:vb2.
-		# 		_:xx a :OutputTagging;
-		# 			:tagging _:tagging;
-		# 			:validity_binding _:vb2;
-		# 			:hah :wow.
-		# 	}.
-		# }.
 	}.
 }.
 

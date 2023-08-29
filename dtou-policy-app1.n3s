@@ -87,6 +87,7 @@
 
 :re-delete-all a :Delete;
 	# :filter :filter-all.
+	# :filter :filter-ada-p.
 	:filter :filter-test.
 
 :filter-all a :Filter.
