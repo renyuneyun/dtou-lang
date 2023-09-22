@@ -1,3 +1,4 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix : <http://example.org/ns#>.
@@ -25,15 +26,28 @@
 # Data Policy
 
 :Tagging a rdfs:Class.
-:Tag rdfs:subClassOf :Tagging.
-:Integrity rdfs:subClassOf :Tag;
-	rdfs:subClassOf [:type :IntegrityType].
-:Purpose rdfs:subClassOf :Tag;
-	rdfs:subClassOf [:type :PurposeType].
-:Requirement rdfs:subClassOf :Tagging.
-:Security rdfs:subClassOf :Requirement;
-	rdfs:subClassOf [:type :SecurityType].
+:Tag :sameAs [
+	rdfs:subClassOf :Tagging;
+	rdfs:subClassOf [:type :TagType]
+].
+:Integrity :sameAs [
+	rdfs:subClassOf :Tag;
+	rdfs:subClassOf [:type :IntegrityType]
+].
+:Purpose :sameAs [
+	rdfs:subClassOf :Tag;
+	rdfs:subClassOf [:type :PurposeType]
+].
+:Requirement :sameAs [
+	rdfs:subClassOf :Tagging;
+	rdfs:subClassOf [:type :RequirementType]
+].
+:Security :sameAs [
+	rdfs:subClassOf :Requirement;
+	rdfs:subClassOf [:type :SecurityType]
+].
 
+## Assign :name to :Tagging, based on `:attribute_ref [:class]`
 (_:tagging _:attr_ref _:C) log:onNegativeSurface {
 	_:tagging a :Tagging;
 		:attribute_ref _:attr_ref.
@@ -41,6 +55,17 @@
 		:class _:C.
 	() log:onNegativeSurface {
 		_:tagging :name _:C.
+	}.
+}.
+
+# Propagate TaggingType tree
+(_:x _:type _:superType) log:onNegativeSurface {
+	_:x a :Tagging;
+		:type _:type.
+	_:type rdfs:subClassOf _:superType.
+
+	() log:onNegativeSurface {
+		_:x :type _:superType.
 	}.
 }.
 
