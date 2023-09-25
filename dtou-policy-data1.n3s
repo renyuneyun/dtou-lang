@@ -64,6 +64,7 @@
 	:policy :policy2.
 
 :policy2 a :DataPolicy;
+	:attribute :any-purpose-attr1;
 	:tag :any-purpose.
 
 :any-purpose a :Purpose;
