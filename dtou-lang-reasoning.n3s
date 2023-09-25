@@ -47,7 +47,7 @@
 	}.
 }.
 
-# DeletedAttribute
+# DeletedAttribute (now ForwardLink)
 (_:attr _:N _:AT _:V _:input _:inputPort _:output_spec _:re _:filter) log:onNegativeSurface {
 	_:attr a :Attribute;
 		:name _:N;
@@ -70,9 +70,11 @@
 			:value _:V.
 
 	() log:onNegativeSurface {
-		_:m a :DeletedAttribute;
-			:attribute _:attr;
-			:output _:output_spec.
+		_:mm a :ForwardLink;
+			:output_spec _:output_spec;
+			:ref :nil.
+		_:attr
+			:output_to _:mm.
 	}.
 }.
 
@@ -288,19 +290,20 @@
 				:class _:T;
 				:value _:V.
 
-			(_:y _:scope) log:onPositiveSurface {
+			(_:y _:context) log:onPositiveSurface {
 				(
 					()
 					{
-						_:y a :DeletedAttribute;
-							:attribute _:attr.
+						_:attr :output_to _:y.
+						_:y :output_spec _:output_spec;
+							:ref :nil.
 					}
 					()
-				) log:collectAllIn _:scope.
+				) log:collectAllIn (_:context 1).
 			}.
 
 		}.
-		() log:onNegativeSurface {  # This branch is not checked
+		() log:onNegativeSurface {  # This branch is not checked by me
 			_:policy :attribute _:attr.
 			_:attr
 				:name _:N;
@@ -322,11 +325,19 @@
 	}.
 
 	() log:onNegativeSurface {
-		_:m a :OutputAttribute;
+		_:m a :OutputAttribute, :Attribute;
 			:name _:N;
 			:class _:T;
 			:value _:V;
 			:port _:P.
+
+		_:mm a :ForwardLink;
+			:output_spec _:output_spec;
+			:ref _:m.
+
+		_:attr
+			:output_to _:mm;
+			:debug _:m.
 	}.
 }.
 
@@ -352,7 +363,7 @@
 }.
 
 # OutputTagging
-(_:x _:input _:policy _:output_spec _:P _:tagging _:T _:ar _:vbs) log:onNegativeSurface {
+(_:x _:input _:policy _:output_spec _:P _:tagging _:T _:ar _:link0 _:ar1 _:vbs) log:onNegativeSurface {
 	_:x a :InputPolicyForOutput;
 		:input _:input;
 		:policy _:policy;
@@ -364,24 +375,30 @@
 		:real_type _:T;
 		:attribute_ref _:ar.
 
-	( _:scope) log:onPositiveSurface {
+	_:ar :output_to _:link0.
+	_:link0 :output_spec _:output_spec;
+		:ref _:ar1.
+
+	_:ar1 log:notEqualTo :nil.
+
+	(_:v _:link _:v1 _:context) log:onPositiveSurface {
 		(
-			?v
+			_:v1
 			{
-				_:tagging :validity_binding ?v.
+				_:tagging :validity_binding _:v.
+				_:v :output_to _:link.
+				_:link :output_spec _:output_spec;
+					:ref _:v1.
 			}
 			_:vbs
-		) log:collectAllIn _:scope.
+		) log:collectAllIn (_:context 2).
 	}.
 
 	(_:scope) log:onPositiveSurface {
 		(
 			()
 			{
-				?da a :DeletedAttribute;
-					:output _:output_spec;
-					:attribute ?at.
-				?at list:in _:vbs.
+				:nil list:in _:vbs.
 			}
 			()
 		) log:collectAllIn _:scope.
@@ -390,9 +407,10 @@
 	() log:onNegativeSurface {
 		_:m a :OutputTagging;
 			:type _:T;
-			:attribute_ref _:ar;
+			:attribute_ref _:ar1;
 			:validity_binding _:vbs;
-			:port _:P.
+			:port _:P;
+			:from _:tagging.
 	}.
 }.
 
