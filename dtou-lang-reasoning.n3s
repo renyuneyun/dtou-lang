@@ -392,16 +392,13 @@
 			}
 			_:vbs
 		) log:collectAllIn (_:context 2).
-	}.
-
-	(_:scope) log:onPositiveSurface {
 		(
 			()
 			{
 				:nil list:in _:vbs.
 			}
 			()
-		) log:collectAllIn _:scope.
+		) log:collectAllIn (_:context 2).
 	}.
 
 	() log:onNegativeSurface {
@@ -440,16 +437,13 @@
 			}
 			_:args
 		) log:collectAllIn (_:context 2).
-	}.
-
-	(_:scope) log:onPositiveSurface {
 		(
 			()
 			{
 				:nil list:in _:args.
 			}
 			()
-		) log:collectAllIn _:scope.
+		) log:collectAllIn (_:context 2).
 	}.
 
 	(_:v _:link _:v1 _:context) log:onPositiveSurface {
@@ -463,16 +457,13 @@
 			}
 			_:vbs
 		) log:collectAllIn (_:context 2).
-	}.
-
-	(_:scope) log:onPositiveSurface {
 		(
 			()
 			{
 				:nil list:in _:vbs.
 			}
 			()
-		) log:collectAllIn _:scope.
+		) log:collectAllIn (_:context 2).
 	}.
 
 	() log:onNegativeSurface {
@@ -510,16 +501,13 @@
 			}
 			_:vbs
 		) log:collectAllIn (_:context 2).
-	}.
-
-	(_:scope) log:onPositiveSurface {
 		(
 			()
 			{
 				:nil list:in _:vbs.
 			}
 			()
-		) log:collectAllIn _:scope.
+		) log:collectAllIn (_:context 2).
 	}.
 
 	() log:onNegativeSurface {
