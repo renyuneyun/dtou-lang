@@ -415,7 +415,7 @@
 }.
 
 #OutputObligation
-(_:x _:input _:policy _:output_spec _:P _:ob _:OC _:args _:vb _:ac) log:onNegativeSurface {
+(_:x _:input _:policy _:output_spec _:P _:ob _:OC _:args _:vbs _:ac) log:onNegativeSurface {
 	_:x a :InputPolicyForOutput;
 		:input _:input;
 		:policy _:policy;
@@ -424,16 +424,62 @@
 	_:policy :obligation _:ob.
 	_:ob
 		:obligation_class _:OC;
-		:argument _:args;
+		# :argument _:args;
 		# :validity_binding _:vb;
 		:activation_condition _:ac.
-	# TODO: Handle _:vb & any member of _:vb is not deleted
+
+	(_:args0 _:v _:link _:v1 _:context) log:onPositiveSurface {
+		_:ob :argument _:args0.
+		(
+			_:v1
+			{
+				_:v list:in _:args0.
+				_:v :output_to _:link.
+				_:link :output_spec _:output_spec;
+					:ref _:v1.
+			}
+			_:args
+		) log:collectAllIn (_:context 2).
+	}.
+
+	(_:scope) log:onPositiveSurface {
+		(
+			()
+			{
+				:nil list:in _:args.
+			}
+			()
+		) log:collectAllIn _:scope.
+	}.
+
+	(_:v _:link _:v1 _:context) log:onPositiveSurface {
+		(
+			_:v1
+			{
+				_:ob :validity_binding _:v.
+				_:v :output_to _:link.
+				_:link :output_spec _:output_spec;
+					:ref _:v1.
+			}
+			_:vbs
+		) log:collectAllIn (_:context 2).
+	}.
+
+	(_:scope) log:onPositiveSurface {
+		(
+			()
+			{
+				:nil list:in _:vbs.
+			}
+			()
+		) log:collectAllIn _:scope.
+	}.
 
 	() log:onNegativeSurface {
 		_:m a :OutputObligation;
 			:obligation_class _:OC;
 			:argument _:args;
-			:validity_binding _:vb;
+			:validity_binding _:vbs;
 			:activation_condition _:ac;
 			:port _:P.
 
@@ -441,24 +487,45 @@
 }.
 
 #OutputProhibition
-(_:x _:input _:policy _:output_spec _:P _:pr _:M _:VB _:AC) log:onNegativeSurface {
+(_:x _:input _:policy _:output_spec _:P _:pr _:M _:vbs _:AC) log:onNegativeSurface {
 	_:x a :InputPolicyForOutput;
 		:input _:input;
 		:policy _:policy;
 		:output_spec _:output_spec.
 	_:output_spec :port _:P.
 	_:policy :prohibition _:pr.
-	# _:pr 
-	# 	:use_mode _:M;
-	# 	:validity_binding _:VB;
-	# 	:activation_condition _:AC.
+	_:pr
+		:use_mode _:M;
+		# :validity_binding _:VB;
+		:activation_condition _:AC.
 	
-	# TODO: VB is deleted.
+	(_:v _:link _:v1 _:context) log:onPositiveSurface {
+		(
+			_:v1
+			{
+				_:ob :validity_binding _:v.
+				_:v :output_to _:link.
+				_:link :output_spec _:output_spec;
+					:ref _:v1.
+			}
+			_:vbs
+		) log:collectAllIn (_:context 2).
+	}.
+
+	(_:scope) log:onPositiveSurface {
+		(
+			()
+			{
+				:nil list:in _:vbs.
+			}
+			()
+		) log:collectAllIn _:scope.
+	}.
 
 	() log:onNegativeSurface {
 		_:m a :OutputProhibition;
 			:mode _:M;
-			:validity_binding _:VB;
+			:validity_binding _:vbs;
 			:activation_condition _:AC;
 			:port _:P.
 	}.
