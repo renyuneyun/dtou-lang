@@ -405,9 +405,20 @@
 		_:m a :OutputTagging;
 			:type _:T;
 			:attribute_ref _:ar1;
-			:validity_binding _:vbs;
+			:validity_binding_list _:vbs;
 			:port _:P;
 			:from _:tagging.
+	}.
+}.
+
+(_:m _:vbs _:vb) log:onNegativeSurface {
+	_:m a :OutputTagging;
+		:validity_binding_list _:vbs.
+
+	_:vb list:in _:vbs.
+
+	() log:onNegativeSurface {
+		_:m :validity_binding _:vb.
 	}.
 }.
 
@@ -470,10 +481,21 @@
 		_:m a :OutputObligation;
 			:obligation_class _:OC;
 			:argument _:args;
-			:validity_binding _:vbs;
+			:validity_binding_list _:vbs;
 			:activation_condition _:ac;
 			:port _:P.
 
+	}.
+}.
+
+(_:ob _:vbs _:vb) log:onNegativeSurface {
+	_:ob a :OutputObligation;
+		:validity_binding_list _:vbs.
+
+	_:vb list:in _:vbs.
+
+	() log:onNegativeSurface {
+		_:ob :validity_binding _:vb.
 	}.
 }.
 
@@ -516,5 +538,16 @@
 			:validity_binding _:vbs;
 			:activation_condition _:AC;
 			:port _:P.
+	}.
+}.
+
+(_:pr _:vbs _:vb) log:onNegativeSurface {
+	_:pr a :OutputProhibition;
+		:validity_binding_list _:vbs.
+
+	_:vb list:in _:vbs.
+
+	() log:onNegativeSurface {
+		_:pr :validity_binding _:vb.
 	}.
 }.
