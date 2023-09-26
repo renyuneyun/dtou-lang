@@ -402,7 +402,7 @@
 	}.
 
 	() log:onNegativeSurface {
-		_:m a :OutputTagging;
+		_:m a :OutputTagging, :Tagging;
 			:type _:T;
 			:attribute_ref _:ar1;
 			:validity_binding_list _:vbs;
@@ -478,7 +478,7 @@
 	}.
 
 	() log:onNegativeSurface {
-		_:m a :OutputObligation;
+		_:m a :OutputObligation, :Obligation;
 			:obligation_class _:OC;
 			:argument _:args;
 			:validity_binding_list _:vbs;
@@ -533,7 +533,7 @@
 	}.
 
 	() log:onNegativeSurface {
-		_:m a :OutputProhibition;
+		_:m a :OutputProhibition, :Prohibition;
 			:mode _:M;
 			:validity_binding _:vbs;
 			:activation_condition _:AC;
@@ -549,5 +549,68 @@
 
 	() log:onNegativeSurface {
 		_:pr :validity_binding _:vb.
+	}.
+}.
+
+(_:o _:port) log:onNegativeSurface {
+	_:o a :OutputSpec;
+		:port _:port.
+	(_:x _:p) log:onNegativeSurface {
+		_:p a :OutputPolicy, :DataPolicy.
+		_:x a :OutputPolicyPair;
+			:port _:port;
+			:policy _:p.
+	}.
+}.
+
+(_:x _:port _:op _:a _:o _:p _:t) log:onNegativeSurface {
+	_:x a :OutputPolicyPair;
+		:port _:port;
+		:policy _:op.
+
+	_:a a :OutputAttribute;
+		:port _:port.
+	
+	() log:onNegativeSurface {
+		_:op :attribute _:a.
+	}.
+}.
+
+(_:x _:port _:op _:a _:o _:p _:t) log:onNegativeSurface {
+	_:x a :OutputPolicyPair;
+		:port _:port;
+		:policy _:op.
+
+	_:o a :OutputObligation;
+		:port _:port.
+
+	() log:onNegativeSurface {
+		_:op :obligation _:o.
+	}.
+}.
+
+(_:x _:port _:op _:a _:o _:p _:t) log:onNegativeSurface {
+	_:x a :OutputPolicyPair;
+		:port _:port;
+		:policy _:op.
+
+	_:p a :OutputProhibition;
+		:port _:port.
+
+	() log:onNegativeSurface {
+		_:op :prohibition _:p.
+	}.
+}.
+
+(_:x _:port _:op _:a _:o _:p _:t) log:onNegativeSurface {
+	_:x a :OutputPolicyPair;
+		:port _:port;
+		:policy _:op.
+
+	_:t a :OutputTagging;
+		:port _:port.
+	
+	() log:onNegativeSurface {
+		_:op :tagging _:t.
 	}.
 }.
