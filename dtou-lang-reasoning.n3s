@@ -87,7 +87,7 @@
 	_:data :policy _:policy.
 	_:policy :requirement _:requirement.
 	_:requirement
-		:type _:T;
+		:real_type _:T;
 		:name _:N.
 
     # # Won't work, because RDF Surfaces hold open world asumption, and negation/negative surface is also in this sense... Patrick suggested using N3's scoped negation instead, as shown below.
