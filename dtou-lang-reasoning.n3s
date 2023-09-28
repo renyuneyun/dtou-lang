@@ -57,7 +57,7 @@
 				_:filter :inputPort _:n.
 			}
 			_:ns
-		) log:collectAllIn _:scope.
+		) log:collectAllIn (_:scope 1).
 	}.
 
 	() log:onNegativeSurface {
@@ -75,7 +75,7 @@
 				_:filter :name _:n.
 			}
 			_:ns
-		) log:collectAllIn _:scope.
+		) log:collectAllIn (_:scope 1).
 	}.
 
 	() log:onNegativeSurface {
@@ -93,7 +93,7 @@
 				_:filter :class _:n.
 			}
 			_:ns
-		) log:collectAllIn _:scope.
+		) log:collectAllIn (_:scope 1).
 	}.
 
 	() log:onNegativeSurface {
@@ -111,7 +111,7 @@
 				_:filter :value _:n.
 			}
 			_:ns
-		) log:collectAllIn _:scope.
+		) log:collectAllIn (_:scope 1).
 	}.
 
 	() log:onNegativeSurface {
@@ -119,7 +119,7 @@
 	}.
 }.
 
-# DeletedAttribute (now ForwardLink)
+# OutputAttribute (with ForwardLink)
 (_:x _:policy _:attr _:N _:AT _:V _:input _:inputPort _:inputPortName _:output_spec _:re _:filter _:ipp _:np _:cp _:vp ) log:onNegativeSurface {
 	_:x a :InputPolicyForOutput;
 		:input _:input;
@@ -141,8 +141,7 @@
 	# 	:refinement _:re.
 	_:output_spec
 		:refinement _:re.
-	_:re a :Delete;
-		:filter _:filter.
+	_:re :filter _:filter.
 	_:filter a :Filter;
 		:inputPort_p _:ipp;
 		:name_p _:np;
@@ -156,7 +155,7 @@
 	# 		{
 	# 			_:filter :inputPort _:n.
 	# 		}
-	# 		_:iip
+	# 		_:ipp
 	# 	) log:collectAllIn (_:scope 0).
 	# }.
 
@@ -197,10 +196,89 @@
 
 	() log:onNegativeSurface {
 		_:mm a :ForwardLink;
+			:inputPortName _:inputPortName;
 			:output_spec _:output_spec;
-			:ref :nil.
+			:refinement _:re.
 		_:attr
 			:output_to _:mm.
+	}.
+}.
+
+(_:x _:m _:inputPortName _:output_spec _:re) log:onNegativeSurface {
+	_:x a :Attribute;
+		:output_to _:m.
+
+	_:m a :ForwardLink;
+		:inputPortName _:inputPortName;
+		:output_spec _:output_spec;
+		:refinement _:re.
+
+	_:re a :Delete.
+
+	() log:onNegativeSurface {
+		_:m :ref :nil.
+	}.
+}.
+
+(_:x _:m _:inputPortName _:output_spec _:re _:N _:T _:V) log:onNegativeSurface {
+	_:x a :Attribute;
+		:name _:N;
+		:output_to _:m.
+
+	_:m a :ForwardLink;
+		:inputPortName _:inputPortName;
+		:output_spec _:output_spec;
+		:refinement _:re.
+
+	_:re a :Edit;
+		:new_class _:T;
+		:new_value _:V.
+
+	() log:onNegativeSurface {
+		_:aa a :OutputAttribute, :Attribute;
+			:name _:N;
+			:class _:T;
+			:value _:V.
+
+		_:m :ref _:aa.
+	}.
+}.
+
+(_:x _:attr _:input _:policy _:inputPort _:inputPortName _:output_spec _:re _:N _:T _:V) log:onNegativeSurface {
+	_:x a :InputPolicyForOutput;
+		:input _:input;
+		:policy _:policy;
+		:output_spec _:output_spec.
+
+	_:policy :attribute _:attr.
+	_:attr a :Attribute;
+		:name _:N;
+		:class _:T;
+		:value _:V.
+	_:input a :InputSpec;
+		:port _:inputPort.
+
+	(_:m _:scope) log:onPositiveSurface {
+		(
+			()
+			{
+				_:attr :output_to _:m.
+			}
+			()
+		) log:collectAllIn (_:scope 2).
+	}.
+
+	() log:onNegativeSurface {
+		_:aa a :OutputAttribute, :Attribute;
+			:name _:N;
+			:class _:T;
+			:value _:V.
+
+		_:n a :ForwardLink;
+			:output_spec _:output_spec;
+			:ref _:aa.
+
+		_:attr :output_to _:n.
 	}.
 }.
 
@@ -399,80 +477,6 @@
 	}.
 }.
 
-# OutputAttribute
-(_:x _:input _:policy _:output_spec _:P _:attr _:N _:T _:V _:T1 _:V1 _:ipp _:np _:cp _:vp) log:onNegativeSurface {
-
-	_:x a :InputPolicyForOutput;
-		:input _:input;
-		:policy _:policy;
-		:output_spec _:output_spec.
-	_:output_spec :port _:P.
-
-	() log:onNegativeSurface {
-		() log:onNegativeSurface {
-			_:policy :attribute _:attr.
-			_:attr
-				:name _:N;
-				:class _:T;
-				:value _:V.
-
-			(_:y _:context) log:onPositiveSurface {
-				(
-					()
-					{
-						_:attr :output_to _:y.
-						_:y :output_spec _:output_spec;
-							:ref :nil.
-					}
-					()
-				) log:collectAllIn (_:context 1).
-			}.
-
-		}.
-		() log:onNegativeSurface {  # This branch is not checked by me
-			_:policy :attribute _:attr.
-			_:attr
-				:name _:N;
-				:class _:T1;
-				:value _:V1.
-
-			_:input :port _:inputPort.
-			
-			_:output_spec :refinement _:refinement.
-			_:refinement a :Edit;
-				:filter _:filter;
-				:new_class _:T;
-				:new_value _:V.
-			_:filter
-				:inputPort_p _:ipp;
-				:name_p _:np;
-				:class_p _:cp;
-				:value_p _:vp.
-
-			_:ipp list:in ((_:inputPort) ()).
-			_:np list:in ((_:N) ()).
-			_:cp list:in ((_:T1) ()).
-			_:vp list:in ((_:V1) ()).
-		}.
-	}.
-
-	() log:onNegativeSurface {
-		_:m a :OutputAttribute, :Attribute;
-			:name _:N;
-			:class _:T;
-			:value _:V;
-			:port _:P.
-
-		_:mm a :ForwardLink;
-			:output_spec _:output_spec;
-			:ref _:m.
-
-		_:attr
-			:output_to _:mm;
-			:debug _:m.
-	}.
-}.
-
 ## Real Type (of Tagging) -- the type without any subtype. This is a helper for OutputTagging.
 (_:x _:T) log:onNegativeSurface {
 	_:x a :Tagging;
@@ -523,14 +527,14 @@
 					:ref _:v1.
 			}
 			_:vbs
-		) log:collectAllIn (_:context 2).
+		) log:collectAllIn (_:context 3).
 		(
 			()
 			{
 				:nil list:in _:vbs.
 			}
 			()
-		) log:collectAllIn (_:context 2).
+		) log:collectAllIn (_:context 3).
 	}.
 
 	() log:onNegativeSurface {
@@ -579,14 +583,14 @@
 					:ref _:v1.
 			}
 			_:args
-		) log:collectAllIn (_:context 2).
+		) log:collectAllIn (_:context 3).
 		(
 			()
 			{
 				:nil list:in _:args.
 			}
 			()
-		) log:collectAllIn (_:context 2).
+		) log:collectAllIn (_:context 3).
 	}.
 
 	(_:v _:link _:v1 _:context) log:onPositiveSurface {
@@ -599,14 +603,14 @@
 					:ref _:v1.
 			}
 			_:vbs
-		) log:collectAllIn (_:context 2).
+		) log:collectAllIn (_:context 3).
 		(
 			()
 			{
 				:nil list:in _:vbs.
 			}
 			()
-		) log:collectAllIn (_:context 2).
+		) log:collectAllIn (_:context 3).
 	}.
 
 	() log:onNegativeSurface {
@@ -654,14 +658,14 @@
 					:ref _:v1.
 			}
 			_:vbs
-		) log:collectAllIn (_:context 2).
+		) log:collectAllIn (_:context 3).
 		(
 			()
 			{
 				:nil list:in _:vbs.
 			}
 			()
-		) log:collectAllIn (_:context 2).
+		) log:collectAllIn (_:context 3).
 	}.
 
 	() log:onNegativeSurface {
