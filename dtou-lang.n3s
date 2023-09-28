@@ -73,7 +73,6 @@
 :tag rdfs:subPropertyOf :tagging.
 :requirement rdfs:subPropertyOf :tagging.
 
-
 # App Policy
 
 :TaggingInfo a rdfs:Class.
@@ -85,3 +84,6 @@
 :RequirementProvide rdfs:subClassOf :TaggingInfo.
 :SecurityProvide rdfs:subClassOf :RequirementProvide;
 	rdfs:subClassOf [:type :SecurityType].
+
+:expect a rdfs:Property.
+:purpose rdfs:subPropertyOf :expect.
