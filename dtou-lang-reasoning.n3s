@@ -47,8 +47,86 @@
 	}.
 }.
 
+(_:filter _:ns) log:onNegativeSurface {
+	_:filter a :Filter.
+
+	(_:n _:scope) log:onPositiveSurface {
+		(
+			_:n
+			{
+				_:filter :inputPort _:n.
+			}
+			_:ns
+		) log:collectAllIn _:scope.
+	}.
+
+	() log:onNegativeSurface {
+		_:filter :inputPort_p _:ns.
+	}.
+}.
+
+(_:filter _:ns) log:onNegativeSurface {
+	_:filter a :Filter.
+
+	(_:n _:scope) log:onPositiveSurface {
+		(
+			_:n
+			{
+				_:filter :name _:n.
+			}
+			_:ns
+		) log:collectAllIn _:scope.
+	}.
+
+	() log:onNegativeSurface {
+		_:filter :name_p _:ns.
+	}.
+}.
+
+(_:filter _:ns) log:onNegativeSurface {
+	_:filter a :Filter.
+
+	(_:n _:scope) log:onPositiveSurface {
+		(
+			_:n
+			{
+				_:filter :class _:n.
+			}
+			_:ns
+		) log:collectAllIn _:scope.
+	}.
+
+	() log:onNegativeSurface {
+		_:filter :class_p _:ns.
+	}.
+}.
+
+(_:filter _:ns) log:onNegativeSurface {
+	_:filter a :Filter.
+
+	(_:n _:scope) log:onPositiveSurface {
+		(
+			_:n
+			{
+				_:filter :value _:n.
+			}
+			_:ns
+		) log:collectAllIn _:scope.
+	}.
+
+	() log:onNegativeSurface {
+		_:filter :value_p _:ns.
+	}.
+}.
+
 # DeletedAttribute (now ForwardLink)
-(_:attr _:N _:AT _:V _:input _:inputPort _:output_spec _:re _:filter) log:onNegativeSurface {
+(_:x _:policy _:attr _:N _:AT _:V _:input _:inputPort _:inputPortName _:output_spec _:re _:filter _:ipp _:np _:cp _:vp ) log:onNegativeSurface {
+	_:x a :InputPolicyForOutput;
+		:input _:input;
+		:policy _:policy;
+		:output_spec _:output_spec.
+
+	_:policy :attribute _:attr.
 	_:attr a :Attribute;
 		:name _:N;
 		:class _:AT;
@@ -56,18 +134,66 @@
 	_:input a :InputSpec;
 		:port _:inputPort.
 
-		_:output_spec a :OutputSpec;
-			:from _:inputPort;
-			:refinement _:re.
-		_:re a :Delete;
-			:filter _:filter.
-		_:filter a :Filter.
-		# TODO: Fix filter for "any" filtering target value; example works because all attributes are deleted. Maybe using subclass, because we are using N3 and that's easy to support?
-		_:filter a :Filter;
-			# :input _:inputPort;
-			:name _:N;
-			:class _:AT;
-			:value _:V.
+	_:inputPort :name _:inputPortName.
+
+	# _:output_spec a :OutputSpec;
+	# 	:from _:inputPort;
+	# 	:refinement _:re.
+	_:output_spec
+		:refinement _:re.
+	_:re a :Delete;
+		:filter _:filter.
+	_:filter a :Filter;
+		:inputPort_p _:ipp;
+		:name_p _:np;
+		:class_p _:cp;
+		:value_p _:vp.
+
+	# # Not used, in favour of the dedicated rules above, which hopefully has better performance.
+	# (_:n _:scope) log:onPositiveSurface {
+	# 	(
+	# 		_:n
+	# 		{
+	# 			_:filter :inputPort _:n.
+	# 		}
+	# 		_:iip
+	# 	) log:collectAllIn (_:scope 0).
+	# }.
+
+	# (_:n _:scope) log:onPositiveSurface {
+	# 	(
+	# 		_:n
+	# 		{
+	# 			_:filter :name _:n.
+	# 		}
+	# 		_:np
+	# 	) log:collectAllIn (_:scope 0).
+	# }.
+
+	# (_:n _:scope) log:onPositiveSurface {
+	# 	(
+	# 		_:n
+	# 		{
+	# 			_:filter :class _:n.
+	# 		}
+	# 		_:cp
+	# 	) log:collectAllIn (_:scope 0).
+	# }.
+
+	# (_:n _:scope) log:onPositiveSurface {
+	# 	(
+	# 		_:n
+	# 		{
+	# 			_:filter :value _:n.
+	# 		}
+	# 		_:vp
+	# 	) log:collectAllIn (_:scope 0).
+	# }.
+
+	_:ipp list:in ((_:inputPortName) ()).
+	_:np list:in ((_:N) ()).
+	_:cp list:in ((_:AT) ()).
+	_:vp list:in ((_:V) ()).
 
 	() log:onNegativeSurface {
 		_:mm a :ForwardLink;
@@ -274,7 +400,7 @@
 }.
 
 # OutputAttribute
-(_:x _:input _:policy _:output_spec _:P _:attr _:N _:T _:V _:T1 _:V1) log:onNegativeSurface {
+(_:x _:input _:policy _:output_spec _:P _:attr _:N _:T _:V _:T1 _:V1 _:ipp _:np _:cp _:vp) log:onNegativeSurface {
 
 	_:x a :InputPolicyForOutput;
 		:input _:input;
@@ -313,14 +439,20 @@
 			_:input :port _:inputPort.
 			
 			_:output_spec :refinement _:refinement.
-			_:refinement :filter _:filter.
-			_:filter a :Edit;
-				:input _:inputPort;
-				:name _:N;
-				:class _:T1;
-				:value _:V1;
+			_:refinement a :Edit;
+				:filter _:filter;
 				:new_class _:T;
 				:new_value _:V.
+			_:filter
+				:inputPort_p _:ipp;
+				:name_p _:np;
+				:class_p _:cp;
+				:value_p _:vp.
+
+			_:ipp list:in ((_:inputPort) ()).
+			_:np list:in ((_:N) ()).
+			_:cp list:in ((_:T1) ()).
+			_:vp list:in ((_:V1) ()).
 		}.
 	}.
 
