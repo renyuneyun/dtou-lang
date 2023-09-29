@@ -85,5 +85,11 @@
 :SecurityProvide rdfs:subClassOf :RequirementProvide;
 	rdfs:subClassOf [:type :SecurityType].
 
-:expect a rdfs:Property.
-:purpose rdfs:subPropertyOf :expect.
+(_:x _:p) log:onNegativeSurface {
+	_:x a :InputSpec;
+		:purpose _:p.
+
+	() log:onNegativeSurface {
+		_:x :expect _:p.
+	}.
+}.
