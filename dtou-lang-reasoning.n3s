@@ -350,7 +350,7 @@
 		:data _:data;
 		:app _:app;
 		:input _:input.
-	
+
 	_:data :policy _:policy.
 	_:policy :prohibition _:prohibition.
 	_:prohibition
@@ -360,18 +360,38 @@
 		:app _:N;
 		:purpose _:P.
 
+	_:app :name _:N.
+	_:input :purpose _:P.
+
 	() log:onNegativeSurface {
-		() log:onNegativeSurface {
-			_:app :name _:N.
-			_:input :purpose _:P.
-		}.
-		() log:onNegativeSurface {
-			_:input :downsteram _:ds.
-			_:ds
-				:app_name _:N;
-				:purpose _:P.
-		}.
+		_:m a :ProhibitedUse;
+			:mode :Use;
+			:app _:N;
+			:purpose _:P.
 	}.
+}.
+
+# ProhibitedUse
+# TODO: needs verification
+(_:x _:data _:app _:input _:ds _:N _:P _:policy _:prohibition _:ac _:ds) log:onNegativeSurface {
+	_:x a :RelatedDataAppInput;
+		:data _:data;
+		:app _:app;
+		:input _:input.
+
+	_:data :policy _:policy.
+	_:policy :prohibition _:prohibition.
+	_:prohibition
+		:mode :Use;
+		:activation_condition _:ac.
+	_:ac
+		:app _:N;
+		:purpose _:P.
+
+	_:input :downsteram _:ds.
+	_:ds
+		:app_name _:N;
+		:purpose _:P.
 
 	() log:onNegativeSurface {
 		_:m a :ProhibitedUse;
