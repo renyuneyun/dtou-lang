@@ -344,12 +344,16 @@
 }.
 
 # ProhibitedUse
-# TODO: needs verification
-(_:x _:data _:app _:input _:ds _:N _:P _:policy _:prohibition _:ac _:ds) log:onNegativeSurface {
+(_:x _:data _:app _:input _:ds _:U _:N _:P _:policy _:prohibition _:ac _:pn1 _:pn2 _:up _:ap _:pp) log:onNegativeSurface {
 	_:x a :RelatedDataAppInput;
 		:data _:data;
 		:app _:app;
 		:input _:input.
+
+	_:uc a :UsageContext;
+		:app _:ai;
+		:user _:U.
+	_:ai :policy _:app.
 
 	_:data :policy _:policy.
 	_:policy :prohibition _:prohibition.
@@ -357,11 +361,13 @@
 		:mode :Use;
 		:activation_condition _:ac.
 	_:ac
+		:user _:U;
 		:app _:N;
 		:purpose _:P.
 
 	_:app :name _:N.
-	_:input :purpose _:P.
+	_:input :purpose _:pn1.
+	_:pn1 :name _:P.
 
 	() log:onNegativeSurface {
 		_:m a :ProhibitedUse;
@@ -372,8 +378,7 @@
 }.
 
 # ProhibitedUse
-# TODO: needs verification
-(_:x _:data _:app _:input _:ds _:N _:P _:policy _:prohibition _:ac _:ds) log:onNegativeSurface {
+(_:x _:data _:app _:input _:ds _:N _:P _:policy _:prohibition _:ac _:pn1 _:pn2 _:ap _:pp) log:onNegativeSurface {
 	_:x a :RelatedDataAppInput;
 		:data _:data;
 		:app _:app;
@@ -388,10 +393,11 @@
 		:app _:N;
 		:purpose _:P.
 
-	_:input :downsteram _:ds.
+	_:input :downstream _:ds.
 	_:ds
 		:app_name _:N;
-		:purpose _:P.
+		:purpose _:pn1.
+	_:pn1 :name _:P.
 
 	() log:onNegativeSurface {
 		_:m a :ProhibitedUse;
@@ -465,12 +471,18 @@
 # }.
 
 # ActivatedObligation
-(_:x _:usage _:data _:app _:input _:policy _:obligation _:ob _:args _:ac _:P) log:onNegativeSurface {
+(_:x _:usage _:data _:app _:input _:policy _:obligation _:ob _:args _:ac _:P _:U _:N _:up _:ap _:pp) log:onNegativeSurface {
 	_:x a :RelatedDataAppInput;
 		:usage _:usage;
 		:data _:data;
 		:app _:app;
 		:input _:input.
+
+	_:uc a :UsageContext;
+		:app _:ai;
+		:user _:U.
+	_:ai :policy _:app.
+
 	_:data :policy _:policy.
 	_:policy :obligation _:obligation.
 	_:obligation
@@ -478,16 +490,14 @@
 		:argument _:args;
 		:activation_condition _:ac.
 
-	# TODO: Support more general checks, particularly the "any".
-	# Currently it's correct without the "any" part.
 	_:ac
-		# :user _:U;
-		# :app _:N;
-		:purpose _:P.	
-	
-	# _:usage :user _:U.
-	# _:app :name _:N.
-	_:input :purpose _:P.
+		:user _:U;
+		:app _:N;
+		:purpose _:P.
+
+	_:app :name _:N.
+	_:input :purpose _:pn1.
+	_:pn1 :name _:P.
 
 	() log:onNegativeSurface {
 		_:m a :ActivatedObligation;
