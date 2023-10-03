@@ -47,6 +47,27 @@
 	}.
 }.
 
+## Real Type (of Tagging) -- the type without any subtype. This is a helper for OutputTagging.
+(_:x _:T) log:onNegativeSurface {
+	_:x a :Tagging;
+		:type _:T.
+
+	(_:t2 _:scope) log:onPositiveSurface {
+		(
+			()
+			{
+				_:x :type _:t2.
+				_:t2 rdfs:subClassOf _:T.
+			}
+			()
+		) log:collectAllIn _:scope.
+	}.
+
+	() log:onNegativeSurface {
+		_:x :real_type _:T.
+	}.
+}.
+
 (_:filter _:ns) log:onNegativeSurface {
 	_:filter a :Filter.
 
@@ -316,20 +337,20 @@
 }.
 
 # UnmatchedExpectation
-(_:x _:input _:data _:expect _:T _:N) log:onNegativeSurface {
+(_:x _:input _:data _:expect _:policy _:T _:N) log:onNegativeSurface {
     _:x a :RelatedDataAppInput;
         :input _:input;
         :data _:data.
+	_:data :policy _:policy.
     _:input :expect _:expect.
     _:expect
         :type _:T;
         :name _:N.
-    (_:policy _:tag _:scope) log:onPositiveSurface {
+    (_:tag _:scope) log:onPositiveSurface {
         ( () {
-            _:data :policy _:policy.
             _:policy :tag _:tag.
             _:tag
-                :type _:T;
+                :real_type _:T;
                 :name _:N.
             } ()) log:collectAllIn _:scope.
     }.
@@ -504,27 +525,6 @@
 			:purpose _:P;
 			:class _:ob;
 			:args _:args.
-	}.
-}.
-
-## Real Type (of Tagging) -- the type without any subtype. This is a helper for OutputTagging.
-(_:x _:T) log:onNegativeSurface {
-	_:x a :Tagging;
-		:type _:T.
-
-	(_:t2 _:scope) log:onPositiveSurface {
-		(
-			()
-			{
-				_:x :type _:t2.
-				_:t2 rdfs:subClassOf _:T.
-			}
-			()
-		) log:collectAllIn _:scope.
-	}.
-
-	() log:onNegativeSurface {
-		_:x :real_type _:T.
 	}.
 }.
 
