@@ -49,6 +49,20 @@
 		:purpose :research
 	].
 
+:pr1 a :Prohibition;
+	:mode :Use;
+	:activation_condition [
+		:app <urn:dtou:appoint-booking>;
+		:purpose <urn:dtou:purpose-verify-identity>;
+	].
+
+:pr2 a :Prohibition;
+	:mode :Use;
+	:activation_condition [
+		:app <https://gh.app/clinic>;
+		:purpose <urn:dtou:purpose-booking>;
+	].
+
 :data1 a :Data;
 	:uri <https://ada.site/id>;
 	:policy :policy1.
@@ -57,6 +71,7 @@
 	:attribute :attr1, :sec-attr1, :per-attr1, :compl-attr1, :attr2;
 	:requirement :sec-tag1, :per-tag1;
 	# :tag :compl-tag1;
+	:prohibition :pr1, :pr2;
 	:obligation :ob1.
 
 :data2 a :Data;

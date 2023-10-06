@@ -80,7 +80,7 @@
 :output1 a :OutputSpec;
 	:port :outputPort1;
 	:from :inputPort1, :inputPort2;
-	:refinement :re-delete-all.
+	:refinement :re-delete-all, :re-edit-ada-p.
 
 :outputPort1 a :Port;
 	:name "output".
@@ -89,6 +89,16 @@
 	# :filter :filter-all.
 	# :filter :filter-ada-p.
 	:filter :filter-test.
+
+:re-delete-ada-p a :Delete;
+	# :filter :filter-all.
+	:filter :filter-ada-p.
+	# :filter :filter-test.
+
+:re-edit-ada-p a :Edit;
+	:filter :filter-ada-p;
+	:new_class :not-a-person;
+	:new_value :adaa.
 
 :filter-all a :Filter.
 
