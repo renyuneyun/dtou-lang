@@ -73,10 +73,10 @@
 # }.
 
 # Nothing in input to test
-(_:s _:p _:o) log:onQuerySurface {
-	_:s a :OutputProhibition.
-	_:s _:p _:o.
-}.
+# (_:s _:p _:o) log:onQuerySurface {
+# 	_:s a :OutputProhibition.
+# 	_:s _:p _:o.
+# }.
 
 
 # Test
@@ -95,4 +95,46 @@
 (_:s _:p _:o) log:onQuerySurface {
 	_:s a :DebugOutput.
 	_:s _:p _:o.
+}.
+
+(_:s _:p _:o) log:onQuerySurface {
+	_:s a :OutputPolicy.
+	_:s _:p _:o.
+}.
+
+# (_:s _:p _:o) log:onQuerySurface {
+# 	_:s a :Attribute.
+# 	_:s _:p _:o.
+# }.
+
+# (_:x _:s _:p _:o) log:onQuerySurface {
+# 	_:x a :Attribute;
+# 		:output_to _:s.
+# 	_:s _:p _:o.
+# }.
+
+# (_:output_spec _:re _:filter _:s _:p _:o _:p2 _:o2) log:onQuerySurface {
+# 	_:output_spec
+# 		:refinement _:re.
+# 	_:re
+# 		_:p2 _:o2;
+# 		:filter _:filter.
+# 	_:filter a :Filter.
+# 	_:filter _:p _:o.
+# }.
+
+# (_:x _:input _:ex _:s _:p _:o) log:onQuerySurface {
+# 	_:x :input _:input.
+# 	_:input :expect _:ex.
+# 	_:ex _:p _:o.
+# }.
+
+(_:x _:policy _:s _:p _:o) log:onQuerySurface {
+	_:s a :OutputTagging0.
+	_:s _:p _:o.
+}.
+(_:x _:policy _:p1 _:o1 _:s _:p _:o) log:onQuerySurface {
+	_:x a :OutputTagging0;
+		_:p1 _:o1.
+	_:o1 _:p _:o.
 }.

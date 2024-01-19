@@ -31,6 +31,11 @@
 	:class :complete;
 	:value :nil.
 
+:clear-attr1 a :Attribute;
+	:name :clear-attr;
+	:class :clear;
+	:value :nil.
+
 :sec-tag1 a :Security;
 	:attribute_ref :sec-attr1;
 	:validity_binding :attr1, :attr2.
@@ -41,6 +46,9 @@
 
 :compl-tag1 a :Integrity;
 	:attribute_ref :compl-attr1.
+
+:clear-tag1 a :Integrity;
+	:attribute_ref :clear-attr1.
 
 :ob1 a :Obligation;
 	:obligation_class :acknowledge;
@@ -70,7 +78,7 @@
 :policy1 a :DataPolicy;
 	:attribute :attr1, :sec-attr1, :per-attr1, :compl-attr1, :attr2;
 	:requirement :sec-tag1, :per-tag1;
-	# :tag :compl-tag1;
+	:tag :compl-tag1, :clear-tag1;
 	:prohibition :pr1, :pr2;
 	:obligation :ob1.
 
@@ -80,7 +88,7 @@
 
 :policy2 a :DataPolicy;
 	:attribute :any-purpose-attr1;
-	:tag :any-purpose.
+	:tag :any-purpose, :compl-tag1.
 
 :any-purpose a :Purpose;
 	:attribute_ref :any-purpose-attr1.

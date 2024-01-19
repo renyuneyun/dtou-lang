@@ -537,7 +537,7 @@
 	_:output_spec :port _:P.
 	_:policy :tagging _:tagging.
 	_:tagging
-		# :type _:T;
+		# :type :TagType;
 		:real_type _:T;
 		:attribute_ref _:ar.
 
@@ -568,14 +568,140 @@
 	}.
 
 	() log:onNegativeSurface {
-		_:m a :OutputTagging, :Tagging;
+		_:m a :OutputTagging0;
 			:type _:T;
 			:attribute_ref _:ar1;
 			:validity_binding_list _:vbs;
 			:port _:P;
-			:from _:tagging.
+			:from _:tagging;
+			:output_spec _:output_spec;
+			:from_input _:input.
 	}.
 }.
+(_:x _:t _:ar _:vbs _:P _:tagging _:output_spec _:input) log:onNegativeSurface {
+	_:x a :OutputTagging0;
+		:type _:t;
+		:attribute_ref _:ar;
+		:validity_binding_list _:vbs;
+		:port _:P;
+		:from _:tagging;
+		:output_spec _:output_spec;
+		:from_input _:input.
+
+	_:t rdfs:subClassOf :RequirementType.
+
+	() log:onNegativeSurface {
+		_:m a :OutputTagging;
+			:type _:t;
+			:attribute_ref _:ar;
+			:validity_binding_list _:vbs;
+			:port _:P;
+			:from _:tagging.
+	}
+}.
+(_:x _:t _:ar _:vbs _:P _:tagging _:output_spec _:input _:class) log:onNegativeSurface {
+	_:x a :OutputTagging0;
+		:type _:t;
+		:attribute_ref _:ar;
+		:validity_binding_list _:vbs;
+		:port _:P;
+		:from _:tagging;
+		:output_spec _:output_spec;
+		:from_input _:input.
+
+	_:t rdfs:subClassOf :TagType.
+	_:ar :class _:class.
+
+	# () log:onNegativeSurface {
+	# 	(_:xx _:input2 _:ar2 _:scope) log:onPositiveSurface {
+	# 		(
+	# 			()
+	# 			{
+	# 				_:xx a :OutputTagging;
+	# 					:output_spec _:output_spec;
+	# 					:attribute_ref _:ar2;
+	# 					:from_input _:input2.
+	# 				_:ar2 :class _:class.
+	# 			}
+	# 			()
+	# 		) log:collectAllIn _:scope.
+	# 	}.
+	# }.
+	(_:input2) log:onNegativeSurface {
+		(_:xx  _:ar2) log:onNegativeSurface {
+			_:xx a :OutputTagging;
+				:output_spec _:output_spec;
+				:attribute_ref _:ar2;
+				:from_input _:input2.
+			_:ar2 :class _:class.
+		}.
+	}.
+
+	() log:onNegativeSurface {
+		_:m a :OutputTagging;
+			:type _:t;
+			:attribute_ref _:ar;
+			:validity_binding_list _:vbs;
+			:port _:P;
+			:from _:tagging.
+	}
+}.
+
+# (_:x _:input _:policy _:output_spec _:P _:tagging _:T _:ar _:link0 _:ar1 _:vbs) log:onNegativeSurface {
+# 	_:x a :InputPolicyForOutput;
+# 		:input _:input;
+# 		:policy _:policy;
+# 		:output_spec _:output_spec.
+# 	_:output_spec :port _:P.
+# 	_:policy :tagging _:tagging.
+# 	_:tagging
+# 		:type :RequirementType;
+# 		:real_type _:T;
+# 		:attribute_ref _:ar.
+
+# 	_:ar :output_to _:link0.
+# 	_:link0 :output_spec _:output_spec;
+# 		:ref _:ar1.
+
+# 	_:ar1 log:notEqualTo :nil.
+
+# 	(_:v _:link _:v1 _:context) log:onPositiveSurface {
+# 		(
+# 			_:v1
+# 			{
+# 				_:tagging :validity_binding _:v.
+# 				_:v :output_to _:link.
+# 				_:link :output_spec _:output_spec;
+# 					:ref _:v1.
+# 			}
+# 			_:vbs
+# 		) log:collectAllIn (_:context 3).
+# 		(
+# 			()
+# 			{
+# 				:nil list:in _:vbs.
+# 			}
+# 			()
+# 		) log:collectAllIn (_:context 3).
+# 	}.
+
+# 	() log:onNegativeSurface {
+# 		_:m a :OutputRequirement;
+# 			:type _:T;
+# 			:attribute_ref _:ar1;
+# 			:validity_binding_list0 _:vbs;
+# 			:port _:P;
+# 			:from _:tagging.
+# 	}.
+# }.
+# (_:x) log:onNegativeSurface {
+# 	_:x a :OutputRequirement;
+# 		:type _:T;
+# 		:attribute_ref _:ar1;
+# 		:validity_binding_list _:vbs;
+# 		:port _:P;
+# 		:from _:tagging.
+# }.
 
 (_:m _:vbs _:vb) log:onNegativeSurface {
 	_:m a :OutputTagging;
