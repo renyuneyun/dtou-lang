@@ -1,0 +1,127 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix : <http://example.org/ns#>.
+
+######
+# Reasoning rules
+######
+
+# RelatedDataAppInput
+(_:usage _:data _:app _:input _:ai _:u) log:onNegativeSurface {
+	_:usage a :UsageContext;
+		:app _:ai.
+	_:ai :policy _:app.
+	_:app a :AppPolicy;
+		:input_spec _:input.
+	_:data a :Data;
+		:uri _:u.
+	_:input :data _:u.
+
+	() log:onNegativeSurface {
+		_:m a :RelatedDataAppInput;
+			:usage _:usage;
+			:data _:data;
+			:app _:app;
+			:input _:input.
+	}.
+}.
+
+## Real Type (of Tagging) -- the type without any subtype. This is a helper for OutputTagging.
+(_:x _:T) log:onNegativeSurface {
+	_:x a :Tagging;
+		:type _:T.
+
+	(_:t2 _:scope) log:onPositiveSurface {
+		(
+			()
+			{
+				_:x :type _:t2.
+				_:t2 rdfs:subClassOf _:T.
+			}
+			()
+		) log:collectAllIn (_:scope 1).
+	}.
+
+	() log:onNegativeSurface {
+		_:x :real_type _:T.
+	}.
+}.
+
+# UnmatchedExpectation
+(_:x _:input _:data _:expect _:policy _:tag _:T _:N) log:onNegativeSurface {
+    _:x a :RelatedDataAppInput;
+        :input _:input;
+        :data _:data.
+	_:data :policy _:policy.
+    _:input :expect _:expect.
+    _:expect
+        :type _:T;
+        :name _:N.
+	_:policy :tag _:tag.
+	_:tag
+		:real_type _:T;
+		:name _:N.
+
+    () log:onNegativeSurface {
+		_:expect
+			:match _:tag.
+    }.
+}.
+(_:x _:input _:data _:expect _:T _:N) log:onNegativeSurface {
+    _:x a :RelatedDataAppInput;
+        :input _:input;
+        :data _:data.
+    _:input :expect _:expect.
+    _:expect
+        :type _:T;
+        :name _:N.
+
+	(_:tag _:scope) log:onPositiveSurface {
+		(
+			()
+			{
+				_:expect :match _:tag.
+			}
+			()
+		) log:collectAllIn _:scope.
+	}.
+
+	() log:onNegativeSurface {
+        _:m a :UnmatchedExpectation;
+            :input _:input;
+            :data _:data;
+            :type _:T;
+            :name _:N.
+	}.
+}.
+
+# # UnmatchedExpectation
+# (_:x _:input _:data _:expect _:policy _:T _:N) log:onNegativeSurface {
+#     _:x a :RelatedDataAppInput;
+#         :input _:input;
+#         :data _:data.
+# 	_:data :policy _:policy.
+#     _:input :expect _:expect.
+#     _:expect
+#         :type _:T;
+#         :name _:N.
+#     (_:tag _:scope) log:onPositiveSurface {
+#         ( () {
+#             _:policy :tag _:tag.
+#             _:tag
+#                 :real_type _:T;
+#                 :name _:N.
+#             } ()) log:collectAllIn (_:scope 2).
+#     }.
+
+#     () log:onNegativeSurface {
+#         _:m a :UnmatchedExpectation;
+#             :input _:input;
+#             :data _:data;
+#             :type _:T;
+#             :name _:N.
+#     }.
+# }.
+
+:UnmatchedExpectation rdfs:subClassOf :Conflict.

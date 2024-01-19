@@ -1,0 +1,65 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix : <http://example.org/ns#>.
+
+######
+# Reasoning rules
+######
+
+# RelatedDataAppInput
+(_:usage _:data _:app _:input _:ai _:u) log:onNegativeSurface {
+	_:usage a :UsageContext;
+		:app _:ai.
+	_:ai :policy _:app.
+	_:app a :AppPolicy;
+		:input_spec _:input.
+	_:data a :Data;
+		:uri _:u.
+	_:input :data _:u.
+
+	() log:onNegativeSurface {
+		_:m a :RelatedDataAppInput;
+			:usage _:usage;
+			:data _:data;
+			:app _:app;
+			:input _:input.
+	}.
+}.
+
+# ActivatedObligation
+(_:x _:usage _:data _:app _:input _:policy _:obligation _:ob _:args _:ac _:P _:U _:N _:up _:ap _:pp) log:onNegativeSurface {
+	_:x a :RelatedDataAppInput;
+		:usage _:usage;
+		:data _:data;
+		:app _:app;
+		:input _:input.
+
+	_:uc a :UsageContext;
+		:app _:ai;
+		:user _:U.
+	_:ai :policy _:app.
+
+	_:data :policy _:policy.
+	_:policy :obligation _:obligation.
+	_:obligation
+		:obligation_class _:ob;
+		:argument _:args;
+		:activation_condition _:ac.
+
+	_:ac
+		:user _:U;
+		:app _:N;
+		:purpose3 _:P.
+
+	_:app :name _:N.
+	_:input :purpose2 _:pn1.
+	_:pn1 :name _:P.
+
+	() log:onNegativeSurface {
+		_:m a :ActivatedObligation;
+			:purpose4 _:P;
+			:class _:ob;
+			:args _:args.
+	}.
+}.

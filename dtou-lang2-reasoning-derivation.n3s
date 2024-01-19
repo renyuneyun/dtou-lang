@@ -1,0 +1,553 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix : <http://example.org/ns#>.
+
+######
+# Reasoning rules
+######
+
+# RelatedDataAppInput
+(_:usage _:data _:app _:input _:ai _:u) log:onNegativeSurface {
+	_:usage a :UsageContext;
+		:app _:ai.
+	_:ai :policy _:app.
+	_:app a :AppPolicy;
+		:input_spec _:input.
+	_:data a :Data;
+		:uri _:u.
+	_:input :data _:u.
+
+	() log:onNegativeSurface {
+		_:m a :RelatedDataAppInput;
+			:usage _:usage;
+			:data _:data;
+			:app _:app;
+			:input _:input.
+	}.
+}.
+
+# InputPolicyForOutput
+(_:q _:data _:input _:app _:output_spec _:inputPort _:policy) log:onNegativeSurface {
+	_:q a :RelatedDataAppInput;
+		:data _:data;
+		:input _:input;
+		:app _:app.
+
+	_:app :output_spec _:output_spec.
+	_:output_spec :from _:inputPort.
+	_:input :port _:inputPort.
+	_:data :policy _:policy.
+
+	() log:onNegativeSurface {
+		_:m a :InputPolicyForOutput;
+			:input _:input;
+			:policy _:policy;
+			:output_spec _:output_spec.
+	}.
+}.
+
+(_:filter _:ns) log:onNegativeSurface {
+	_:filter a :Filter.
+
+	(_:n _:scope) log:onPositiveSurface {
+		(
+			_:n
+			{
+				_:filter :inputPort _:n.
+			}
+			_:ns
+		) log:collectAllIn (_:scope 1).
+	}.
+
+	() log:onNegativeSurface {
+		_:filter :inputPort_p _:ns.
+	}.
+}.
+
+(_:filter _:ns) log:onNegativeSurface {
+	_:filter a :Filter.
+
+	(_:n _:scope) log:onPositiveSurface {
+		(
+			_:n
+			{
+				_:filter :name _:n.
+			}
+			_:ns
+		) log:collectAllIn (_:scope 1).
+	}.
+
+	() log:onNegativeSurface {
+		_:filter :name_p _:ns.
+	}.
+}.
+
+(_:filter _:ns) log:onNegativeSurface {
+	_:filter a :Filter.
+
+	(_:n _:scope) log:onPositiveSurface {
+		(
+			_:n
+			{
+				_:filter :class _:n.
+			}
+			_:ns
+		) log:collectAllIn (_:scope 1).
+	}.
+
+	() log:onNegativeSurface {
+		_:filter :class_p _:ns.
+	}.
+}.
+
+(_:filter _:ns) log:onNegativeSurface {
+	_:filter a :Filter.
+
+	(_:n _:scope) log:onPositiveSurface {
+		(
+			_:n
+			{
+				_:filter :value _:n.
+			}
+			_:ns
+		) log:collectAllIn (_:scope 1).
+	}.
+
+	() log:onNegativeSurface {
+		_:filter :value_p _:ns.
+	}.
+}.
+
+# OutputAttribute (with ForwardLink)
+(_:x _:policy _:attr _:N _:AT _:V _:input _:inputPort _:inputPortName _:output_spec _:re _:filter _:ipp _:np _:cp _:vp ) log:onNegativeSurface {
+	_:x a :InputPolicyForOutput;
+		:input _:input;
+		:policy _:policy;
+		:output_spec _:output_spec.
+
+	_:policy :attribute _:attr.
+	_:attr a :Attribute;
+		:name _:N;
+		:class _:AT;
+		:value _:V.
+	_:input a :InputSpec;
+		:port _:inputPort.
+
+	_:inputPort :name _:inputPortName.
+
+	# _:output_spec a :OutputSpec;
+	# 	:from _:inputPort;
+	# 	:refinement _:re.
+	_:output_spec
+		:refinement _:re.
+	_:re :filter _:filter.
+	_:filter a :Filter;
+		:inputPort_p _:ipp;
+		:name_p _:np;
+		:class_p _:cp;
+		:value_p _:vp.
+
+	# # Not used, in favour of the dedicated rules above, which hopefully has better performance.
+	# (_:n _:scope) log:onPositiveSurface {
+	# 	(
+	# 		_:n
+	# 		{
+	# 			_:filter :inputPort _:n.
+	# 		}
+	# 		_:ipp
+	# 	) log:collectAllIn (_:scope 0).
+	# }.
+
+	# (_:n _:scope) log:onPositiveSurface {
+	# 	(
+	# 		_:n
+	# 		{
+	# 			_:filter :name _:n.
+	# 		}
+	# 		_:np
+	# 	) log:collectAllIn (_:scope 0).
+	# }.
+
+	# (_:n _:scope) log:onPositiveSurface {
+	# 	(
+	# 		_:n
+	# 		{
+	# 			_:filter :class _:n.
+	# 		}
+	# 		_:cp
+	# 	) log:collectAllIn (_:scope 0).
+	# }.
+
+	# (_:n _:scope) log:onPositiveSurface {
+	# 	(
+	# 		_:n
+	# 		{
+	# 			_:filter :value _:n.
+	# 		}
+	# 		_:vp
+	# 	) log:collectAllIn (_:scope 0).
+	# }.
+
+	_:ipp list:in ((_:inputPortName) ()).
+	_:np list:in ((_:N) ()).
+	_:cp list:in ((_:AT) ()).
+	_:vp list:in ((_:V) ()).
+
+	() log:onNegativeSurface {
+		_:mm a :ForwardLink;
+			:inputPortName _:inputPortName;
+			:output_spec _:output_spec;
+			:refinement _:re.
+		_:attr
+			:output_to _:mm.
+	}.
+}.
+
+(_:x _:m _:inputPortName _:output_spec _:re) log:onNegativeSurface {
+	_:x a :Attribute;
+		:output_to _:m.
+
+	_:m a :ForwardLink;
+		:inputPortName _:inputPortName;
+		:output_spec _:output_spec;
+		:refinement _:re.
+
+	_:re a :Delete.
+
+	() log:onNegativeSurface {
+		_:m :ref :nil.
+	}.
+}.
+
+(_:x _:m _:inputPortName _:output_spec _:re _:N _:T _:V) log:onNegativeSurface {
+	_:x a :Attribute;
+		:name _:N;
+		:output_to _:m.
+
+	_:m a :ForwardLink;
+		:inputPortName _:inputPortName;
+		:output_spec _:output_spec;
+		:refinement _:re.
+
+	_:re a :Edit;
+		:new_class _:T;
+		:new_value _:V.
+
+	() log:onNegativeSurface {
+		_:aa a :OutputAttribute, :Attribute;
+			:name _:N;
+			:class _:T;
+			:value _:V.
+
+		_:m :ref _:aa.
+	}.
+}.
+
+(_:x _:attr _:input _:policy _:inputPort _:inputPortName _:output_spec _:re _:N _:T _:V) log:onNegativeSurface {
+	_:x a :InputPolicyForOutput;
+		:input _:input;
+		:policy _:policy;
+		:output_spec _:output_spec.
+
+	_:policy :attribute _:attr.
+	_:attr a :Attribute;
+		:name _:N;
+		:class _:T;
+		:value _:V.
+	_:input a :InputSpec;
+		:port _:inputPort.
+
+	(_:m _:scope) log:onPositiveSurface {
+		(
+			()
+			{
+				_:attr :output_to _:m.
+			}
+			()
+		) log:collectAllIn (_:scope 2).
+	}.
+
+	() log:onNegativeSurface {
+		_:aa a :OutputAttribute, :Attribute;
+			:name _:N;
+			:class _:T;
+			:value _:V.
+
+		_:n a :ForwardLink;
+			:output_spec _:output_spec;
+			:ref _:aa.
+
+		_:attr :output_to _:n.
+	}.
+}.
+
+## Real Type (of Tagging) -- the type without any subtype. This is a helper for OutputTagging.
+(_:x _:T) log:onNegativeSurface {
+	_:x a :Tagging;
+		:type _:T.
+
+	(_:t2 _:scope) log:onPositiveSurface {
+		(
+			()
+			{
+				_:x :type _:t2.
+				_:t2 rdfs:subClassOf _:T.
+			}
+			()
+		) log:collectAllIn _:scope.
+	}.
+
+	() log:onNegativeSurface {
+		_:x :real_type _:T.
+	}.
+}.
+
+# OutputTagging
+(_:x _:input _:policy _:output_spec _:P _:tagging _:T _:ar _:link0 _:ar1 _:vbs) log:onNegativeSurface {
+	_:x a :InputPolicyForOutput;
+		:input _:input;
+		:policy _:policy;
+		:output_spec _:output_spec.
+	_:output_spec :port _:P.
+	_:policy :tagging _:tagging.
+	_:tagging
+		:real_type _:T;
+		:attribute_ref _:ar.
+
+	_:ar :output_to _:link0.
+	_:link0 :output_spec _:output_spec;
+		:ref _:ar1.
+
+	_:ar1 log:notEqualTo :nil.
+
+	(_:v _:link _:v1 _:context) log:onPositiveSurface {
+		(
+			_:v1
+			{
+				_:tagging :validity_binding _:v.
+				_:v :output_to _:link.
+				_:link :output_spec _:output_spec;
+					:ref _:v1.
+			}
+			_:vbs
+		) log:collectAllIn (_:context 3).
+		(
+			()
+			{
+				:nil list:in _:vbs.
+			}
+			()
+		) log:collectAllIn (_:context 3).
+	}.
+
+	() log:onNegativeSurface {
+		_:m a :OutputTagging, :Tagging;
+			:type _:T;
+			:attribute_ref _:ar1;
+			:validity_binding_list _:vbs;
+			:port _:P;
+			:from _:tagging.
+	}.
+}.
+
+(_:m _:vbs _:vb) log:onNegativeSurface {
+	_:m a :OutputTagging;
+		:validity_binding_list _:vbs.
+
+	_:vb list:in _:vbs.
+
+	() log:onNegativeSurface {
+		_:m :validity_binding _:vb.
+	}.
+}.
+
+#OutputObligation
+(_:x _:input _:policy _:output_spec _:P _:ob _:OC _:args _:vbs _:ac) log:onNegativeSurface {
+	_:x a :InputPolicyForOutput;
+		:input _:input;
+		:policy _:policy;
+		:output_spec _:output_spec.
+	_:output_spec :port _:P.
+	_:policy :obligation _:ob.
+	_:ob
+		:obligation_class _:OC;
+		:activation_condition _:ac.
+
+	(_:args0 _:v _:link _:v1 _:context) log:onPositiveSurface {
+		_:ob :argument _:args0.
+		(
+			_:v1
+			{
+				_:v list:in _:args0.
+				_:v :output_to _:link.
+				_:link :output_spec _:output_spec;
+					:ref _:v1.
+			}
+			_:args
+		) log:collectAllIn (_:context 3).
+		(
+			()
+			{
+				:nil list:in _:args.
+			}
+			()
+		) log:collectAllIn (_:context 3).
+	}.
+
+	(_:v _:link _:v1 _:context) log:onPositiveSurface {
+		(
+			_:v1
+			{
+				_:ob :validity_binding _:v.
+				_:v :output_to _:link.
+				_:link :output_spec _:output_spec;
+					:ref _:v1.
+			}
+			_:vbs
+		) log:collectAllIn (_:context 3).
+		(
+			()
+			{
+				:nil list:in _:vbs.
+			}
+			()
+		) log:collectAllIn (_:context 3).
+	}.
+
+	() log:onNegativeSurface {
+		_:m a :OutputObligation, :Obligation;
+			:obligation_class _:OC;
+			:argument _:args;
+			:validity_binding_list _:vbs;
+			:activation_condition _:ac;
+			:port _:P.
+
+	}.
+}.
+
+(_:ob _:vbs _:vb) log:onNegativeSurface {
+	_:ob a :OutputObligation;
+		:validity_binding_list _:vbs.
+
+	_:vb list:in _:vbs.
+
+	() log:onNegativeSurface {
+		_:ob :validity_binding _:vb.
+	}.
+}.
+
+#OutputProhibition
+(_:x _:input _:policy _:output_spec _:P _:pr _:M _:vbs _:AC) log:onNegativeSurface {
+	_:x a :InputPolicyForOutput;
+		:input _:input;
+		:policy _:policy;
+		:output_spec _:output_spec.
+	_:output_spec :port _:P.
+	_:policy :prohibition _:pr.
+	_:pr
+		:use_mode _:M;
+		:activation_condition _:AC.
+	
+	(_:v _:link _:v1 _:context) log:onPositiveSurface {
+		(
+			_:v1
+			{
+				_:ob :validity_binding _:v.
+				_:v :output_to _:link.
+				_:link :output_spec _:output_spec;
+					:ref _:v1.
+			}
+			_:vbs
+		) log:collectAllIn (_:context 3).
+		(
+			()
+			{
+				:nil list:in _:vbs.
+			}
+			()
+		) log:collectAllIn (_:context 3).
+	}.
+
+	() log:onNegativeSurface {
+		_:m a :OutputProhibition, :Prohibition;
+			:mode _:M;
+			:validity_binding _:vbs;
+			:activation_condition _:AC;
+			:port _:P.
+	}.
+}.
+
+(_:pr _:vbs _:vb) log:onNegativeSurface {
+	_:pr a :OutputProhibition;
+		:validity_binding_list _:vbs.
+
+	_:vb list:in _:vbs.
+
+	() log:onNegativeSurface {
+		_:pr :validity_binding _:vb.
+	}.
+}.
+
+(_:o _:port) log:onNegativeSurface {
+	_:o a :OutputSpec;
+		:port _:port.
+	(_:x _:p) log:onNegativeSurface {
+		_:p a :OutputPolicy, :DataPolicy.
+		_:x a :OutputPolicyPair;
+			:port _:port;
+			:policy _:p.
+	}.
+}.
+
+(_:x _:port _:op _:a _:o _:p _:t) log:onNegativeSurface {
+	_:x a :OutputPolicyPair;
+		:port _:port;
+		:policy _:op.
+
+	_:a a :OutputAttribute;
+		:port _:port.
+	
+	() log:onNegativeSurface {
+		_:op :attribute _:a.
+	}.
+}.
+
+(_:x _:port _:op _:a _:o _:p _:t) log:onNegativeSurface {
+	_:x a :OutputPolicyPair;
+		:port _:port;
+		:policy _:op.
+
+	_:o a :OutputObligation;
+		:port _:port.
+
+	() log:onNegativeSurface {
+		_:op :obligation _:o.
+	}.
+}.
+
+(_:x _:port _:op _:a _:o _:p _:t) log:onNegativeSurface {
+	_:x a :OutputPolicyPair;
+		:port _:port;
+		:policy _:op.
+
+	_:p a :OutputProhibition;
+		:port _:port.
+
+	() log:onNegativeSurface {
+		_:op :prohibition _:p.
+	}.
+}.
+
+(_:x _:port _:op _:a _:o _:p _:t) log:onNegativeSurface {
+	_:x a :OutputPolicyPair;
+		:port _:port;
+		:policy _:op.
+
+	_:t a :OutputTagging;
+		:port _:port.
+	
+	() log:onNegativeSurface {
+		_:op :tagging _:t.
+	}.
+}.
