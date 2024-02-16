@@ -1,0 +1,511 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix : <http://example.org/ns#>.
+
+######
+# Helper implications for the language
+######
+
+###
+# General helper
+###
+{ ?x :attribute_ref [ :class ?N ].  } => { ?x :name ?N.  }.
+
+{ ?x a :Security.  } => { ?x :type :SecurityType.  }. 
+{ ?x a :Integrity.  } => { ?x :type :IntegrityType.  }.
+{ ?x a :Purpose.  } => { ?x :type :PurposeType.  }.
+{ ?x a :PurposeExpectation.  } => { ?x :type :PurposeType.  }.
+{ ?x a :IntegrityExpectation.  } => { ?x :type :IntegrityType.  }.
+{ ?x a :SecurityProvide.  } => { ?x :type :SecurityType.  }.
+
+{ ?x :requirement ?tag } => { ?x :tagging ?tag }.
+{ ?x :tag ?tag } => { ?x :tagging ?tag }.
+
+### Helper to check condition is activated or not (and by the current app or downstream)
+### {{{
+# For current App
+{
+    ?x a :RelatedDataAppInput;
+        :usage ?usage;
+        :data ?data;
+        :app ?app;
+        :input ?input.
+
+    ?data :policy [ ?p [ :activation_condition ?ac ] ].
+
+    _:t log:notIncludes {
+        _:t log:notIncludes {
+            ?ac :user ?U.
+            ?usage :user ?U.
+        }.
+
+        ?ac :user ?U0.
+    }.
+
+    _:t log:notIncludes {
+        _:t log:notIncludes {
+            ?ac :app ?N.
+            ?app :name ?N.
+        }.
+
+        ?ac :app ?N0.
+    }.
+
+    _:t log:notIncludes {
+        _:t log:notIncludes {
+            ?ac :purpose ?P.
+            ?input :purpose [ :name ?P ].
+        }.
+
+        ?ac :purpose ?P0.
+    }.
+} => {
+    ?ac a :MetCondition;
+        :met_by :Current.
+}.
+# For downstream
+{
+    ?x a :RelatedDataAppInput;
+        :usage ?usage;
+        :data ?data;
+        :app ?app;
+        :input ?input.
+
+    ?data :policy [ ?p [ :activation_condition ?ac ] ].
+
+    ?input :downstream ?ds.
+    
+    _:t log:notIncludes {
+        _:t log:notIncludes {
+            ?ac :app ?N.
+            ?ds :app_name ?N.
+        }.
+
+        ?ac :app ?N0.
+    }.
+
+    _:t log:notIncludes {
+        _:t log:notIncludes {
+            ?ac :purpose ?P.
+            ?ds :purpose [ :name ?P ].
+        }.
+
+        ?ac :purpose ?P0.
+    }.
+} => {
+    ?ac a :MetCondition;
+        :met_by :Downstream.
+}.
+### }}}
+
+###
+# Included in appendix
+###
+
+# UsageContext
+# \forall usage, data, app, input.
+# related_data_app_input( ?usage, ?data, ?app, ?input ) <==>
+#    UsageContext(?usage) /\ {usage.app.policy ?app} /\ AppPolicy(?app) /\ {?app.input_spec ?input} /\ Data(?data) /\ {?input.data ?data.uri}
+
+{
+    ?usage a :UsageContext;
+       :app [ :policy ?app ].
+
+    ?app a :AppPolicy;
+        :input_spec ?input.
+
+    ?data a :Data;
+        :uri ?uri.
+
+    ?input :data ?uri.
+} => {
+    ?m a :RelatedDataAppInput;
+        :usage ?usage;
+        :app ?app;
+        :data ?data;
+        :input ?input.
+}.
+
+# input_policy_for_output ( ?input, ?policy, ?output_spec ) <==>
+#    related_data_app_input( ?usage, ?data, ?app, ?input ) /\ {?app.output_spec ?output_spec} /\ {?output_spec.from ?inputPort} /\ {?input.port ?inputPort} /\ {?data.policy ?policy}
+
+{
+    ?x a :RelatedDataAppInput;
+        :usage ?usage;
+        :app ?app;
+        :data ?data;
+        :input ?input.
+
+    ?app :output_spec ?output_spec.
+
+    ?output_spec :from ?inputPort.
+
+    ?input :port ?inputPort.
+
+    ?data :policy ?policy.
+
+} => {
+    ?m a :InputPolicyForOutput;
+        :input ?input;
+        :policy ?policy;
+        :output_spec ?output_spec.
+}.
+
+######
+# Reasoning rules
+######
+
+# UnsatisfiedRequirement
+{
+    ?x a :RelatedDataAppInput;
+        :usage ?usage;
+        :data ?data;
+        :app ?app;
+        :input ?input.
+
+    ?data :policy [
+        :requirement [
+            :type ?T;
+            :name ?N
+        ]
+    ].
+
+    _:t log:notIncludes {
+            ?input :provide ?provide.
+            ?provide :type ?T;
+                :name ?N.
+    }.
+} => {
+    ?m a :UnsatisfiedRequirement;
+        :type ?T;
+        :name ?N.
+}.
+
+# UnmatchedExpectation
+{
+    ?x a :RelatedDataAppInput;
+        :usage ?usage;
+        :data ?data;
+        :app ?app;
+        :input ?input.
+
+    ?input :expect [
+        :type ?T;
+        :name ?N
+        ].
+
+    _:t log:notIncludes {
+        ?data :policy [
+            :tag [
+                :type ?T;
+                :name ?N
+            ]
+        ].
+    }
+} => {
+    ?m a :UnmatchedExpectation;
+        :type ?T;
+        :name ?N.
+}.
+
+# ProhibitedUse
+{
+    ?x a :RelatedDataAppInput;
+        :usage ?usage;
+        :data ?data;
+        :app ?app;
+        :input ?input.
+    
+    ?data :policy [
+        :prohibition [
+            :mode :Use;
+            :activation_condition ?ac
+        ]
+    ].
+
+    ?ac a :MetCondition.
+
+    # ?app :name ?N.
+    # ?input :purpose ?P.
+
+    # TODO: Add details of why prohibited use is triggered. Useful for complex conditions
+} => {
+    ?m a :ProhibitedUse;
+        :condition ?ac.
+}.
+
+{ ?x a :UnsatisfiedRequirement.  } => { ?x a :Conflict.  }.
+{ ?x a :UnmatchedExpectation.  } => { ?x a :Conflict.  }.
+{ ?x a :ProhibitedUse.  } => { ?x a :Conflict.  }.
+
+# ActivatedObligation
+{
+    ?x a :RelatedDataAppInput;
+        :usage ?usage;
+        :data ?data;
+        :app ?app;
+        :input ?input.
+
+    ?data :policy [
+        :obligation [
+            :obligation_class ?ob;
+            :argument ?args;
+            :activation_condition ?ac
+        ]
+    ].
+
+    ?ac a :MetCondition.
+} => {
+    ?m a :ActivatedObligation;
+        :obligation_class ?ob;
+        :argument ?args.
+}.
+
+# OutputAttribute
+# For not Deleted nor Edited attributes
+{
+    ?x a :InputPolicyForOutput;
+        :input ?input;
+        :policy ?policy;
+        :output_spec ?output.
+
+    ?output :port ?p.
+    ?input :port ?port.
+
+    ?policy :attribute ?attr.
+    ?attr :name ?n;
+        :class ?t;
+        :value ?v.
+    
+    _:t log:notIncludes {
+        ?output :refinement ?refi.
+        ?refi
+            :filter ?filter.
+        ?filter
+            # :input ?port;
+            :name ?n;
+            :class ?t;
+            :value ?v.
+    }.
+} => {
+    _:m a :OutputAttribute;
+        :name ?n;
+        :class ?t;
+        :value ?v;
+        :link [
+            a :ForwardLink;
+            :origin ?attr;
+            :port ?p;
+            :ref _:m
+        ].
+}.
+# For Edit
+{
+    ?x a :InputPolicyForOutput;
+        :input ?input;
+        :policy ?policy;
+        :output_spec ?output.
+
+    ?output :port ?p.
+    ?input :port ?port.
+
+    ?policy :attribute ?attr.
+    ?attr :name ?n;
+        :class ?t1;
+        :value ?v1.
+    
+    ?output :refinement ?refi.
+    ?refi a :Edit;
+        :filter ?filter;
+        :new_class ?t;
+        :new_value ?v.
+    ?filter
+        # :input ?port;
+        :name ?n;
+        :class ?t1;
+        :value ?v1.
+} => {
+    _:m a :OutputAttribute;
+        :name ?n;
+        :class ?t;
+        :value ?v;
+        :link [
+            a :ForwardLink;
+            :origin ?attr;
+            :port ?p;
+            :ref _:m
+        ].
+}.
+
+{
+    ?x a :InputPolicyForOutput;
+        :input ?input;
+        :policy ?policy;
+        :output_spec ?output.
+
+    ?output :port ?p.
+    ?policy :tagging ?tag.
+    ?tag :type ?t;
+        :attribute_ref ?ar0.
+
+    ?fl a :ForwardLink;
+        :origin ?ar0;
+        :port ?p;
+        :ref ?ar.
+
+    (
+        { ?tag :validity_binding ?vb. }
+        { ?fl2 a :ForwardLink; :origin ?vb; :port ?p. }
+    ) log:forAllIn _:t.
+} => {
+    ?ot a :Tagging, :OutputTagging;
+        :type ?t;
+        :attribute_ref ?ar;
+        :port ?p;
+        :from ?tag.
+}.
+
+{
+    ?ot a :OutputTagging;
+        :port ?p;
+        :from ?tag.
+
+    # Note: cannot put to previous axiom (through log:collectAllIn), otherwise it will require existence of :validity_binding
+    ?tag :validity_binding ?vb.
+
+    ?fl3 a :ForwardLink;
+        :origin ?vb;
+        :port ?p;
+        :ref ?attr.
+} => {
+    ?ot :validity_binding ?attr.
+}.
+
+{
+    ?x a :InputPolicyForOutput;
+        :input ?input;
+        :policy ?policy;
+        :output_spec ?output.
+
+    ?output :port ?p.
+    ?policy :prohibition ?pr.
+    ?pr :mode ?m;
+        :activation_condition ?ac.
+
+    (
+        { ?pr :validity_binding ?vb. }
+        { ?fl2 a :ForwardLink; :origin ?vb; :port ?p. }
+    ) log:forAllIn _:t.
+} => {
+    ?mm a :Prohibition, :OutputProhibition;
+        :mode ?m;
+        :activation_condition ?ac;
+        :port ?p;
+        :from ?pr.
+}.
+
+{
+    ?m a :Prohibition;
+        :port ?p;
+        :from ?pr.
+
+    ?pr :validity_binding ?vb.
+
+    ?fl a :ForwardLink;
+        :origin ?vb;
+        :port ?p;
+        :ref ?attr.
+} => {
+    ?m :validity_binding ?attr.
+}.
+
+{
+    ?x a :InputPolicyForOutput;
+        :input ?input;
+        :policy ?policy;
+        :output_spec ?output.
+    
+    ?output :port ?p.
+    ?policy :obligation ?ob.
+    ?ob :obligation_class ?oc;
+        :argument ?arg;
+        :activation_condition ?ac.
+
+    (
+        { ?ob :validity_binding ?vb. }
+        { ?fl2 a :ForwardLink; :origin ?vb; :port ?p. }
+    ) log:forAllIn _:t.
+
+    (
+        ?v1
+        {
+            ?v list:in ?arg.
+            ?fl a :ForwardLink;
+                :origin ?v;
+                :port ?p;
+                :ref ?v1.
+        }
+        ?args
+    ) log:collectAllIn _:t.
+} => {
+    ?M a :Obligation, :OutputObligation;
+        :obligation_class ?oc;
+        :argument ?args;
+        :port ?p;
+        :from ?ob.
+}.
+
+{
+    ?m a :OutputObligation;
+        :port ?p;
+        :from ?ob.
+
+    ?ob :validity_binding ?vb.
+
+    ?fl a :ForwardLink;
+        :origin ?vb;
+        :port ?p;
+        :ref ?attr.
+} => {
+    ?m :validity_binding ?attr.
+}.
+
+# {
+#     ?x a :Obligation;
+#         :from ?ob.
+
+#     ?ob :argument ?arg.
+
+# } => {}.
+
+
+# {
+#     ?x a :InputPolicyForOutput;
+#         :input ?input;
+#         :policy ?policy;
+#         :output_spec ?output.
+
+#     # ?output :port ?p.
+#     # ?input :port ?port.
+
+#     ?policy :attribute ?attr.
+#     # ?attr :name ?n;
+#     #     :class ?t1;
+#     #     :value :v1.
+# } => {
+#     ?attr a :OutputAttribute.
+# }.
+
+######
+# For debug query
+######
+
+# {
+#     ?x a :ProhibitedUse; :condition ?ac.
+# } => {
+#     ?x a :DebugOutput.
+#     ?ac a :DebugOutput.
+# }.
+
+{ ?x a :OutputObligation } => { ?x a :DebugOutput }.
