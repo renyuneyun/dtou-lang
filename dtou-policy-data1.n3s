@@ -42,13 +42,18 @@
 :compl-tag1 a :Integrity;
 	:attribute_ref :compl-attr1.
 
+# Should not be activated for :research
+# (Manual) Should be activated for :verify-identity
 :ob1 a :Obligation;
 	:obligation_class :acknowledge;
 	:argument (:attr1);
+	# :validity_binding :attr1;
 	:activation_condition [
 		:purpose :research
+		# :purpose  <urn:dtou:purpose-verify-identity>
 	].
 
+# Should be activated by App
 :pr1 a :Prohibition;
 	:mode :Use;
 	:activation_condition [
@@ -56,10 +61,19 @@
 		:purpose <urn:dtou:purpose-verify-identity>;
 	].
 
+# Should be activated by downstream
 :pr2 a :Prohibition;
 	:mode :Use;
 	:activation_condition [
 		:app <https://gh.app/clinic>;
+		:purpose <urn:dtou:purpose-booking>;
+	].
+
+# Should not be activated
+:pr3 a :Prohibition;
+	:mode :Use;
+	:activation_condition [
+		:app <https://gh.app/bad_guy>;
 		:purpose <urn:dtou:purpose-booking>;
 	].
 
@@ -71,7 +85,7 @@
 	:attribute :attr1, :sec-attr1, :per-attr1, :compl-attr1, :attr2;
 	:requirement :sec-tag1, :per-tag1;
 	# :tag :compl-tag1;
-	:prohibition :pr1, :pr2;
+	:prohibition :pr1, :pr2, :pr3;
 	:obligation :ob1.
 
 :data2 a :Data;
