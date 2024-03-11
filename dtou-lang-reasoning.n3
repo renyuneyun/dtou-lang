@@ -10,17 +10,17 @@
 ###
 # General helper
 ###
-{ ?x :attribute_ref [ :class ?N ].  } => { ?x :name ?N.  }.
+{ ?x :attribute_ref [ :class ?N ].  } => { ?x :descriptor ?N.  }.
 
-{ ?x a :Security.  } => { ?x :type :SecurityType.  }. 
-{ ?x a :Integrity.  } => { ?x :type :IntegrityType.  }.
-{ ?x a :Purpose.  } => { ?x :type :PurposeType.  }.
-{ ?x a :PurposeExpectation.  } => { ?x :type :PurposeType.  }.
-{ ?x a :IntegrityExpectation.  } => { ?x :type :IntegrityType.  }.
-{ ?x a :SecurityProvide.  } => { ?x :type :SecurityType.  }.
+{ ?x a :Security.  } => { ?x :category :SecurityType.  }.
+{ ?x a :Integrity.  } => { ?x :category :IntegrityType.  }.
+{ ?x a :Purpose.  } => { ?x :category :PurposeType.  }.
+{ ?x a :PurposeExpectation.  } => { ?x :category :PurposeType.  }.
+{ ?x a :IntegrityExpectation.  } => { ?x :category :IntegrityType.  }.
+{ ?x a :SecurityProvide.  } => { ?x :category :SecurityType.  }.
 
-{ ?x :requirement ?tag } => { ?x :tagging ?tag }.
-{ ?x :tag ?tag } => { ?x :tagging ?tag }.
+{ ?x :requirement ?tagging } => { ?x :tag ?tagging }.
+{ ?x :tagging ?tagging } => { ?x :tag ?tagging }.
 
 ### Helper to check condition is activated or not (and by the current app or downstream)
 ### {{{
@@ -55,7 +55,7 @@
     _:t log:notIncludes {
         _:t log:notIncludes {
             ?ac :purpose ?P.
-            ?input :purpose [ :name ?P ].
+            ?input :purpose [ :descriptor ?P ].
         }.
 
         ?ac :purpose ?P0.
@@ -88,7 +88,7 @@
     _:t log:notIncludes {
         _:t log:notIncludes {
             ?ac :purpose ?P.
-            ?ds :purpose [ :name ?P ].
+            ?ds :purpose [ :descriptor ?P ].
         }.
 
         ?ac :purpose ?P0.
@@ -166,20 +166,20 @@
 
     ?data :policy [
         :requirement [
-            :type ?T;
-            :name ?N
+            :category ?T;
+            :descriptor ?N
         ]
     ].
 
     _:t log:notIncludes {
             ?input :provide ?provide.
-            ?provide :type ?T;
-                :name ?N.
+            ?provide :category ?T;
+                :descriptor ?N.
     }.
 } => {
     ?m a :UnsatisfiedRequirement;
-        :type ?T;
-        :name ?N.
+        :category ?T;
+        :descriptor ?N.
 }.
 
 # UnmatchedExpectation
@@ -191,22 +191,22 @@
         :input ?input.
 
     ?input :expect [
-        :type ?T;
-        :name ?N
+        :category ?T;
+        :descriptor ?N
         ].
 
     _:t log:notIncludes {
         ?data :policy [
-            :tag [
-                :type ?T;
-                :name ?N
+            :tagging [
+                :category ?T;
+                :descriptor ?N
             ]
         ].
     }
 } => {
     ?m a :UnmatchedExpectation;
-        :type ?T;
-        :name ?N.
+        :category ?T;
+        :descriptor ?N.
 }.
 
 # ProhibitedUse
@@ -289,7 +289,7 @@
             :value ?v.
     }.
 } => {
-    _:m a :OutputAttribute;
+    ?m a :OutputAttribute;
         :name ?n;
         :class ?t;
         :value ?v;
@@ -297,7 +297,7 @@
             a :ForwardLink;
             :origin ?attr;
             :port ?p;
-            :ref _:m
+            :ref ?m
         ].
 }.
 # For Edit
@@ -326,7 +326,7 @@
         :class ?t1;
         :value ?v1.
 } => {
-    _:m a :OutputAttribute;
+    ?m a :OutputAttribute;
         :name ?n;
         :class ?t;
         :value ?v;
@@ -334,7 +334,7 @@
             a :ForwardLink;
             :origin ?attr;
             :port ?p;
-            :ref _:m
+            :ref ?m
         ].
 }.
 
@@ -345,8 +345,8 @@
         :output_spec ?output.
 
     ?output :port ?p.
-    ?policy :tagging ?tag.
-    ?tag :type ?t;
+    ?policy :tag ?tagging.
+    ?tagging :category ?t;
         :attribute_ref ?ar0.
 
     ?fl a :ForwardLink;
@@ -355,24 +355,24 @@
         :ref ?ar.
 
     (
-        { ?tag :validity_binding ?vb. }
+        { ?tagging :validity_binding ?vb. }
         { ?fl2 a :ForwardLink; :origin ?vb; :port ?p. }
     ) log:forAllIn _:t.
 } => {
-    ?ot a :Tagging, :OutputTagging;
-        :type ?t;
+    ?ot a :Tag, :OutputTag;
+        :category ?t;
         :attribute_ref ?ar;
         :port ?p;
-        :from ?tag.
+        :from ?tagging.
 }.
 
 {
-    ?ot a :OutputTagging;
+    ?ot a :OutputTag;
         :port ?p;
-        :from ?tag.
+        :from ?tagging.
 
     # Note: cannot put to previous axiom (through log:collectAllIn), otherwise it will require existence of :validity_binding
-    ?tag :validity_binding ?vb.
+    ?tagging :validity_binding ?vb.
 
     ?fl3 a :ForwardLink;
         :origin ?vb;
@@ -452,6 +452,7 @@
     ?M a :Obligation, :OutputObligation;
         :obligation_class ?oc;
         :argument ?args;
+        :activation_condition ?ac;
         :port ?p;
         :from ?ob.
 }.
@@ -497,6 +498,7 @@
 #     ?attr a :OutputAttribute.
 # }.
 
+
 ######
 # For debug query
 ######
@@ -508,4 +510,4 @@
 #     ?ac a :DebugOutput.
 # }.
 
-{ ?x a :OutputObligation } => { ?x a :DebugOutput }.
+# { ?x a :OutputObligation } => { ?x a :DebugOutput }.

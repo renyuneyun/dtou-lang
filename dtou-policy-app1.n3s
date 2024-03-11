@@ -31,29 +31,29 @@
 	:downstream :ds-clinic1.
 
 :complete1 a :IntegrityExpectation;
-	:name :complete.
+	:descriptor :complete.
 
 :verify-identify a :PurposeExpectation;
-	:name <urn:dtou:purpose-verify-identity>.
+	:descriptor <urn:dtou:purpose-verify-identity>.
 
 :verify-age a :PurposeExpectation;
-	:name <urn:dtou:purpose-verify-age>.
+	:descriptor <urn:dtou:purpose-verify-age>.
 
 :secure1 a :SecurityProvide;
-	:name :secure.
+	:descriptor :secure.
 
 :personal1 a :SecurityProvide;
-	:name :personal.
+	:descriptor :personal.
 
 :ds-clinic1 a :DownstreamSpec;
 	:app_name <https://gh.app/clinic>;
 	:purpose :booking, :recording.
 
 :booking a :PurposeExpectation;
-	:name <urn:dtou:purpose-booking>.
+	:descriptor <urn:dtou:purpose-booking>.
 
 :recording a :PurposeExpectation;
-	:name <urn:dtou:purpose-recording>.
+	:descriptor <urn:dtou:purpose-recording>.
 
 :inputPort1 a :Port;
 	:name "inputPort1".
@@ -68,10 +68,10 @@
 	:name "inputPort2".
 
 :send-confirmation a :PurposeExpectation;
-	:name <urn:dtou:purpose-send-confirmation>.
+	:descriptor <urn:dtou:purpose-send-confirmation>.
 
 :send-reminder a :PurposeExpectation;
-	:name <urn:dtou:purpose-send-reminder>.
+	:descriptor <urn:dtou:purpose-send-reminder>.
 
 :ds-clinic2 a :DownstreamSpec;
 	:app_name <https://gh.app/clinic>;

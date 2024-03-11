@@ -84,7 +84,7 @@
 :policy1 a :DataPolicy;
 	:attribute :attr1, :sec-attr1, :per-attr1, :compl-attr1, :attr2;
 	:requirement :sec-tag1, :per-tag1;
-	# :tag :compl-tag1;
+	# :tagging :compl-tag1;
 	:prohibition :pr1, :pr2, :pr3;
 	:obligation :ob1.
 
@@ -94,7 +94,7 @@
 
 :policy2 a :DataPolicy;
 	:attribute :any-purpose-attr1;
-	:tag :any-purpose.
+	:tagging :any-purpose.
 
 :any-purpose a :Purpose;
 	:attribute_ref :any-purpose-attr1.
