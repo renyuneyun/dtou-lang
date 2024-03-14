@@ -40,7 +40,7 @@
 				_:t2 rdfs:subClassOf _:T.
 			}
 			()
-		) log:collectAllIn _:scope.
+		) log:collectAllIn (_:scope 1).
 	}.
 
 	() log:onNegativeSurface {

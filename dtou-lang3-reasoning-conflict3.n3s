@@ -47,17 +47,17 @@
 	_:ac
 		:user _:U;
 		:app _:N;
-		:purpose3 _:P.
+		:purpose _:P.
 
 	_:app :name _:N.
-	_:input :purpose2 _:pn1.
+	_:input :purpose _:pn1.
 	_:pn1 :name _:P.
 
 	() log:onNegativeSurface {
 		_:m a :ProhibitedUse;
 			:mode :Use;
 			:app _:N;
-			:purpose4 _:P.
+			:purpose _:P.
 	}.
 }.
 
@@ -75,19 +75,19 @@
 		:activation_condition _:ac.
 	_:ac
 		:app _:N;
-		:purpose3 _:P.
+		:purpose _:P.
 
 	_:input :downstream _:ds.
 	_:ds
 		:app_name _:N;
-		:purpose2 _:pn1.
+		:purpose _:pn1.
 	_:pn1 :name _:P.
 
 	() log:onNegativeSurface {
 		_:m a :ProhibitedUse;
 			:mode :Use;
 			:app _:N;
-			:purpose4 _:P.
+			:purpose _:P.
 	}.
 }.
 

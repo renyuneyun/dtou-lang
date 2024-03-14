@@ -47,27 +47,6 @@
 	}.
 }.
 
-## Real Type (of Tagging) -- the type without any subtype. This is a helper for OutputTagging.
-(_:x _:T) log:onNegativeSurface {
-	_:x a :Tagging;
-		:type _:T.
-
-	(_:t2 _:scope) log:onPositiveSurface {
-		(
-			()
-			{
-				_:x :type _:t2.
-				_:t2 rdfs:subClassOf _:T.
-			}
-			()
-		) log:collectAllIn _:scope.
-	}.
-
-	() log:onNegativeSurface {
-		_:x :real_type _:T.
-	}.
-}.
-
 (_:filter _:ns) log:onNegativeSurface {
 	_:filter a :Filter.
 
@@ -337,7 +316,7 @@
 }.
 
 # UnmatchedExpectation
-(_:x _:input _:data _:expect _:policy _:T _:N) log:onNegativeSurface {
+(_:x _:input _:data _:expect _:policy _:tag _:T _:N) log:onNegativeSurface {
     _:x a :RelatedDataAppInput;
         :input _:input;
         :data _:data.
@@ -346,22 +325,42 @@
     _:expect
         :type _:T;
         :name _:N.
-    (_:tag _:scope) log:onPositiveSurface {
-        ( () {
-            _:policy :tag _:tag.
-            _:tag
-                :real_type _:T;
-                :name _:N.
-            } ()) log:collectAllIn _:scope.
-    }.
+	_:policy :tag _:tag.
+	_:tag
+		:type _:T;
+		:name _:N.
 
     () log:onNegativeSurface {
+		_:expect
+			:match _:tag.
+    }.
+}.
+(_:x _:input _:data _:expect _:T _:N) log:onNegativeSurface {
+    _:x a :RelatedDataAppInput;
+        :input _:input;
+        :data _:data.
+    _:input :expect _:expect.
+    _:expect
+        :type _:T;
+        :name _:N.
+
+	(_:tag _:scope) log:onPositiveSurface {
+		(
+			()
+			{
+				_:expect :match _:tag.
+			}
+			()
+		) log:collectAllIn _:scope.
+	}.
+
+	() log:onNegativeSurface {
         _:m a :UnmatchedExpectation;
             :input _:input;
             :data _:data;
             :type _:T;
             :name _:N.
-    }.
+	}.
 }.
 
 # ProhibitedUse
@@ -525,6 +524,27 @@
 			:purpose _:P;
 			:class _:ob;
 			:args _:args.
+	}.
+}.
+
+## Real Type (of Tagging) -- the type without any subtype. This is a helper for OutputTagging.
+(_:x _:T) log:onNegativeSurface {
+	_:x a :Tagging;
+		:type _:T.
+
+	(_:t2 _:scope) log:onPositiveSurface {
+		(
+			()
+			{
+				_:x :type _:t2.
+				_:t2 rdfs:subClassOf _:T.
+			}
+			()
+		) log:collectAllIn _:scope.
+	}.
+
+	() log:onNegativeSurface {
+		_:x :real_type _:T.
 	}.
 }.
 
