@@ -1,0 +1,22 @@
+@prefix : <http://example.org/ns#> .
+
+[] a :Conflict,
+        :UnsatisfiedRequirement ;
+    :category :SecurityType ;
+    :descriptor :secure .
+
+[] a :Conflict,
+        :UnsatisfiedRequirement ;
+    :category :SecurityType ;
+    :descriptor :personal .
+
+[] a :Conflict,
+        :UnmatchedExpectation ;
+    :category :PurposeType ;
+    :descriptor <urn:dtou:purpose-send-confirmation> .
+
+[] a :Conflict,
+        :UnmatchedExpectation ;
+    :category :PurposeType ;
+    :descriptor <urn:dtou:purpose-send-reminder> .
+

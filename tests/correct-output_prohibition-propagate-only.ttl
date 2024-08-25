@@ -1,0 +1,15 @@
+@prefix : <http://example.org/ns#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+[] a :OutputProhibition;
+    :activation_condition [ :app <urn:dtou:appoint-booking> ;
+            :purpose <urn:dtou:purpose-verify-identity> ] ;
+    :mode :Use ;
+    :port :outputPort1 .
+
+[] a :OutputProhibition;
+    :activation_condition [ :app <https://gh.app/clinic> ;
+            :purpose <urn:dtou:purpose-booking> ] ;
+    :mode :Use ;
+    :port :outputPort1 .
+

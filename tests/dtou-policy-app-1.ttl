@@ -1,0 +1,75 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <http://example.org/ns#>.
+
+######
+# Usage & App Policy
+######
+
+:usageContext1 a :UsageContext;
+	:user :rui;
+	:app [a :AppInfo; :policy :appPolicy1];
+	:time "20230823".
+
+:rui a :User.
+
+:appPolicy1 a :AppPolicy;
+	:name <urn:dtou:appoint-booking>;
+	:action :book-appointment;
+	:input_spec :input1;
+	:output_spec :output1.
+
+:book-appointment a :Action.
+
+:input1 a :InputSpec;
+	:data <https://ada.site/id>;
+	:port :inputPort1;
+	:expect :complete1;
+	:purpose :verify-identify, :verify-age;
+	# :provide :secure1, :personal1;
+	:provide :secure1;
+	:downstream :ds-clinic1.
+
+:complete1 a :IntegrityExpectation;
+	:name :complete.
+
+:verify-identify a :PurposeExpectation;
+	:name <urn:dtou:purpose-verify-identity>.
+
+:verify-age a :PurposeExpectation;
+	:name <urn:dtou:purpose-verify-age>.
+
+:secure1 a :SecurityProvide;
+	:name :secure.
+
+:personal1 a :SecurityProvide;
+	:name :personal.
+
+:ds-clinic1 a :DownstreamSpec;
+	:app_name <https://gh.app/clinic>;
+	:purpose :booking, :recording.
+
+:booking a :PurposeExpectation;
+	:name <urn:dtou:purpose-booking>.
+
+:recording a :PurposeExpectation;
+	:name <urn:dtou:purpose-recording>.
+
+:inputPort1 a :Port;
+	:name "inputPort1".
+
+:output1 a :OutputSpec;
+	:port :outputPort1;
+	:from :inputPort1;
+	:refinement :re-delete-test;
+	:refinement :re-edit-ada-p.
+
+# attribute(test, testClass, testValue) cease to exist
+:re-delete-test a :Delete;
+	:filter :filter-test.
+
+# attribute(ada-p, person, ada) becomes attribute(ada-p, not-a-person, adaa)
+:re-edit-ada-p a :Edit;
+	:filter :filter-ada-p;
+	:new_class :not-a-person;
+	:new_value :adaa.
