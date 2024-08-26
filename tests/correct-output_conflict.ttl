@@ -1,22 +1,33 @@
-@prefix : <http://example.org/ns#> .
+@prefix dtou: <http://example.org/ns#> .
+@prefix voc: <http://example.org/ns#> .
+@prefix ex: <http://example.org/ns#> .
 
-[] a :Conflict,
-        :UnsatisfiedRequirement ;
-    :category :SecurityType ;
-    :descriptor :secure .
+[] a dtou:Conflict,
+        dtou:UnsatisfiedRequirement ;
+    dtou:port ex:inputPort1;
+    dtou:category dtou:SecurityType ;
+    dtou:descriptor voc:secure .
 
-[] a :Conflict,
-        :UnsatisfiedRequirement ;
-    :category :SecurityType ;
-    :descriptor :personal .
+[] a dtou:Conflict,
+        dtou:UnsatisfiedRequirement ;
+    dtou:port ex:inputPort1;
+    dtou:category dtou:SecurityType ;
+    dtou:descriptor voc:personal .
 
-[] a :Conflict,
-        :UnmatchedExpectation ;
-    :category :PurposeType ;
-    :descriptor <urn:dtou:purpose-send-confirmation> .
+[] a dtou:Conflict,
+        dtou:UnmatchedExpectation ;
+    dtou:port ex:inputPort2;
+    dtou:category dtou:PurposeType ;
+    dtou:descriptor <urn:dtou:purpose-send-confirmation> .
 
-[] a :Conflict,
-        :UnmatchedExpectation ;
-    :category :PurposeType ;
-    :descriptor <urn:dtou:purpose-send-reminder> .
+[] a dtou:Conflict,
+        dtou:UnmatchedExpectation ;
+    dtou:port ex:inputPort2;
+    dtou:category dtou:PurposeType ;
+    dtou:descriptor <urn:dtou:purpose-send-reminder> .
 
+ex:inputPort1 a dtou:Port;
+    dtou:name "inputPort1".
+
+ex:inputPort2 a dtou:Port ;
+    dtou:name "inputPort2" .

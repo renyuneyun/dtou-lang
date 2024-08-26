@@ -23,6 +23,8 @@
 { ?x dtou:requirement ?tagging } => { ?x dtou:tag ?tagging }.
 { ?x dtou:tagging ?tagging } => { ?x dtou:tag ?tagging }.
 
+{ ?x a dtou:InputSpec; dtou:purpose ?purpose } => { ?x dtou:expect ?purpose }.
+
 ### Helper to check condition is activated or not (and by the current app or downstream)
 ### {{{
 # For current App
@@ -172,6 +174,8 @@
         ]
     ].
 
+    ?input dtou:port ?port.
+
     _:t log:notIncludes {
             ?input dtou:provide ?provide.
             ?provide dtou:category ?T;
@@ -179,6 +183,7 @@
     }.
 } => {
     ?m a dtou:UnsatisfiedRequirement;
+        dtou:port ?port;
         dtou:category ?T;
         dtou:descriptor ?N.
 }.
@@ -196,6 +201,8 @@
         dtou:descriptor ?N
         ].
 
+    ?input dtou:port ?port.
+
     _:t log:notIncludes {
         ?data dtou:policy [
             dtou:tagging [
@@ -206,6 +213,7 @@
     }
 } => {
     ?m a dtou:UnmatchedExpectation;
+        dtou:port ?port;
         dtou:category ?T;
         dtou:descriptor ?N.
 }.
