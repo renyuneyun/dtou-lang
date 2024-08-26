@@ -1,0 +1,409 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix dtou: <http://example.org/ns#>.
+@prefix dri: <http://example.org/ns2#>.
+
+######
+# Helper implications for the language
+######
+
+###
+# General helper
+###
+{ ?x dtou:attribute_ref [ dtou:class ?N ].  } => { ?x dtou:descriptor ?N.  }.
+
+{ ?x a dtou:Security.  } => { ?x dtou:category dtou:SecurityType.  }.
+{ ?x a dtou:Integrity.  } => { ?x dtou:category dtou:IntegrityType.  }.
+{ ?x a dtou:Purpose.  } => { ?x dtou:category dtou:PurposeType.  }.
+{ ?x a dtou:PurposeExpectation.  } => { ?x dtou:category dtou:PurposeType.  }.
+{ ?x a dtou:IntegrityExpectation.  } => { ?x dtou:category dtou:IntegrityType.  }.
+{ ?x a dtou:SecurityProvide.  } => { ?x dtou:category dtou:SecurityType.  }.
+
+{ ?x dtou:requirement ?tagging } => { ?x dtou:tag ?tagging }.
+{ ?x dtou:tagging ?tagging } => { ?x dtou:tag ?tagging }.
+
+### Helper to check condition is activated or not (and by the current app or downstream)
+### {{{
+# For current App
+{
+    ?x a dri:RelatedDataAppInput;
+        dri:usage ?usage;
+        dri:data ?data;
+        dri:app ?app;
+        dri:input ?input.
+
+    ?data dtou:policy [ ?p [ dtou:activation_condition ?ac ] ].
+
+    _:t log:notIncludes {
+        _:t log:notIncludes {
+            ?ac dtou:user ?U.
+            ?usage dtou:user ?U.
+        }.
+
+        ?ac dtou:user ?U0.
+    }.
+
+    _:t log:notIncludes {
+        _:t log:notIncludes {
+            ?ac dtou:app ?N.
+            ?app dtou:name ?N.
+        }.
+
+        ?ac dtou:app ?N0.
+    }.
+
+    _:t log:notIncludes {
+        _:t log:notIncludes {
+            ?ac dtou:purpose ?P.
+            ?input dtou:purpose [ dtou:descriptor ?P ].
+        }.
+
+        ?ac dtou:purpose ?P0.
+    }.
+} => {
+    ?ac a dri:MetCondition;
+        dri:met_by dri:Current.
+}.
+# For downstream
+{
+    ?x a dri:RelatedDataAppInput;
+        dri:usage ?usage;
+        dri:data ?data;
+        dri:app ?app;
+        dri:input ?input.
+
+    ?data dtou:policy [ ?p [ dtou:activation_condition ?ac ] ].
+
+    ?input dtou:downstream ?ds.
+    
+    _:t log:notIncludes {
+        _:t log:notIncludes {
+            ?ac dtou:app ?N.
+            ?ds dtou:app_name ?N.
+        }.
+
+        ?ac dtou:app ?N0.
+    }.
+
+    _:t log:notIncludes {
+        _:t log:notIncludes {
+            ?ac dtou:purpose ?P.
+            ?ds dtou:purpose [ dtou:descriptor ?P ].
+        }.
+
+        ?ac dtou:purpose ?P0.
+    }.
+} => {
+    ?ac a dri:MetCondition;
+        dri:met_by dri:Downstream.
+}.
+### }}}
+
+###
+# Included in appendix
+###
+
+# UsageContext
+# \forall usage, data, app, input.
+# related_data_app_input( ?usage, ?data, ?app, ?input ) <==>
+#    UsageContext(?usage) /\ {usage.app.policy ?app} /\ AppPolicy(?app) /\ {?app.input_spec ?input} /\ Data(?data) /\ {?input.data ?data.uri}
+
+{
+    ?usage a dtou:UsageContext;
+       dtou:app [ dtou:policy ?app ].
+
+    ?app a dtou:AppPolicy;
+        dtou:input_spec ?input.
+
+    ?data a dtou:Data;
+        dtou:uri ?uri.
+
+    ?input dtou:data ?uri.
+} => {
+    ?m a dri:RelatedDataAppInput;
+        dri:usage ?usage;
+        dri:app ?app;
+        dri:data ?data;
+        dri:input ?input.
+}.
+
+# input_policy_for_output ( ?input, ?policy, ?output_spec ) <==>
+#    related_data_app_input( ?usage, ?data, ?app, ?input ) /\ {?app.output_spec ?output_spec} /\ {?output_spec.from ?inputPort} /\ {?input.port ?inputPort} /\ {?data.policy ?policy}
+
+{
+    ?x a dri:RelatedDataAppInput;
+        dri:usage ?usage;
+        dri:app ?app;
+        dri:data ?data;
+        dri:input ?input.
+
+    ?app dtou:output_spec ?output_spec.
+
+    ?output_spec dtou:from ?inputPort.
+
+    ?input dtou:port ?inputPort.
+
+    ?data dtou:policy ?policy.
+
+} => {
+    ?m a dri:InputPolicyForOutput;
+        dri:input ?input;
+        dri:policy ?policy;
+        dri:output_spec ?output_spec.
+}.
+
+######
+# Reasoning rules
+######
+
+# OutputAttribute
+# For not Deleted nor Edited attributes
+{
+    ?x a dri:InputPolicyForOutput;
+        dri:input ?input;
+        dri:policy ?policy;
+        dri:output_spec ?output.
+
+    ?output dtou:port ?p.
+    ?input dtou:port ?port.
+
+    ?policy dtou:attribute ?attr.
+    ?attr dtou:name ?n;
+        dtou:class ?t;
+        dtou:value ?v.
+    
+    _:t log:notIncludes {
+        ?output dtou:refinement ?refi.
+        ?refi
+            dtou:filter ?filter.
+        ?filter
+            # dtou:input ?port;
+            dtou:name ?n;
+            dtou:class ?t;
+            dtou:value ?v.
+    }.
+} => {
+    ?m a dtou:OutputAttribute;
+        dtou:name ?n;
+        dtou:class ?t;
+        dtou:value ?v;
+        dri:link [
+            a dri:ForwardLink;
+            dri:origin ?attr;
+            dri:port ?p;
+            dri:ref ?m
+        ].
+}.
+# For Edit
+{
+    ?x a dri:InputPolicyForOutput;
+        dri:input ?input;
+        dri:policy ?policy;
+        dri:output_spec ?output.
+
+    ?output dtou:port ?p.
+    ?input dtou:port ?port.
+
+    ?policy dtou:attribute ?attr.
+    ?attr dtou:name ?n;
+        dtou:class ?t1;
+        dtou:value ?v1.
+    
+    ?output dtou:refinement ?refi.
+    ?refi a dtou:Edit;
+        dtou:filter ?filter;
+        dtou:new_class ?t;
+        dtou:new_value ?v.
+    ?filter
+        # dtou:input ?port;
+        dtou:name ?n;
+        dtou:class ?t1;
+        dtou:value ?v1.
+} => {
+    ?m a dtou:OutputAttribute;
+        dtou:name ?n;
+        dtou:class ?t;
+        dtou:value ?v;
+        dri:link [
+            a dri:ForwardLink;
+            dri:origin ?attr;
+            dri:port ?p;
+            dri:ref ?m
+        ].
+}.
+
+{
+    ?x a dri:InputPolicyForOutput;
+        dri:input ?input;
+        dri:policy ?policy;
+        dri:output_spec ?output.
+
+    ?output dtou:port ?p.
+    ?policy dtou:tag ?tagging.
+    ?tagging dtou:category ?t;
+        dtou:attribute_ref ?ar0.
+
+    ?fl a dri:ForwardLink;
+        dri:origin ?ar0;
+        dri:port ?p;
+        dri:ref ?ar.
+
+    (
+        { ?tagging dtou:validity_binding ?vb. }
+        { ?fl2 a dri:ForwardLink; dri:origin ?vb; dri:port ?p. }
+    ) log:forAllIn _:t.
+} => {
+    ?ot a dtou:Tag, dtou:OutputTag;
+        dtou:category ?t;
+        dtou:attribute_ref ?ar;
+        dtou:port ?p;
+        dri:from ?tagging.
+}.
+
+{
+    ?ot a dtou:OutputTag;
+        dtou:port ?p;
+        dri:from ?tagging.
+
+    # Note: cannot put to previous axiom (through log:collectAllIn), otherwise it will require existence of dtou:validity_binding
+    ?tagging dtou:validity_binding ?vb.
+
+    ?fl3 a dri:ForwardLink;
+        dri:origin ?vb;
+        dri:port ?p;
+        dri:ref ?attr.
+} => {
+    ?ot dtou:validity_binding ?attr.
+}.
+
+{
+    ?x a dri:InputPolicyForOutput;
+        dri:input ?input;
+        dri:policy ?policy;
+        dri:output_spec ?output.
+
+    ?output dtou:port ?p.
+    ?policy dtou:prohibition ?pr.
+    ?pr dtou:mode ?m;
+        dtou:activation_condition ?ac.
+
+    (
+        { ?pr dtou:validity_binding ?vb. }
+        { ?fl2 a dri:ForwardLink; dri:origin ?vb; dri:port ?p. }
+    ) log:forAllIn _:t.
+} => {
+    ?mm a dtou:Prohibition, dtou:OutputProhibition;
+        dtou:mode ?m;
+        dtou:activation_condition ?ac;
+        dtou:port ?p;
+        dri:from ?pr.
+}.
+
+{
+    ?m a dtou:Prohibition;
+        dtou:port ?p;
+        dtou:from ?pr.
+
+    ?pr dtou:validity_binding ?vb.
+
+    ?fl a dri:ForwardLink;
+        dri:origin ?vb;
+        dri:port ?p;
+        dri:ref ?attr.
+} => {
+    ?m dtou:validity_binding ?attr.
+}.
+
+{
+    ?x a dri:InputPolicyForOutput;
+        dri:input ?input;
+        dri:policy ?policy;
+        dri:output_spec ?output.
+    
+    ?output dtou:port ?p.
+    ?policy dtou:obligation ?ob.
+    ?ob dtou:obligation_class ?oc;
+        dtou:argument ?arg;
+        dtou:activation_condition ?ac.
+
+    (
+        { ?ob dtou:validity_binding ?vb. }
+        { ?fl2 a dri:ForwardLink; dri:origin ?vb; dri:port ?p. }
+    ) log:forAllIn _:t.
+
+    (
+        ?v1
+        {
+            ?v list:in ?arg.
+            ?fl a dri:ForwardLink;
+                dri:origin ?v;
+                dri:port ?p;
+                dri:ref ?v1.
+        }
+        ?args
+    ) log:collectAllIn _:t.
+} => {
+    ?M a dtou:Obligation, dtou:OutputObligation;
+        dtou:obligation_class ?oc;
+        dtou:argument ?args;
+        dtou:activation_condition ?ac;
+        dtou:port ?p;
+        dri:from ?ob.
+}.
+
+{
+    ?m a dtou:OutputObligation;
+        dtou:port ?p;
+        dtou:from ?ob.
+
+    ?ob dtou:validity_binding ?vb.
+
+    ?fl a dri:ForwardLink;
+        dri:origin ?vb;
+        dri:port ?p;
+        dri:ref ?attr.
+} => {
+    ?m dtou:validity_binding ?attr.
+}.
+
+# {
+#     ?x a dtou:Obligation;
+#         dtou:from ?ob.
+
+#     ?ob dtou:argument ?arg.
+
+# } => {}.
+
+
+# {
+#     ?x a dtou:InputPolicyForOutput;
+#         dtou:input ?input;
+#         dtou:policy ?policy;
+#         dtou:output_spec ?output.
+
+#     # ?output dtou:port ?p.
+#     # ?input dtou:port ?port.
+
+#     ?policy dtou:attribute ?attr.
+#     # ?attr dtou:name ?n;
+#     #     dtou:class ?t1;
+#     #     dtou:value dtou:v1.
+# } => {
+#     ?attr a dtou:OutputAttribute.
+# }.
+
+
+######
+# For debug query
+######
+
+# {
+#     ?x a dtou:ProhibitedUse; dtou:condition ?ac.
+# } => {
+#     ?x a dtou:DebugOutput.
+#     ?ac a dtou:DebugOutput.
+# }.
+
+# { ?x a dtou:OutputObligation } => { ?x a dtou:DebugOutput }.
+

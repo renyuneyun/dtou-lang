@@ -1,0 +1,62 @@
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <http://example.org/ns#>.
+@prefix q: <http://example.org/query/ns#>.
+
+######
+# Query
+######
+
+# (_:s _:p _:o) log:onQuerySurface {
+# 	_:s a :RelatedDataAppInput.
+# 	_:s _:p _:o.
+# }.
+
+# (_:s _:p _:o) log:onQuerySurface {
+# 	_:s a :InputPolicyForOutput.
+# 	_:s _:p _:o.
+# }.
+
+# (_:s _:p _:o) log:onQuerySurface {
+# 	_:s a :DeletedAttribute.
+# 	_:s _:p _:o.
+# }.
+
+q:query_condition
+    q:property :app, :purpose.
+
+q:query_attribute
+    q:property rdf:type, :name, :class, :value.
+
+{
+    ?s a :OutputAttribute;
+        ?p ?o.
+
+    q:query_attribute q:property ?p.
+} => {
+    ?s ?p ?o.
+}.
+
+{
+    ?type list:in (:OutputTag :OutputProhibition :OutputObligation).
+
+    ?s a ?type;
+        ?p ?o.
+} => {
+    ?s ?p ?o.
+}.
+
+{
+    ?type list:in (:OutputProhibition :OutputObligation).
+
+    ?s a ?type;
+        :activation_condition ?ac.
+    ?ac ?p ?o.
+
+    q:query_condition q:property ?p.
+} => {
+    ?ac ?p ?o.
+}.
+
