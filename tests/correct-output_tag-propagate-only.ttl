@@ -33,9 +33,3 @@ _:n91d38d10d0fe4719ae77ebb75783a7f9b1 a :OutputAttribute ;
     :class :person ;
     :name :ada-p ;
     :value :ada .
-
-[] a :OutputAttribute ;
-    :class :complete ;
-    :name :compl-attr ;
-    :value :nil .
-

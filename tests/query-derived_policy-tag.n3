@@ -3,16 +3,6 @@
 @prefix : <http://example.org/ns#>.
 
 {
-	#( rdf:type :name :class :value :port ) list:iterate ( ?i ?p ).
-	( :name :class :value :port ) list:iterate ( ?i ?p ).
-	?a a :OutputAttribute;
-		?p ?o.
-} => {
-	?a a :OutputAttribute;
-		?p ?o.
-}.
-
-{
 	#( rdf:type :category :attribute_ref :validity_binding :port ) list:iterate ( ?i ?p ).
 	( :category :attribute_ref :validity_binding :port ) list:iterate ( ?i ?p ).
 	?a a :OutputTag;
@@ -34,7 +24,7 @@
 
 {
 	( :attribute_ref :validity_binding ) list:iterate ( ?i ?p ).
-	( rdf:type :name :class :value ) list:iterate ( ?i ?p1 ).
+	( rdf:type :name :class :value ) list:iterate ( ?i2 ?p1 ).
 	?a a :OutputTag;
 		?p ?o0.
 	?o0 ?p1 ?o1.
