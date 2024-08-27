@@ -1,0 +1,22 @@
+@prefix : <http://example.org/ns#>.
+
+_:sk_4 a :OutputAttribute;
+  #:port :outputPort1;
+  :name :ada-p;
+  :class :not-a-person;
+  :value :adaa.
+_:sk_27 a :OutputAttribute;
+  #:port :outputPort1;
+  :name :sec-attr;
+  :class :secure;
+  :value :nil.
+_:sk_31 a :OutputAttribute;
+  #:port :outputPort1;
+  :name :per-attr;
+  :class :personal;
+  :value :nil.
+_:sk_35 a :OutputAttribute;
+  #:port :outputPort1;
+  :name :compl-attr;
+  :class :complete;
+  :value :nil.

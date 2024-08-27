@@ -73,3 +73,13 @@
 	:filter :filter-ada-p;
 	:new_class :not-a-person;
 	:new_value :adaa.
+
+:filter-ada-p a :Filter;
+	:name :ada-p;
+	:class :person;
+	:value :ada.
+
+:filter-test a :Filter;
+	:name :test;
+	:class :testClass;
+	:value :testValue.
