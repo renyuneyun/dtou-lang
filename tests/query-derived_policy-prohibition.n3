@@ -1,0 +1,35 @@
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix : <http://example.org/ns#>.
+
+{
+	#( rdf:type :activation_condition :mode :port ) list:iterate ( ?i ?p ).
+	( :activation_condition :mode :port ) list:iterate ( ?i ?p ).
+	?a a :OutputProhibition;
+		?p ?o.
+} => {
+	?a a :OutputProhibition;
+		?p ?o.
+}.
+
+{
+	( :activation_condition :port ) list:iterate ( ?i ?p ).
+	?a a :OutputProhibition;
+		?p ?o0.
+	?o0 ?p1 ?o1.
+} => {
+	?a a :OutputProhibition;
+		?p ?o0.
+	?o0 ?p1 ?o1.
+}.
+
+{
+	( rdf:type :name :class :value ) list:iterate ( ?i ?p1 ).
+	?a a :OutputProhibition;
+		:validity_binding ?o0.
+	?o0 ?p1 ?o1.
+} => {
+	?a a :OutputProhibition;
+		:validity_binding ?o0.
+	?o0 ?p1 ?o1.
+}.

@@ -54,12 +54,11 @@ wrap() {
 }
 
 
-wrap "Only attribute propagation" runTest dtou-policy-data_attributes.ttl dtou-policy-app_propagate-only.ttl query-derived-policy.n3 correct-output_attribute-propagate-only.ttl
-wrap "Only tag propagation" runTest dtou-policy-data_tag.ttl dtou-policy-app_propagate-only.ttl query-derived-policy.n3 correct-output_tag-propagate-only.ttl
-wrap "Only prohibition propagation" runTest dtou-policy-data_prohibition.ttl dtou-policy-app_propagate-only.ttl query-derived-policy.n3 correct-output_prohibition-propagate-only.ttl
-wrap "Only obligation propagation" runTest dtou-policy-data_obligation.ttl dtou-policy-app_propagate-only.ttl query-derived-policy.n3 correct-output_obligation-propagate-only.ttl
+wrap "Only attribute propagation" runTest dtou-policy-data-1.ttl dtou-policy-app_propagate-only.ttl query-derived_policy-attribute.n3 correct-output_attribute-propagate-only.ttl
+wrap "Only tag propagation" runTest dtou-policy-data-1.ttl dtou-policy-app_propagate-only.ttl query-derived_policy-tag.n3 correct-output_tag-propagate-only.ttl
+wrap "Only prohibition propagation" runTest dtou-policy-data-1.ttl dtou-policy-app_propagate-only.ttl query-derived_policy-prohibition.n3 correct-output_prohibition-propagate-only.ttl
+wrap "Only obligation propagation" runTest dtou-policy-data-1.ttl dtou-policy-app_propagate-only.ttl query-derived_policy-obligation.n3 correct-output_obligation-propagate-only.ttl
 wrap "Full data policy propagation" runTest dtou-policy-data-1.ttl dtou-policy-app_propagate-only.ttl query-derived-policy.n3 correct-output_derived_propagate-only.ttl  # The "correct" output is only after a brief verification. Something is not correct with the definition (see commented-out lines in "correct" output)
 wrap "Full data policy with refinement" runTest dtou-policy-data-1.ttl dtou-policy-app-1.ttl query-derived-policy.n3 correct-output_derived-policy_refinement.ttl  # The "correct" output is only after a brief verification. Something is not correct with the definition (see commented-out lines in "correct" output)
 wrap "Conflict" runTest dtou-policy-data-1.ttl dtou-policy-app_propagate-only.ttl query-conflict.n3 correct-output_conflict.ttl
 wrap "Activated Obligation" runTest dtou-policy-data-1.ttl dtou-policy-app_propagate-only.ttl query-obligation.n3 correct-output_obligation.ttl  # The "correct" output may not be correct; eye has some issues before v10.19.6 (#113)
-
