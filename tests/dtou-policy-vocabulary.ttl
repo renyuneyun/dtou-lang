@@ -1,0 +1,5 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix voc: <http://example.org/ns#>.
+
+<urn:dtou:purpose-send-confirmation> rdfs:subClassOf voc:Purpose.
+<urn:dtou:purpose-send-reminder> rdfs:subClassOf voc:Purpose.

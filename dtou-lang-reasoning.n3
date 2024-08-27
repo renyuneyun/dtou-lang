@@ -3,6 +3,7 @@
 @prefix list: <http://www.w3.org/2000/10/swap/list#> .
 @prefix dtou: <http://example.org/ns#>.
 @prefix dri: <http://example.org/ns2#>.
+@prefix : <http://example.org/ns#>.
 
 ######
 # Helper implications for the language
@@ -22,8 +23,16 @@
 
 { ?x dtou:requirement ?tagging } => { ?x dtou:tag ?tagging }.
 { ?x dtou:tagging ?tagging } => { ?x dtou:tag ?tagging }.
+{ ?x a dtou:DataPolicy; dtou:purpose ?purpose } => { ?x dtou:tagging ?purpose }.
 
 { ?x a dtou:InputSpec; dtou:purpose ?purpose } => { ?x dtou:expect ?purpose }.
+
+###
+# Additional helper for reasoning (subclassing of items to be checked, e.g. tags)
+###
+
+{ ?x dtou:descriptor ?d. } => { ?d dri:hasEffectiveSuper ?d. }.
+{ ?x dri:hasEffectiveSuper ?d. ?d rdfs:subClassOf ?dp. } => { ?x dri:hasEffectiveSuper ?dp. }.  # Only use super classes for simplicity and generally better performance (than using sub-classes)
 
 ### Helper to check condition is activated or not (and by the current app or downstream)
 ### {{{
@@ -57,7 +66,7 @@
 
     _:t log:notIncludes {
         _:t log:notIncludes {
-            ?ac dtou:purpose ?P.
+            ?ac dtou:purpose [ dri:hasEffectiveSuper ?P ].
             ?input dtou:purpose [ dtou:descriptor ?P ].
         }.
 
@@ -78,7 +87,7 @@
     ?data dtou:policy [ ?p [ dtou:activation_condition ?ac ] ].
 
     ?input dtou:downstream ?ds.
-    
+
     _:t log:notIncludes {
         _:t log:notIncludes {
             ?ac dtou:app ?N.
@@ -90,7 +99,7 @@
 
     _:t log:notIncludes {
         _:t log:notIncludes {
-            ?ac dtou:purpose ?P.
+            ?ac dtou:purpose [ dri:hasEffectiveSuper ?P ].
             ?ds dtou:purpose [ dtou:descriptor ?P ].
         }.
 
@@ -178,8 +187,9 @@
 
     _:t log:notIncludes {
             ?input dtou:provide ?provide.
+            ?N dri:hasEffectiveSuper ?Ns.
             ?provide dtou:category ?T;
-                dtou:descriptor ?N.
+                dtou:descriptor ?Ns.
     }.
 } => {
     ?m a dtou:UnsatisfiedRequirement;
@@ -204,13 +214,14 @@
     ?input dtou:port ?port.
 
     _:t log:notIncludes {
+        ?N dri:hasEffectiveSuper ?Ns.
         ?data dtou:policy [
             dtou:tagging [
                 dtou:category ?T;
-                dtou:descriptor ?N
+                dtou:descriptor ?Ns
             ]
         ].
-    }
+    }.
 } => {
     ?m a dtou:UnmatchedExpectation;
         dtou:port ?port;
@@ -434,7 +445,7 @@
         dri:input ?input;
         dri:policy ?policy;
         dri:output_spec ?output.
-    
+
     ?output dtou:port ?p.
     ?policy dtou:obligation ?ob.
     ?ob dtou:obligation_class ?oc;

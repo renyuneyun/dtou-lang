@@ -80,7 +80,7 @@
 
 :policy2 a :DataPolicy;
 	:attribute :any-purpose-attr1;
-	:tag :any-purpose.
+	:tagging :any-purpose.
 
 :any-purpose a :Purpose;
 	:attribute_ref :any-purpose-attr1.

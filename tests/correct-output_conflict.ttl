@@ -14,20 +14,6 @@
     dtou:category dtou:SecurityType ;
     dtou:descriptor voc:personal .
 
-[] a dtou:Conflict,
-        dtou:UnmatchedExpectation ;
-    dtou:port ex:inputPort2;
-    dtou:category dtou:PurposeType ;
-    dtou:descriptor <urn:dtou:purpose-send-confirmation> .
-
-[] a dtou:Conflict,
-        dtou:UnmatchedExpectation ;
-    dtou:port ex:inputPort2;
-    dtou:category dtou:PurposeType ;
-    dtou:descriptor <urn:dtou:purpose-send-reminder> .
-
 ex:inputPort1 a dtou:Port;
     dtou:name "inputPort1".
 
-ex:inputPort2 a dtou:Port ;
-    dtou:name "inputPort2" .
