@@ -31,15 +31,15 @@
 	:class :complete;
 	:value :nil.
 
-:sec-tag1 a :Security;
+:sec-tag1 a :SecurityTag;
 	:attribute_ref :sec-attr1;
 	:validity_binding :attr1, :attr2.
 
-:per-tag1 a :Security;
+:per-tag1 a :SecurityTag;
 	:attribute_ref :per-attr1;
 	:validity_binding :attr1.
 
-:compl-tag1 a :Integrity;
+:compl-tag1 a :IntegrityTag;
 	:attribute_ref :compl-attr1.
 
 # Should not be activated for :research
@@ -96,7 +96,7 @@
 	:attribute :any-purpose-attr1;
 	:tagging :any-purpose.
 
-:any-purpose a :Purpose;
+:any-purpose a :PurposeTag;
 	:attribute_ref :any-purpose-attr1.
 
 :any-purpose-attr1 a :Attribute;
