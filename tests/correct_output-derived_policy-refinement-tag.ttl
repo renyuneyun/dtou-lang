@@ -22,3 +22,11 @@ _:sk_43 a dtou:OutputTag;
   dtou:attribute_ref _:sk_31;
   dtou:validity_binding _:sk_4;
   dtou:category dtou:SecurityType.
+[] a dtou:OutputTag;
+	dtou:attribute_ref [ a dtou:OutputAttribute;
+	        dtou:name voc:compl-attr;
+	        dtou:class voc:complete;
+	        dtou:value voc:nil ];
+    dtou:category dtou:IntegrityType;
+    #dtou:descriptor dtou:complete;
+    dtou:port ex:outputPort1.

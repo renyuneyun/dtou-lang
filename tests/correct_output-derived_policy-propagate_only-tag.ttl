@@ -15,7 +15,7 @@
     #dtou:descriptor voc:secure ;
     dtou:port ex:outputPort1 ;
     #dtou:type dtou:TagType,
-    #    dtou:TaggingType ;
+    #    dtou:RequirementType ;
     dtou:validity_binding _:n91d38d10d0fe4719ae77ebb75783a7f9b1,
         [ a dtou:OutputAttribute ;
             dtou:class voc:testClass ;
@@ -31,8 +31,17 @@
     #dtou:descriptor dtou:personal ;
     dtou:port ex:outputPort1 ;
     #dtou:type dtou:TagType,
-    #    dtou:TaggingType ;
+    #    dtou:RequirementType ;
     dtou:validity_binding _:n91d38d10d0fe4719ae77ebb75783a7f9b1 .
+
+[] a dtou:OutputTag;
+	dtou:attribute_ref [ a dtou:OutputAttribute;
+	        dtou:name voc:compl-attr;
+	        dtou:class voc:complete;
+	        dtou:value voc:nil ];
+    dtou:category dtou:IntegrityType;
+    #dtou:descriptor dtou:complete;
+    dtou:port ex:outputPort1.
 
 _:n91d38d10d0fe4719ae77ebb75783a7f9b1 a dtou:OutputAttribute ;
     dtou:class voc:person ;

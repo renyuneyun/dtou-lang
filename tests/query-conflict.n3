@@ -13,7 +13,7 @@
 }.
 
 {
-	( dtou:port ) list:iterate ( ?i ?p ).
+	( dtou:port) list:iterate ( ?i ?p ).
 	?a a dtou:Conflict;
 		?p ?o0.
 	?o0 ?p1 ?o1.
@@ -23,3 +23,13 @@
 	?o0 ?p1 ?o1.
 }.
 
+{
+	( dtou:app dtou:purpose dtou:user ) list:iterate ( ?i ?p ).
+	?a a dtou:ProhibitedUse;
+		dtou:condition ?o0.
+	?o0 ?p ?o1.
+} => {
+	?a a dtou:ProhibitedUse;
+		dtou:condition ?o0.
+	?o0 ?p ?o1.
+}.

@@ -34,6 +34,15 @@
     #    dtou:TaggingType ;
     dtou:validity_binding _:n91d38d10d0fe4719ae77ebb75783a7f9b1 .
 
+[] a dtou:OutputTag;
+	dtou:attribute_ref [ a dtou:OutputAttribute;
+	        dtou:name voc:compl-attr;
+	        dtou:class voc:complete;
+	        dtou:value voc:nil ];
+    dtou:category dtou:IntegrityType;
+    #dtou:descriptor dtou:complete;
+    dtou:port ex:outputPort1.
+
 [] a dtou:OutputProhibition;
     dtou:activation_condition [ dtou:app <urn:dtou:appoint-booking> ;
             dtou:purpose <urn:dtou:purpose-verify-identity> ] ;
@@ -44,6 +53,14 @@
     dtou:activation_condition [ dtou:app <https://gh.app/clinic> ;
             dtou:purpose <urn:dtou:purpose-booking> ] ;
     dtou:mode dtou:Use ;
+    dtou:port ex:outputPort1 .
+
+[] a dtou:OutputProhibition;
+    dtou:mode dtou:Use;
+    dtou:activation_condition [
+            dtou:app <https://not.exist/app>;
+            dtou:purpose <urn:dtou:purpose-booking>;
+	];
     dtou:port ex:outputPort1 .
 
 [] a dtou:OutputObligation ;

@@ -18,3 +18,10 @@
     dtou:mode dtou:Use ;
     dtou:port ex:outputPort1 .
 
+[] a dtou:OutputProhibition;
+    dtou:mode dtou:Use;
+    dtou:activation_condition [
+            dtou:app <https://not.exist/app>;
+            dtou:purpose <urn:dtou:purpose-booking>;
+	];
+    dtou:port ex:outputPort1 .

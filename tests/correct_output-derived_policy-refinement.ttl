@@ -32,6 +32,14 @@ _:sk_43 a dtou:OutputTag;
   dtou:attribute_ref _:sk_31;
   dtou:validity_binding _:sk_4;
   dtou:category dtou:SecurityType.
+[] a dtou:OutputTag;
+	dtou:attribute_ref [ a dtou:OutputAttribute;
+	        dtou:name voc:compl-attr;
+	        dtou:class voc:complete;
+	        dtou:value voc:nil ];
+    dtou:category dtou:IntegrityType;
+    #dtou:descriptor dtou:complete;
+    dtou:port ex:outputPort1.
 _:sk_61 a dtou:OutputObligation;
   dtou:port ex:outputPort1;
   dtou:obligation_class voc:acknowledge;
@@ -45,6 +53,13 @@ _:sk_52 a dtou:OutputProhibition;
   dtou:port ex:outputPort1;
   dtou:activation_condition _:ac2;
   dtou:mode dtou:Use.
+[] a dtou:OutputProhibition;
+    dtou:mode dtou:Use;
+    dtou:activation_condition [
+            dtou:app <https://not.exist/app>;
+            dtou:purpose <urn:dtou:purpose-booking>;
+	  ];
+    dtou:port ex:outputPort1 .
 _:ac1 dtou:app <urn:dtou:appoint-booking>;
   dtou:purpose <urn:dtou:purpose-verify-identity>.
 _:ac2 dtou:app <https://gh.app/clinic>;

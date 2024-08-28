@@ -1,23 +1,41 @@
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix log: <http://www.w3.org/2000/10/swap/log#>.
-@prefix list: <http://www.w3.org/2000/10/swap/list#>.
-@prefix dtou: <urn:dtou:core#>.
-@prefix voc: <urn:dtou:vocabulary#>.
-@prefix ex: <http://example.org/ns#>.
+@prefix : <http://example.org/ns#> .
+@prefix dtou: <urn:dtou:core#> .
+@prefix voc: <urn:dtou:vocabulary#> .
+
+:inputPort1 a dtou:Port ;
+    dtou:name "inputPort1" .
 
 [] a dtou:Conflict,
         dtou:UnsatisfiedRequirement ;
-    dtou:port ex:inputPort1;
     dtou:category dtou:SecurityType ;
-    dtou:descriptor voc:secure .
+    dtou:descriptor voc:personal ;
+    dtou:port :inputPort1 .
 
 [] a dtou:Conflict,
-        dtou:UnsatisfiedRequirement ;
-    dtou:port ex:inputPort1;
-    dtou:category dtou:SecurityType ;
-    dtou:descriptor voc:personal .
+        dtou:UnmatchedExpectation ;
+    dtou:category dtou:IntegrityType ;
+    dtou:descriptor voc:complete ;
+    dtou:port :inputPort1 .
 
-ex:inputPort1 a dtou:Port;
-    dtou:name "inputPort1".
+[] a dtou:Conflict,
+        dtou:UnmatchedExpectation ;
+    dtou:category dtou:PurposeType ;
+    dtou:descriptor <urn:dtou:purpose-verify-identity> ;
+    dtou:port :inputPort1 .
+
+[] a dtou:Conflict,
+        dtou:UnmatchedExpectation ;
+    dtou:category dtou:PurposeType ;
+    dtou:descriptor <urn:dtou:purpose-verify-age> ;
+    dtou:port :inputPort1 .
+
+[] a dtou:Conflict,
+        dtou:ProhibitedUse ;
+    dtou:condition [ dtou:app <urn:dtou:appoint-booking> ;
+            dtou:purpose <urn:dtou:purpose-verify-identity> ] .
+
+[] a dtou:Conflict,
+        dtou:ProhibitedUse ;
+    dtou:condition [ dtou:app <https://gh.app/clinic> ;
+            dtou:purpose <urn:dtou:purpose-booking> ] .
 
