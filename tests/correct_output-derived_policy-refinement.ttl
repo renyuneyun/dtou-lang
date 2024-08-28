@@ -24,7 +24,7 @@ _:sk_35 a :OutputAttribute;
   :value :nil.
 _:sk_43 a :OutputTag;
   :port :outputPort1;
-  :descriptor :personal;
+  #:descriptor :personal;
   :attribute_ref _:sk_31;
   :validity_binding _:sk_4;
   :category :SecurityType.

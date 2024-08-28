@@ -1,0 +1,16 @@
+# Not yet verified, but probably correct for most parts.
+
+@prefix : <http://example.org/ns#>.
+
+_:sk_49 a :OutputProhibition;
+  :port :outputPort1;
+  :activation_condition _:ac1;
+  :mode :Use.
+_:sk_52 a :OutputProhibition;
+  :port :outputPort1;
+  :activation_condition _:ac2;
+  :mode :Use.
+_:ac1 :app <urn:dtou:appoint-booking>;
+  :purpose <urn:dtou:purpose-verify-identity>.
+_:ac2 :app <https://gh.app/clinic>;
+  :purpose <urn:dtou:purpose-booking>.

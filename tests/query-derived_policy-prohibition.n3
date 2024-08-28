@@ -4,7 +4,7 @@
 
 {
 	#( rdf:type :activation_condition :mode :port ) list:iterate ( ?i ?p ).
-	( :activation_condition :mode :port ) list:iterate ( ?i ?p ).
+	( :activation_condition :mode :validity_binding :port ) list:iterate ( ?i ?p ).
 	?a a :OutputProhibition;
 		?p ?o.
 } => {

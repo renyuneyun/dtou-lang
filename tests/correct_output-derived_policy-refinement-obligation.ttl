@@ -1,0 +1,14 @@
+# Not yet verified, but probably correct for most parts.
+
+@prefix : <http://example.org/ns#>.
+
+_:sk_4 a :OutputAttribute;
+  #:port :outputPort1;
+  :name :ada-p;
+  :class :not-a-person;
+  :value :adaa.
+_:sk_61 a :OutputObligation;
+  :port :outputPort1;
+  :obligation_class :acknowledge;
+  :argument (_:sk_4);
+  :activation_condition [ :purpose :research ].
