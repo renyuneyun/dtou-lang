@@ -1,59 +1,64 @@
-@prefix : <http://example.org/ns#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix voc: <urn:dtou:vocabulary#>.
+@prefix ex: <http://example.org/ns#>.
 
-[] a :OutputTag;
-    :attribute_ref [ a :OutputAttribute ;
-            :class :secure ;
-            :name :sec-attr ;
-            :value :nil ] ;
-    :category :SecurityType ;
-    #:descriptor :secure ;
-    :port :outputPort1 ;
-    #:type :TagType,
-    #    :TaggingType ;
-    :validity_binding _:n91d38d10d0fe4719ae77ebb75783a7f9b1,
-        [ a :OutputAttribute ;
-            :class :testClass ;
-            :name :test ;
-            :value :testValue ] .
+[] a dtou:OutputTag;
+    dtou:attribute_ref [ a dtou:OutputAttribute ;
+            dtou:class voc:secure ;
+            dtou:name voc:sec-attr ;
+            dtou:value voc:nil ] ;
+    dtou:category dtou:SecurityType ;
+    #dtou:descriptor dtou:secure ;
+    dtou:port ex:outputPort1 ;
+    #dtou:type dtou:TagType,
+    #    dtou:TaggingType ;
+    dtou:validity_binding _:n91d38d10d0fe4719ae77ebb75783a7f9b1,
+        [ a dtou:OutputAttribute ;
+            dtou:class voc:testClass ;
+            dtou:name voc:test ;
+            dtou:value voc:testValue ] .
 
-[] a :OutputTag;
-    :attribute_ref [ a :OutputAttribute ;
-            :class :personal ;
-            :name :per-attr ;
-            :value :nil ] ;
-    :category :SecurityType ;
-    #:descriptor :personal ;
-    :port :outputPort1 ;
-    #:type :TagType,
-    #    :TaggingType ;
-    :validity_binding _:n91d38d10d0fe4719ae77ebb75783a7f9b1 .
+[] a dtou:OutputTag;
+    dtou:attribute_ref [ a dtou:OutputAttribute ;
+            dtou:class voc:personal ;
+            dtou:name voc:per-attr ;
+            dtou:value voc:nil ] ;
+    dtou:category dtou:SecurityType ;
+    #dtou:descriptor dtou:personal ;
+    dtou:port ex:outputPort1 ;
+    #dtou:type dtou:TagType,
+    #    dtou:TaggingType ;
+    dtou:validity_binding _:n91d38d10d0fe4719ae77ebb75783a7f9b1 .
 
-[] a :OutputProhibition;
-    :activation_condition [ :app <urn:dtou:appoint-booking> ;
-            :purpose <urn:dtou:purpose-verify-identity> ] ;
-    :mode :Use ;
-    :port :outputPort1 .
+[] a dtou:OutputProhibition;
+    dtou:activation_condition [ dtou:app <urn:dtou:appoint-booking> ;
+            dtou:purpose <urn:dtou:purpose-verify-identity> ] ;
+    dtou:mode dtou:Use ;
+    dtou:port ex:outputPort1 .
 
-[] a :OutputProhibition;
-    :activation_condition [ :app <https://gh.app/clinic> ;
-            :purpose <urn:dtou:purpose-booking> ] ;
-    :mode :Use ;
-    :port :outputPort1 .
+[] a dtou:OutputProhibition;
+    dtou:activation_condition [ dtou:app <https://gh.app/clinic> ;
+            dtou:purpose <urn:dtou:purpose-booking> ] ;
+    dtou:mode dtou:Use ;
+    dtou:port ex:outputPort1 .
 
-[] a :OutputObligation ;
-    :activation_condition [ :purpose :research ] ;
-    :argument ( _:n91d38d10d0fe4719ae77ebb75783a7f9b1 ) ;
-    :obligation_class :acknowledge ;
-    :port :outputPort1 .
+[] a dtou:OutputObligation ;
+    dtou:activation_condition [ dtou:purpose voc:research ] ;
+    dtou:argument ( _:n91d38d10d0fe4719ae77ebb75783a7f9b1 ) ;
+    dtou:obligation_class voc:acknowledge ;
+    dtou:port ex:outputPort1 .
 
-[] a :OutputAttribute ;
-    :class :complete ;
-    :name :compl-attr ;
-    :value :nil .
+[] a dtou:OutputAttribute ;
+    dtou:class voc:complete ;
+    dtou:name voc:compl-attr ;
+    dtou:value voc:nil .
 
-_:n91d38d10d0fe4719ae77ebb75783a7f9b1 a :OutputAttribute ;
-    :class :person ;
-    :name :ada-p ;
-    :value :ada .
+_:n91d38d10d0fe4719ae77ebb75783a7f9b1 a dtou:OutputAttribute ;
+    dtou:class voc:person ;
+    dtou:name voc:ada-p ;
+    dtou:value voc:ada .
 

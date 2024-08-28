@@ -1,8 +1,8 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix list: <http://www.w3.org/2000/10/swap/list#> .
-@prefix dtou: <http://example.org/ns#>.
-@prefix dri: <http://example.org/ns2#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix dri: <urn:dtou:internal#>.
 @prefix : <http://example.org/ns#>.
 
 ######

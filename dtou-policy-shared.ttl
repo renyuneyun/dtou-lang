@@ -1,15 +1,24 @@
-:complete a :TagName.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix voc: <urn:dtou:vocabulary#>.
+@prefix ex: <http://example.org/ns#>.
 
-:ada-p a :AttributeName.
-:person a :AttributeClass.
-:ada a :Value.
 
-:sec-attr a :AttributeName.
-:secure a :AttributeClass.
-:nil a :Value.
+voc:complete a dtou:Integrity.
 
-:per-attr a :AttributeName.
-:personal a :AttributeClass.
+voc:ada-p a dtou:AttributeName.
+voc:person a dtou:AttributeClass.
+voc:ada a dtou:Value.
 
-:acknowledge a :ObligationClass.
-:research a :Purpose.
+voc:sec-attr a dtou:AttributeName.
+voc:secure a dtou:AttributeClass.
+voc:nil a dtou:Value.
+
+voc:per-attr a dtou:AttributeName.
+voc:personal a dtou:AttributeClass.
+
+voc:acknowledge a dtou:ObligationClass.
+voc:research a dtou:Purpose.

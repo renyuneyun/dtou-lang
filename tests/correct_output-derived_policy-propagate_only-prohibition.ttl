@@ -1,15 +1,20 @@
-@prefix : <http://example.org/ns#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix voc: <urn:dtou:vocabulary#>.
+@prefix ex: <http://example.org/ns#>.
 
-[] a :OutputProhibition;
-    :activation_condition [ :app <urn:dtou:appoint-booking> ;
-            :purpose <urn:dtou:purpose-verify-identity> ] ;
-    :mode :Use ;
-    :port :outputPort1 .
+[] a dtou:OutputProhibition;
+    dtou:activation_condition [ dtou:app <urn:dtou:appoint-booking> ;
+            dtou:purpose <urn:dtou:purpose-verify-identity> ] ;
+    dtou:mode dtou:Use ;
+    dtou:port ex:outputPort1 .
 
-[] a :OutputProhibition;
-    :activation_condition [ :app <https://gh.app/clinic> ;
-            :purpose <urn:dtou:purpose-booking> ] ;
-    :mode :Use ;
-    :port :outputPort1 .
+[] a dtou:OutputProhibition;
+    dtou:activation_condition [ dtou:app <https://gh.app/clinic> ;
+            dtou:purpose <urn:dtou:purpose-booking> ] ;
+    dtou:mode dtou:Use ;
+    dtou:port ex:outputPort1 .
 

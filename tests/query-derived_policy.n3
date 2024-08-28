@@ -1,76 +1,100 @@
-@prefix list: <http://www.w3.org/2000/10/swap/list#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix : <http://example.org/ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix voc: <urn:dtou:vocabulary#>.
+@prefix ex: <http://example.org/ns#>.
 
 {
-	#( rdf:type :name :class :value :port ) list:iterate ( ?i ?p ).
-	( :name :class :value :port ) list:iterate ( ?i ?p ).
-	?a a :OutputAttribute;
+	#( rdf:type dtou:name dtou:class dtou:value dtou:port ) list:iterate ( ?i ?p ).
+	( dtou:name dtou:class dtou:value dtou:port ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputAttribute;
 		?p ?o.
 } => {
-	?a a :OutputAttribute;
+	?a a dtou:OutputAttribute;
 		?p ?o.
 }.
 
 {
-	#( rdf:type :category :attribute_ref :validity_binding :port ) list:iterate ( ?i ?p ).
-	( :category :attribute_ref :validity_binding :port ) list:iterate ( ?i ?p ).
-	?a a :OutputTag;
+	#( rdf:type dtou:category dtou:attribute_ref dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
+	( dtou:category dtou:attribute_ref dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputTag;
 		?p ?o.
 } => {
-	?a a :OutputTag;
+	?a a dtou:OutputTag;
 		?p ?o.
 }.
 
 {
-	?a a :OutputTag;
-		:port ?port.
+	?a a dtou:OutputTag;
+		dtou:port ?port.
 	?port ?p ?o.
 } => {
-	?a a :OutputTag;
-		:port ?port.
+	?a a dtou:OutputTag;
+		dtou:port ?port.
 	?port ?p ?o.
 }.
 
 {
-	#( rdf:type :activation_condition :mode :validity_binding :port ) list:iterate ( ?i ?p ).
-	( :activation_condition :mode :validity_binding :port ) list:iterate ( ?i ?p ).
-	?a a :OutputProhibition;
+	#( rdf:type dtou:activation_condition dtou:mode dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
+	( dtou:activation_condition dtou:mode dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputProhibition;
 		?p ?o.
 } => {
-	?a a :OutputProhibition;
-		?p ?o.
-}.
-
-{
-	( :activation_condition :port ) list:iterate ( ?i ?p ).
-	?a a :OutputProhibition;
-		?p ?o0.
-	?o0 ?p1 ?o1.
-} => {
-	?a a :OutputProhibition;
-		?p ?o0.
-	?o0 ?p1 ?o1.
-}.
-
-
-{
-	#( rdf:type :activation_condition :argument :obligation_class :validity_binding :port ) list:iterate ( ?i ?p ).
-	( :activation_condition :argument :obligation_class :validity_binding :port ) list:iterate ( ?i ?p ).
-	?a a :OutputObligation;
-		?p ?o.
-} => {
-	?a a :OutputObligation;
+	?a a dtou:OutputProhibition;
 		?p ?o.
 }.
 
 {
-	( :activation_condition :port ) list:iterate ( ?i ?p ).
-	?a a :OutputObligation;
+	( dtou:app dtou:purpose dtou:user ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputProhibition;
+		dtou:activation_condition ?o0.
+	?o0 ?p ?o1.
+} => {
+	?a dtou:activation_condition ?o0.
+	?o0 ?p ?o1.
+}.
+
+{
+	( dtou:port ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputProhibition;
 		?p ?o0.
 	?o0 ?p1 ?o1.
 } => {
-	?a a :OutputObligation;
+	?a a dtou:OutputProhibition;
+		?p ?o0.
+	?o0 ?p1 ?o1.
+}.
+
+
+{
+	#( rdf:type dtou:activation_condition dtou:argument dtou:obligation_class dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
+	( dtou:activation_condition dtou:argument dtou:obligation_class dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputObligation;
+		?p ?o.
+} => {
+	?a a dtou:OutputObligation;
+		?p ?o.
+}.
+
+{
+	( dtou:app dtou:purpose dtou:user ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputObligation;
+		dtou:activation_condition ?o0.
+	?o0 ?p ?o1.
+} => {
+	?a dtou:activation_condition ?o0.
+	?o0 ?p ?o1.
+}.
+
+{
+	( dtou:port ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputObligation;
+		?p ?o0.
+	?o0 ?p1 ?o1.
+} => {
+	?a a dtou:OutputObligation;
 		?p ?o0.
 	?o0 ?p1 ?o1.
 }.

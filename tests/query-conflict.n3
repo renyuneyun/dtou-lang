@@ -1,21 +1,24 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix : <http://example.org/ns#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix voc: <urn:dtou:vocabulary#>.
+@prefix ex: <http://example.org/ns#>.
 
 {
-	?a a :Conflict;
+	?a a dtou:Conflict;
 		?p ?o.
 } => {
 	?a ?p ?o.
 }.
 
 {
-	( :port ) list:iterate ( ?i ?p ).
-	?a a :Conflict;
+	( dtou:port ) list:iterate ( ?i ?p ).
+	?a a dtou:Conflict;
 		?p ?o0.
 	?o0 ?p1 ?o1.
 } => {
-	?a a :Conflict;
+	?a a dtou:Conflict;
 		?p ?o0.
 	?o0 ?p1 ?o1.
 }.

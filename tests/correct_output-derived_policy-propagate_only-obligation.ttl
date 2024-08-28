@@ -1,15 +1,20 @@
-@prefix : <http://example.org/ns#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix voc: <urn:dtou:vocabulary#>.
+@prefix ex: <http://example.org/ns#>.
 
-[] a :OutputObligation ;
-    :activation_condition [ :purpose :research ] ;
-    :argument ( _:n91d38d10d0fe4719ae77ebb75783a7f9b1 ) ;
-    :obligation_class :acknowledge ;
-    :port :outputPort1 .
+[] a dtou:OutputObligation ;
+    dtou:activation_condition [ dtou:purpose voc:research ] ;
+    dtou:argument ( _:n91d38d10d0fe4719ae77ebb75783a7f9b1 ) ;
+    dtou:obligation_class voc:acknowledge ;
+    dtou:port ex:outputPort1 .
 
-_:n91d38d10d0fe4719ae77ebb75783a7f9b1 a :OutputAttribute ;
-    :class :person ;
-    :name :ada-p ;
-    :value :ada .
+_:n91d38d10d0fe4719ae77ebb75783a7f9b1 a dtou:OutputAttribute ;
+    dtou:class voc:person ;
+    dtou:name voc:ada-p ;
+    dtou:value voc:ada .
 
 
