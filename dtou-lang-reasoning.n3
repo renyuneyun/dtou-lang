@@ -31,8 +31,8 @@
 # Additional helper for reasoning (subclassing of items to be checked, e.g. tags)
 ###
 
-{ ?x dtou:descriptor ?d. } => { ?d dri:hasEffectiveSuper ?d. }.
-{ ?x dri:hasEffectiveSuper ?d. ?d rdfs:subClassOf ?dp. } => { ?x dri:hasEffectiveSuper ?dp. }.  # Only use super classes for simplicity and generally better performance (than using sub-classes)
+{ ?x rdfs:subClassOf dtou:SuperCheckable; rdfs:subClassOf ?p. } => { ?x dri:hasEffectiveSuper ?x, ?p. }.
+{ _:t log:notIncludes { ?x rdfs:subClassOf dtou:SuperCheckable. }. } => { ?x dri:hasEffectiveSuper ?x. }.
 
 ### Helper to check condition is activated or not (and by the current app or downstream)
 ### {{{

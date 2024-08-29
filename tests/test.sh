@@ -25,7 +25,8 @@ runTest() {
 	#eye --quiet --nope --blogic ../dtou-lang-reasoning.n3 ../dtou-lang-general.n3s ../dtou-lang.n3s $dataPol $appPol --query $query --output $OUTPUT_TMP  # N3; older version eye reasoner argument (e.g. v5.2.2)
 	#eye --quiet --nope --blogic ../dtou-lang-reasoning.n3s ../dtou-lang-general.n3s ../dtou-lang.n3s $dataPol $appPol --query $query --output $OUTPUT_TMP  # RDF Surafaces; older version eye reasoner argument (e.g. v5.2.2)
 	#eye --quiet --nope --no-bnode-relabeling ../dtou-lang-reasoning.n3 ../dtou-lang-general.n3s ../dtou-lang.n3s $dataPol $appPol --query $query --output $OUTPUT_TMP  # N3, with some RDF Surfaces not finished conversion; newer eye reasoner argument (e.g. 10.19.6)
-	eye --quiet --nope ../dtou-lang-reasoning.n3 dtou-policy-vocabulary.ttl $dataPol $appPol --query $query --output $OUTPUT_TMP  # N3, with some RDF Surfaces not finished conversion; newer eye reasoner argument (e.g. 10.19.6)
+	# eye --quiet --nope ../dtou-lang-reasoning.n3 dtou-policy-vocabulary.ttl $dataPol $appPol --query $query --output $OUTPUT_TMP  # N3; newer eye reasoner argument (e.g. 10.19.6)
+	eye --quiet --nope ../owl-rules.n3 ../dtou-core.ttl ../dtou-lang-reasoning.n3 dtou-policy-vocabulary.ttl $dataPol $appPol --query $query --query query-test.n3 --output $OUTPUT_TMP  # N3, with some OWL ontology
 
 	# rdf-diff $correctResult $OUTPUT_TMP
 	# return $?
