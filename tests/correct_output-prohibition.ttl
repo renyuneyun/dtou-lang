@@ -1,0 +1,34 @@
+@prefix ex: <http://example.org/ns#> .
+@prefix dtou: <urn:dtou:core#> .
+@prefix voc: <urn:dtou:example-vocabulary#> .
+
+ex:inputPort1 a dtou:Port ;
+    dtou:name "inputPort1" .
+
+[] a dtou:Conflict,
+        dtou:UnmatchedExpectation ;
+    dtou:category dtou:PurposeType ;
+    dtou:descriptor <urn:dtou:purpose-verify-identity> ;
+    dtou:port ex:inputPort1 .
+
+[] a dtou:Conflict,
+        dtou:UnmatchedExpectation ;
+    dtou:category dtou:PurposeType ;
+    dtou:descriptor <urn:dtou:purpose-booking> ;
+    dtou:port ex:inputPort1 .
+
+[] a dtou:Conflict,
+        dtou:ProhibitedUse ;
+    dtou:condition [ dtou:app <urn:dtou:appoint-booking> ;
+            dtou:purpose <urn:dtou:purpose-verify-identity> ] ;
+    dtou:mode dtou:Use .
+
+[] a dtou:Conflict,
+        dtou:ProhibitedUse ;
+    dtou:condition [ dtou:purpose dtou:Purpose ] ;
+    dtou:mode dtou:Share .
+
+[] a dtou:Conflict,
+        dtou:ProhibitedUse ;
+    dtou:condition [ ] ;
+    dtou:mode dtou:Aggregate .

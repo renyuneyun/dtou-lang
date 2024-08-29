@@ -64,5 +64,6 @@ wrap "Only tag with refinement" runTest dtou-policy-data-1.ttl dtou-policy-app-1
 wrap "Only prohibition with refinement" runTest dtou-policy-data-1.ttl dtou-policy-app-1.ttl query-derived_policy-prohibition.n3 correct_output-derived_policy-refinement-prohibition.ttl
 wrap "Only obligation with refinement" runTest dtou-policy-data-1.ttl dtou-policy-app-1.ttl query-derived_policy-obligation.n3 correct_output-derived_policy-refinement-obligation.ttl
 wrap "Full data policy with refinement" runTest dtou-policy-data-1.ttl dtou-policy-app-1.ttl query-derived_policy.n3 correct_output-derived_policy-refinement.ttl
+wrap "Prohibition test" runTest dtou-policy-data-prohibition.ttl dtou-policy-app-merge.ttl query-conflict.n3 correct_output-prohibition.ttl
 wrap "Conflict" runTest dtou-policy-data-1.ttl dtou-policy-app-propagate_only.ttl query-conflict.n3 correct_output-conflict.ttl
 wrap "Activated Obligation" runTest dtou-policy-data-1.ttl dtou-policy-app-propagate_only.ttl query-activated_obligation.n3 correct_output-activated_obligation.ttl

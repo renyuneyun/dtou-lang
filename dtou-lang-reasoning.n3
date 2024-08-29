@@ -250,9 +250,59 @@
     # ?app dtou:name ?N.
     # ?input dtou:purpose ?P.
 
-    # TODO: Add details of why prohibited use is triggered. Useful for complex conditions
+    # TODO: Add details of why prohibited use is triggered. Useful for complex conditions. Same for other rules for prohibition.
 } => {
     ?m a dtou:ProhibitedUse;
+        dtou:mode dtou:Use;
+        dtou:condition ?ac.
+}.
+{
+    ?x a dri:RelatedDataAppInput;
+        dri:usage ?usage;
+        dri:data ?data;
+        dri:app ?app;
+        dri:input ?input.
+    
+    ?data dtou:policy [
+        dtou:prohibition [
+            dtou:mode dtou:Share;
+            dtou:activation_condition ?ac
+        ]
+    ].
+
+    ?ac a dri:MetCondition;
+        dri:met_by dri:Downstream.
+} => {
+    ?m a dtou:ProhibitedUse;
+        dtou:mode dtou:Share;
+        dtou:condition ?ac.
+}.
+{
+    ?x a dri:RelatedDataAppInput;
+        dri:usage ?usage;
+        dri:data ?data;
+        dri:app ?app;
+        dri:input ?input.
+    
+    ?data dtou:policy [
+        dtou:prohibition [
+            dtou:mode dtou:Aggregate;
+            dtou:activation_condition ?ac
+        ]
+    ].
+
+    ?ac a dri:MetCondition.
+    
+    ?input dtou:port ?port.
+    ?app dtou:output_spec ?output_spec.
+    ?output_spec dtou:from ?port.
+    _:t log:includes {
+        ?output_spec dtou:port ?p2.
+        ?p2 log:notEqualTo ?port.
+    }.
+} => {
+    ?m a dtou:ProhibitedUse;
+        dtou:mode dtou:Aggregate;
         dtou:condition ?ac.
 }.
 
