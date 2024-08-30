@@ -3,3 +3,7 @@
 
 <urn:dtou:purpose-send-confirmation> rdfs:subClassOf dtou:Purpose.
 <urn:dtou:purpose-send-reminder> rdfs:subClassOf dtou:Purpose.
+<urn:dtou:purpose-verify-identity> rdfs:subClassOf dtou:Purpose.
+<urn:dtou:purpose-verify-age> rdfs:subClassOf dtou:Purpose.
+<urn:dtou:purpose-booking> rdfs:subClassOf dtou:Purpose.
+<urn:dtou:purpose-recording> rdfs:subClassOf dtou:Purpose.
