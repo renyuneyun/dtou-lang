@@ -1,6 +1,6 @@
 @prefix : <http://example.org/ns#> .
 @prefix dtou: <urn:dtou:core#> .
-@prefix voc: <urn:dtou:vocabulary#> .
+@prefix voc: <urn:dtou:example-vocabulary#> .
 
 :inputPort1 a dtou:Port ;
     dtou:name "inputPort1" .

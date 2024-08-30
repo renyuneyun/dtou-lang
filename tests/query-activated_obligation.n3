@@ -2,7 +2,7 @@
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
 @prefix dtou: <urn:dtou:core#>.
-@prefix voc: <urn:dtou:vocabulary#>.
+@prefix voc: <urn:dtou:example-vocabulary#>.
 @prefix ex: <http://example.org/ns#>.
 
 {

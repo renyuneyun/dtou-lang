@@ -1,7 +1,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix dtou: <urn:dtou:core#>.
-@prefix voc: <urn:dtou:vocabulary#>.
+@prefix voc: <urn:dtou:example-vocabulary#>.
 @prefix ex: <http://example.org/ns#>.
 
 ######
@@ -81,7 +81,5 @@ ex:ds-clinic2 a dtou:DownstreamSpec;
 
 ex:output1 a dtou:OutputSpec;
 	dtou:port ex:outputPort1;
-	dtou:from ex:inputPort1;
-	dtou:refinement ex:re-delete-test;
-	dtou:refinement ex:re-edit-ada-p.
+	dtou:from ex:inputPort1.
 
