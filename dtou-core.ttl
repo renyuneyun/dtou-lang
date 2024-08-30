@@ -9,11 +9,179 @@
 <urn:dtou:core> rdf:type owl:Ontology .
 
 #################################################################
+#    Object Properties
+#################################################################
+
+###  urn:dtou:core#action
+:action rdf:type owl:ObjectProperty ;
+        rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#activation_condition
+:activation_condition rdf:type owl:ObjectProperty ;
+                      rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#app
+:app rdf:type owl:ObjectProperty ;
+     rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#app_name
+:app_name rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#argument
+:argument rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#attribute
+:attribute rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#attribute_ref
+:attribute_ref rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#class
+:class rdf:type owl:ObjectProperty ;
+       rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#data
+:data rdf:type owl:ObjectProperty ;
+      rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#descriptor
+:descriptor rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#downstream
+:downstream rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#expect
+:expect rdf:type owl:ObjectProperty ;
+        rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#from
+:from rdf:type owl:ObjectProperty ;
+      rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#input_spec
+:input_spec rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#integrity
+:integrity rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf :tagging .
+
+
+###  urn:dtou:core#name
+:name rdf:type owl:ObjectProperty ;
+      rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#obligation
+:obligation rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#obligation_class
+:obligation_class rdf:type owl:ObjectProperty ;
+                  rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#output_spec
+:output_spec rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#policy
+:policy rdf:type owl:ObjectProperty ;
+        rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#port
+:port rdf:type owl:ObjectProperty ;
+      rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#prohibition
+:prohibition rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#provide
+:provide rdf:type owl:ObjectProperty ;
+         rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#purpose
+:purpose rdf:type owl:ObjectProperty ;
+         rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#requirement
+:requirement rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf :tag .
+
+
+###  urn:dtou:core#security
+:security rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf :requirement .
+
+
+###  urn:dtou:core#tag
+:tag rdf:type owl:ObjectProperty ;
+     rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#tagging
+:tagging rdf:type owl:ObjectProperty ;
+         rdfs:subPropertyOf :tag .
+
+
+###  urn:dtou:core#uri
+:uri rdf:type owl:ObjectProperty ;
+     rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#validity_binding
+:validity_binding rdf:type owl:ObjectProperty ;
+                  rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  urn:dtou:core#value
+:value rdf:type owl:ObjectProperty ;
+       rdfs:subPropertyOf owl:topObjectProperty .
+
+
+#################################################################
 #    Classes
 #################################################################
 
 ###  urn:dtou:core#Action
 :Action rdf:type owl:Class .
+
+
+###  urn:dtou:core#ActivationCondition
+:ActivationCondition rdf:type owl:Class .
+
+
+###  urn:dtou:core#Aggregate
+:Aggregate rdf:type owl:Class ;
+           rdfs:subClassOf :UseMode .
 
 
 ###  urn:dtou:core#App
@@ -24,12 +192,28 @@
 :AppPolicy rdf:type owl:Class .
 
 
+###  urn:dtou:core#Attribute
+:Attribute rdf:type owl:Class .
+
+
+###  urn:dtou:core#AttributeName
+:AttributeName rdf:type owl:Class .
+
+
 ###  urn:dtou:core#Category
 :Category rdf:type owl:Class .
 
 
+###  urn:dtou:core#Data
+:Data rdf:type owl:Class .
+
+
 ###  urn:dtou:core#DataPolicy
 :DataPolicy rdf:type owl:Class .
+
+
+###  urn:dtou:core#Downstream
+:Downstream rdf:type owl:Class .
 
 
 ###  urn:dtou:core#InputSpec
@@ -47,8 +231,18 @@
                    owl:disjointWith :PurposeCategory .
 
 
+###  urn:dtou:core#IntegrityTag
+:IntegrityTag rdf:type owl:Class ;
+              rdfs:subClassOf :TaggingTag ;
+              owl:disjointWith :PurposeTag .
+
+
 ###  urn:dtou:core#Obligation
 :Obligation rdf:type owl:Class .
+
+
+###  urn:dtou:core#ObligationClass
+:ObligationClass rdf:type owl:Class .
 
 
 ###  urn:dtou:core#OutputSpec
@@ -69,6 +263,11 @@
                  rdfs:subClassOf :TaggingCategory .
 
 
+###  urn:dtou:core#PurposeTag
+:PurposeTag rdf:type owl:Class ;
+            rdfs:subClassOf :TaggingTag .
+
+
 ###  urn:dtou:core#Requirement
 :Requirement rdf:type owl:Class ;
              rdfs:subClassOf :TagDefinition ;
@@ -81,6 +280,12 @@
                      owl:disjointWith :TaggingCategory .
 
 
+###  urn:dtou:core#RequirementTag
+:RequirementTag rdf:type owl:Class ;
+                rdfs:subClassOf :Tag ;
+                owl:disjointWith :TaggingTag .
+
+
 ###  urn:dtou:core#Security
 :Security rdf:type owl:Class ;
           rdfs:subClassOf :Requirement .
@@ -89,6 +294,16 @@
 ###  urn:dtou:core#SecurityCategory
 :SecurityCategory rdf:type owl:Class ;
                   rdfs:subClassOf :RequirementCategory .
+
+
+###  urn:dtou:core#SecurityTag
+:SecurityTag rdf:type owl:Class ;
+             rdfs:subClassOf :RequirementTag .
+
+
+###  urn:dtou:core#Share
+:Share rdf:type owl:Class ;
+       rdfs:subClassOf :UseMode .
 
 
 ###  urn:dtou:core#SuperCheckable
@@ -114,8 +329,22 @@
                  rdfs:subClassOf :Category .
 
 
+###  urn:dtou:core#TaggingTag
+:TaggingTag rdf:type owl:Class ;
+            rdfs:subClassOf :Tag .
+
+
 ###  urn:dtou:core#UsageContext
 :UsageContext rdf:type owl:Class .
+
+
+###  urn:dtou:core#Use
+:Use rdf:type owl:Class ;
+     rdfs:subClassOf :UseMode .
+
+
+###  urn:dtou:core#UseMode
+:UseMode rdf:type owl:Class .
 
 
 ###  urn:dtou:core#User
@@ -125,6 +354,53 @@
 #################################################################
 #    General axioms
 #################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Action
+                :ActivationCondition
+                :App
+                :AppPolicy
+                :Attribute
+                :Category
+                :Data
+                :DataPolicy
+                :Downstream
+                :InputSpec
+                :Obligation
+                :ObligationClass
+                :OutputSpec
+                :Prohibition
+                :SuperCheckable
+                :Tag
+                :UsageContext
+                :UseMode
+                :User
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Action
+                :ActivationCondition
+                :App
+                :AppPolicy
+                :Attribute
+                :Category
+                :Data
+                :DataPolicy
+                :Downstream
+                :InputSpec
+                :Obligation
+                :OutputSpec
+                :Prohibition
+                :SuperCheckable
+                :Tag
+                :UsageContext
+                :UseMode
+                :User
+              )
+] .
+
 
 [ rdf:type owl:AllDisjointClasses ;
   owl:members ( :Action
@@ -171,6 +447,14 @@
                 :SuperCheckable
                 :Tag
                 :User
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Aggregate
+                :Share
+                :Use
               )
 ] .
 

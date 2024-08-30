@@ -1,13 +1,21 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix dtou: <urn:dtou:core#>.
 @prefix voc: <urn:dtou:example-vocabulary#>.
-@prefix ex: <http://example.org/ns#>.
+@prefix : <http://example.org/ns#>.
+
+:let :ignoreProperties owl:topObjectProperty.
 
 {
 	?a a dtou:Conflict;
 		?p ?o.
+
+	(
+		{ :let :ignoreProperties ?ip }
+		{ ?p log:notEqualTo ?ip }
+	) log:forAllIn _:t.
 } => {
 	?a ?p ?o.
 }.
@@ -17,6 +25,11 @@
 	?a a dtou:Conflict;
 		?p ?o0.
 	?o0 ?p1 ?o1.
+
+	(
+		{ :let :ignoreProperties ?ip }
+		{ ?p1 log:notEqualTo ?ip }
+	) log:forAllIn _:t.
 } => {
 	?a a dtou:Conflict;
 		?p ?o0.

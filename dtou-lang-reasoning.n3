@@ -21,8 +21,9 @@
 { ?x a dtou:IntegrityExpectation.  } => { ?x dtou:category dtou:IntegrityType.  }.
 { ?x a dtou:SecurityProvide.  } => { ?x dtou:category dtou:SecurityType.  }.
 
-{ ?x dtou:requirement ?tagging } => { ?x dtou:tag ?tagging }.
-{ ?x dtou:tagging ?tagging } => { ?x dtou:tag ?tagging }.
+# Expressed in ontology and done through OWL reasoning
+# { ?x dtou:requirement ?tagging } => { ?x dtou:tag ?tagging }.
+# { ?x dtou:tagging ?tagging } => { ?x dtou:tag ?tagging }.
 { ?x a dtou:DataPolicy; dtou:purpose ?purpose } => { ?x dtou:tagging ?purpose }.
 
 { ?x a dtou:InputSpec; dtou:purpose ?purpose } => { ?x dtou:expect ?purpose }.
