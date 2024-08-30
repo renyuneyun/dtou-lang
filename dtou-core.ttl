@@ -196,8 +196,16 @@
 :Attribute rdf:type owl:Class .
 
 
+###  urn:dtou:core#AttributeClass
+:AttributeClass rdf:type owl:Class .
+
+
 ###  urn:dtou:core#AttributeName
 :AttributeName rdf:type owl:Class .
+
+
+###  urn:dtou:core#AttributeValue
+:AttributeValue rdf:type owl:Class .
 
 
 ###  urn:dtou:core#Category
@@ -225,14 +233,16 @@
            rdfs:subClassOf :Tagging .
 
 
-###  urn:dtou:core#IntegrityCategory
-:IntegrityCategory rdf:type owl:Class ;
-                   rdfs:subClassOf :TaggingCategory ;
-                   owl:disjointWith :PurposeCategory .
-
-
 ###  urn:dtou:core#IntegrityTag
 :IntegrityTag rdf:type owl:Class ;
+              owl:equivalentClass [ owl:intersectionOf ( :Tag
+                                                         [ rdf:type owl:Restriction ;
+                                                           owl:onProperty :descriptor ;
+                                                           owl:hasValue :IntegrityCategory
+                                                         ]
+                                                       ) ;
+                                    rdf:type owl:Class
+                                  ] ;
               rdfs:subClassOf :TaggingTag ;
               owl:disjointWith :PurposeTag .
 
@@ -258,19 +268,22 @@
          rdfs:subClassOf :Tagging .
 
 
-###  urn:dtou:core#PurposeCategory
-:PurposeCategory rdf:type owl:Class ;
-                 rdfs:subClassOf :TaggingCategory .
-
-
 ###  urn:dtou:core#PurposeTag
 :PurposeTag rdf:type owl:Class ;
+            owl:equivalentClass [ owl:intersectionOf ( :Tag
+                                                       [ rdf:type owl:Restriction ;
+                                                         owl:onProperty :descriptor ;
+                                                         owl:hasValue :PurposeCategory
+                                                       ]
+                                                     ) ;
+                                  rdf:type owl:Class
+                                ] ;
             rdfs:subClassOf :TaggingTag .
 
 
 ###  urn:dtou:core#Requirement
 :Requirement rdf:type owl:Class ;
-             rdfs:subClassOf :TagDefinition ;
+             rdfs:subClassOf :TagName ;
              owl:disjointWith :Tagging .
 
 
@@ -291,13 +304,16 @@
           rdfs:subClassOf :Requirement .
 
 
-###  urn:dtou:core#SecurityCategory
-:SecurityCategory rdf:type owl:Class ;
-                  rdfs:subClassOf :RequirementCategory .
-
-
 ###  urn:dtou:core#SecurityTag
 :SecurityTag rdf:type owl:Class ;
+             owl:equivalentClass [ owl:intersectionOf ( :Tag
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :descriptor ;
+                                                          owl:hasValue :SecurityCategory
+                                                        ]
+                                                      ) ;
+                                   rdf:type owl:Class
+                                 ] ;
              rdfs:subClassOf :RequirementTag .
 
 
@@ -314,14 +330,16 @@
 :Tag rdf:type owl:Class .
 
 
-###  urn:dtou:core#TagDefinition
-:TagDefinition rdf:type owl:Class ;
-               rdfs:subClassOf :SuperCheckable .
+###  urn:dtou:core#TagName
+:TagName rdf:type owl:Class ;
+         rdfs:subClassOf :SuperCheckable ;
+         rdfs:comment """Here is where vocabulary should define custom concepts for Tags.
+The new Tag type should use punning, i.e. it is both a class and an individual. It should be a subclass under the corresponding class, and an individual of type TagName (and/or any of its subclasses).""" .
 
 
 ###  urn:dtou:core#Tagging
 :Tagging rdf:type owl:Class ;
-         rdfs:subClassOf :TagDefinition .
+         rdfs:subClassOf :TagName .
 
 
 ###  urn:dtou:core#TaggingCategory
@@ -352,8 +370,54 @@
 
 
 #################################################################
+#    Individuals
+#################################################################
+
+###  urn:dtou:core#IntegrityCategory
+:IntegrityCategory rdf:type owl:NamedIndividual ,
+                            :TaggingCategory .
+
+
+###  urn:dtou:core#PurposeCategory
+:PurposeCategory rdf:type owl:NamedIndividual ,
+                          :TaggingCategory .
+
+
+###  urn:dtou:core#SecurityCategory
+:SecurityCategory rdf:type owl:NamedIndividual ,
+                           :RequirementCategory .
+
+
+#################################################################
 #    General axioms
 #################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Action
+                :ActivationCondition
+                :App
+                :AppPolicy
+                :Attribute
+                :AttributeClass
+                :AttributeName
+                :AttributeValue
+                :Category
+                :Data
+                :DataPolicy
+                :Downstream
+                :InputSpec
+                :Obligation
+                :ObligationClass
+                :OutputSpec
+                :Prohibition
+                :SuperCheckable
+                :Tag
+                :UsageContext
+                :UseMode
+                :User
+              )
+] .
+
 
 [ rdf:type owl:AllDisjointClasses ;
   owl:members ( :Action
