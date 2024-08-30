@@ -128,31 +128,6 @@
         dri:input ?input.
 }.
 
-# input_policy_for_output ( ?input, ?policy, ?output_spec ) <==>
-#    related_data_app_input( ?usage, ?data, ?app, ?input ) /\ {?app.output_spec ?output_spec} /\ {?output_spec.from ?inputPort} /\ {?input.port ?inputPort} /\ {?data.policy ?policy}
-
-{
-    ?x a dri:RelatedDataAppInput;
-        dri:usage ?usage;
-        dri:app ?app;
-        dri:data ?data;
-        dri:input ?input.
-
-    ?app dtou:output_spec ?output_spec.
-
-    ?output_spec dtou:from ?inputPort.
-
-    ?input dtou:port ?inputPort.
-
-    ?data dtou:policy ?policy.
-
-} => {
-    ?m a dri:InputPolicyForOutput;
-        dri:input ?input;
-        dri:policy ?policy;
-        dri:output_spec ?output_spec.
-}.
-
 ######
 # Reasoning rules
 ######
