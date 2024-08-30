@@ -67,8 +67,8 @@
 
     _:t log:notIncludes {
         _:t log:notIncludes {
-            ?ac dtou:purpose [ dri:hasEffectiveSuper ?P ].
-            ?input dtou:purpose [ dtou:descriptor ?P ].
+            ?ac dtou:purpose ?P.
+            ?input dtou:purpose [ dtou:descriptor [ dri:hasEffectiveSuper ?P ] ].
         }.
 
         ?ac dtou:purpose ?P0.
@@ -100,8 +100,8 @@
 
     _:t log:notIncludes {
         _:t log:notIncludes {
-            ?ac dtou:purpose [ dri:hasEffectiveSuper ?P ].
-            ?ds dtou:purpose [ dtou:descriptor ?P ].
+            ?ac dtou:purpose ?P.
+            ?ds dtou:purpose [ dtou:descriptor [ dri:hasEffectiveSuper ?P ] ].
         }.
 
         ?ac dtou:purpose ?P0.
