@@ -1,5 +1,6 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix dtou: <urn:dtou:core#>.
+@prefix voc: <urn:dtou:vocabulary#> .
 
 <urn:dtou:purpose-send-confirmation> rdfs:subClassOf dtou:Purpose.
 <urn:dtou:purpose-send-reminder> rdfs:subClassOf dtou:Purpose.
@@ -7,3 +8,4 @@
 <urn:dtou:purpose-verify-age> rdfs:subClassOf dtou:Purpose.
 <urn:dtou:purpose-booking> rdfs:subClassOf dtou:Purpose.
 <urn:dtou:purpose-recording> rdfs:subClassOf dtou:Purpose.
+voc:secure rdfs:subClassOf dtou:Security.
