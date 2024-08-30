@@ -237,6 +237,8 @@
         dri:data ?data;
         dri:app ?app;
         dri:input ?input.
+
+    ?input dtou:port ?port.
     
     ?data dtou:policy [
         dtou:prohibition [
@@ -253,6 +255,7 @@
     # TODO: Add details of why prohibited use is triggered. Useful for complex conditions. Same for other rules for prohibition.
 } => {
     ?m a dtou:ProhibitedUse;
+        dtou:port ?port;
         dtou:mode dtou:Use;
         dtou:condition ?ac.
 }.
@@ -262,6 +265,8 @@
         dri:data ?data;
         dri:app ?app;
         dri:input ?input.
+
+    ?input dtou:port ?port.
     
     ?data dtou:policy [
         dtou:prohibition [
@@ -274,6 +279,7 @@
         dri:met_by dri:Downstream.
 } => {
     ?m a dtou:ProhibitedUse;
+        dtou:port ?port;
         dtou:mode dtou:Share;
         dtou:condition ?ac.
 }.
@@ -283,6 +289,8 @@
         dri:data ?data;
         dri:app ?app;
         dri:input ?input.
+
+    ?input dtou:port ?port.
     
     ?data dtou:policy [
         dtou:prohibition [
@@ -302,6 +310,7 @@
     }.
 } => {
     ?m a dtou:ProhibitedUse;
+        dtou:port ?port;
         dtou:mode dtou:Aggregate;
         dtou:condition ?ac.
 }.

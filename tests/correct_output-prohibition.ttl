@@ -5,6 +5,9 @@
 ex:inputPort1 a dtou:Port ;
     dtou:name "inputPort1" .
 
+ex:inputPort2 a dtou:Port ;
+    dtou:name "inputPort2" .
+
 [] a dtou:Conflict,
         dtou:UnmatchedExpectation ;
     dtou:category dtou:PurposeType ;
@@ -19,16 +22,19 @@ ex:inputPort1 a dtou:Port ;
 
 [] a dtou:Conflict,
         dtou:ProhibitedUse ;
+    dtou:port ex:inputPort1 ;
     dtou:condition [ dtou:app <urn:dtou:appoint-booking> ;
             dtou:purpose <urn:dtou:purpose-verify-identity> ] ;
     dtou:mode dtou:Use .
 
 [] a dtou:Conflict,
         dtou:ProhibitedUse ;
+    dtou:port ex:inputPort1 ;
     dtou:condition [ dtou:purpose dtou:Purpose ] ;
     dtou:mode dtou:Share .
 
 [] a dtou:Conflict,
         dtou:ProhibitedUse ;
+    dtou:port ex:inputPort2 ;
     dtou:condition [ ] ;
     dtou:mode dtou:Aggregate .
