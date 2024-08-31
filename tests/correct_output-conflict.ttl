@@ -7,37 +7,31 @@
 
 [] a dtou:Conflict,
         dtou:UnsatisfiedRequirement ;
-    dtou:category dtou:SecurityType ;
+    dtou:category dtou:SecurityCategory ;
     dtou:descriptor voc:personal ;
     dtou:port :inputPort1 .
 
 [] a dtou:Conflict,
         dtou:UnmatchedExpectation ;
-    dtou:category dtou:IntegrityType ;
-    dtou:descriptor voc:complete ;
-    dtou:port :inputPort1 .
-
-[] a dtou:Conflict,
-        dtou:UnmatchedExpectation ;
-    dtou:category dtou:PurposeType ;
+    dtou:category dtou:PurposeCategory ;
     dtou:descriptor <urn:dtou:purpose-verify-identity> ;
     dtou:port :inputPort1 .
 
 [] a dtou:Conflict,
         dtou:UnmatchedExpectation ;
-    dtou:category dtou:PurposeType ;
+    dtou:category dtou:PurposeCategory ;
     dtou:descriptor <urn:dtou:purpose-verify-age> ;
     dtou:port :inputPort1 .
 
 [] a dtou:Conflict,
         dtou:UnmatchedExpectation ;
-    dtou:category dtou:PurposeType ;
+    dtou:category dtou:PurposeCategory ;
     dtou:descriptor <urn:dtou:purpose-booking> ;
     dtou:port :inputPort1 .
 
 [] a dtou:Conflict,
         dtou:UnmatchedExpectation ;
-    dtou:category dtou:PurposeType ;
+    dtou:category dtou:PurposeCategory ;
     dtou:descriptor <urn:dtou:purpose-recording> ;
     dtou:port :inputPort1 .
 

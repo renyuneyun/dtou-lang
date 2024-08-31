@@ -11,7 +11,7 @@
             dtou:class voc:secure ;
             dtou:name voc:sec-attr ;
             dtou:value voc:nil ] ;
-    dtou:category dtou:SecurityType ;
+    dtou:category dtou:SecurityCategory ;
     #dtou:descriptor dtou:secure ;
     dtou:port ex:outputPort1 ;
     #dtou:type dtou:TagType,
@@ -27,7 +27,7 @@
             dtou:class voc:personal ;
             dtou:name voc:per-attr ;
             dtou:value voc:nil ] ;
-    dtou:category dtou:SecurityType ;
+    dtou:category dtou:SecurityCategory ;
     #dtou:descriptor dtou:personal ;
     dtou:port ex:outputPort1 ;
     #dtou:type dtou:TagType,
@@ -39,7 +39,7 @@
 	        dtou:name voc:compl-attr;
 	        dtou:class voc:complete;
 	        dtou:value voc:nil ];
-    dtou:category dtou:IntegrityType;
+    dtou:category dtou:IntegrityCategory;
     #dtou:descriptor dtou:complete;
     dtou:port ex:outputPort1.
 

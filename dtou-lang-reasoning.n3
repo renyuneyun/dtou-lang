@@ -14,26 +14,27 @@
 ###
 { ?x dtou:attribute_ref [ dtou:class ?N ].  } => { ?x dtou:descriptor ?N.  }.
 
-{ ?x a dtou:SecurityTag.  } => { ?x dtou:category dtou:SecurityType.  }.
-{ ?x a dtou:IntegrityTag.  } => { ?x dtou:category dtou:IntegrityType.  }.
-{ ?x a dtou:PurposeTag.  } => { ?x dtou:category dtou:PurposeType.  }.
-{ ?x a dtou:PurposeExpectation.  } => { ?x dtou:category dtou:PurposeType.  }.
-{ ?x a dtou:IntegrityExpectation.  } => { ?x dtou:category dtou:IntegrityType.  }.
-{ ?x a dtou:SecurityProvide.  } => { ?x dtou:category dtou:SecurityType.  }.
+## TODO: Delete these lines as they are no longer necessary
+# { ?x a dtou:SecurityTag.  } => { ?x dtou:category dtou:SecurityType.  }.
+# { ?x a dtou:IntegrityTag.  } => { ?x dtou:category dtou:IntegrityType.  }.
+# { ?x a dtou:PurposeTag.  } => { ?x dtou:category dtou:PurposeType.  }.
+# { ?x a dtou:PurposeExpectation.  } => { ?x dtou:category dtou:PurposeType.  }.
+# { ?x a dtou:IntegrityExpectation.  } => { ?x dtou:category dtou:IntegrityType.  }.
+# { ?x a dtou:SecurityProvide.  } => { ?x dtou:category dtou:SecurityType.  }.
 
-{ ?x dtou:requirement ?tagging } => { ?x dtou:tag ?tagging }.
-{ ?x dtou:tagging ?tagging } => { ?x dtou:tag ?tagging }.
+{ ?x dtou:requirement ?tag } => { ?x dtou:tag ?tag. ?tag a dtou:RequirementTag. }.
+{ ?x dtou:tagging ?tag } => { ?x dtou:tag ?tag. ?tag a dtou:OfferTag. }.
 { ?x a dtou:DataPolicy; dtou:purpose ?purpose } => { ?x dtou:tagging ?purpose }.
 
-{ ?x a dtou:InputSpec; dtou:purpose ?purpose } => { ?x dtou:expect ?purpose }.
+{ ?x a dtou:InputSpec; dtou:purpose ?purpose } => { ?x dtou:expect ?purpose. ?purpose dtou:category dtou:PurposeCategory. }.
 { ?x a dtou:InputSpec; dtou:downstream [ dtou:purpose ?purpose ]. } => { ?x dtou:purpose ?purpose. }.
 
 ###
 # Additional helper for reasoning (subclassing of items to be checked, e.g. tags)
 ###
 
-{ ?x dtou:descriptor ?d. } => { ?d rdfs:subClassOf ?d. }.
 { ?c1 rdfs:subClassOf ?c2. ?c2 rdfs:subClassOf ?c3. } => { ?c1 rdfs:subClassOf ?c3. }.
+{ ?x dtou:descriptor ?d. } => { ?d rdfs:subClassOf ?d. }.
 
 
 ### Helper to check condition is activated or not (and by the current app or downstream)
@@ -170,7 +171,36 @@
 # Reasoning rules
 ######
 
+# # MatchResult
+# # matches( ?matcher, ?arg1, ?arg2 ) <==> 
+# #   ?matcher = Exact /\ ?arg1 = ?arg2
+# #   \/ ?matcher = SubClassFrom /\ ?arg2 rdfs:subClassOf ?arg1
+# #   \/ ?matcher = SuperClassFrom /\ ?arg1 rdfs:subClassOf ?arg2
+# {
+#     ?m a dri:MatchResult;
+#         dri:matcher ?matcher;
+#         dri:arg1 ?arg1;
+#         dri:arg2 ?arg2.
+# } <= {
+#     _:t log:notIncludes {
+#         _:t1 log:notIncludes {
+#             ?matcher log:equalTo dtou:Exact.
+#             ?arg1 log:equalTo ?arg2.
+#         }.
+#         _:t2 log:notIncludes {
+#             ?matcher log:equalTo dtou:SubClassFrom.
+#             ?arg2 rdfs:subClassOf ?arg1.
+#         }.
+#         _:t3 log:notIncludes {
+#             ?matcher log:equalTo dtou:SuperClassFrom.
+#             ?arg1 rdfs:subClassOf ?arg2.
+#         }.
+#     }
+# }.
+
 # UnsatisfiedRequirement
+# unsatisfied_requirement( ?port, ?category, ?descriptor ) <==> 
+#   related_data_app_input( ?usage, ?data, ?app, ?input ) /\ {?data.policy.tag [a RequirementTag; category ?category; categoryMatcher ?cm; descriptorMatcher ?dm; descriptor ?descriptor]]} /\ {?input.port ?port} /\ ~ \exists ({?input.provide [category ?category'; descriptor ?descriptor']} /\ matches(?cm, ?category, ?category') /\ matches(?dm, ?descriptor, ?descriptor')).
 {
     ?x a dri:RelatedDataAppInput;
         dri:usage ?usage;
@@ -179,7 +209,10 @@
         dri:input ?input.
 
     ?data dtou:policy [
-        dtou:requirement [
+        dtou:tag [
+            a dtou:RequirementTag;
+            dtou:categoryMatcher ?cm;
+            dtou:descriptorMatcher ?dm;
             dtou:category ?T;
             dtou:descriptor ?N
         ]
@@ -188,10 +221,53 @@
     ?input dtou:port ?port.
 
     _:t log:notIncludes {
-            ?input dtou:provide ?provide.
-            ?N rdfs:subClassOf ?Ns.
-            ?provide dtou:category ?T;
-                dtou:descriptor ?Ns.
+        ?input dtou:provide [
+            dtou:category ?T_p;
+            dtou:descriptor ?N_p
+        ].
+
+        _:t log:notIncludes {
+            _:t log:notIncludes {
+                ?cm log:equalTo dtou:Exact.
+                ?T log:equalTo ?T_p.
+            }.
+
+            _:t log:notIncludes {
+                ?cm log:equalTo dtou:SubClassFrom.
+                ?T_p rdfs:subClassOf ?T.
+            }.
+
+            _:t log:notIncludes {
+                ?cm log:equalTo dtou:SuperClassFrom.
+                ?T rdfs:subClassOf ?T_p.
+            }.
+        }.
+
+        _:t log:notIncludes {
+            _:t log:notIncludes {
+                ?dm log:equalTo dtou:Exact.
+                ?N log:equalTo ?N_p.
+            }.
+
+            _:t log:notIncludes {
+                ?dm log:equalTo dtou:SubClassFrom.
+                ?N_p rdfs:subClassOf ?N.
+            }.
+
+            _:t log:notIncludes {
+                ?dm log:equalTo dtou:SuperClassFrom.
+                ?N rdfs:subClassOf ?N_p.
+            }.
+        }.
+
+        # ?matches1 a dri:MatchResult;
+        #     dri:matcher ?cm;
+        #     dri:arg1 ?T;
+        #     dri:arg2 ?T_p.
+        # ?matches2 a dri:MatchResult;
+        #     dri:matcher ?dm;
+        #     dri:arg1 ?N;
+        #     dri:arg2 ?N_p.
     }.
 } => {
     ?m a dtou:UnsatisfiedRequirement;
@@ -201,6 +277,8 @@
 }.
 
 # UnmatchedExpectation
+# unmatched_expectation( ?port, ?category', ?descriptor' ) <==>
+#   related_data_app_input( ?usage, ?data, ?app, ?input ) /\ {?input.expect [category ?category'; descriptor ?descriptor']} /\ {?input.port ?port} /\ ~ \exists ({?data.policy.tag [a OfferTag; category ?category; categoryMatcher ?cm; descriptorMatcher ?dm; descriptor ?descriptor]} /\ matches(?cm, ?category, ?category') /\ matches(?dm, ?descriptor, ?descriptor')).
 {
     ?x a dri:RelatedDataAppInput;
         dri:usage ?usage;
@@ -209,26 +287,71 @@
         dri:input ?input.
 
     ?input dtou:expect [
-        dtou:category ?T;
-        dtou:descriptor ?N
-        ].
+        dtou:category ?T_p;
+        dtou:descriptor ?N_p
+    ].
 
     ?input dtou:port ?port.
 
     _:t log:notIncludes {
-        ?N rdfs:subClassOf ?Ns.
         ?data dtou:policy [
-            dtou:tagging [
+            dtou:tag [
+                a dtou:OfferTag;
+                dtou:categoryMatcher ?cm;
+                dtou:descriptorMatcher ?dm;
                 dtou:category ?T;
-                dtou:descriptor ?Ns
+                dtou:descriptor ?N
             ]
         ].
+
+        _:t log:notIncludes {
+            _:t log:notIncludes {
+                ?cm log:equalTo dtou:Exact.
+                ?T log:equalTo ?T_p.
+            }.
+
+            _:t log:notIncludes {
+                ?cm log:equalTo dtou:SubClassFrom.
+                ?T_p rdfs:subClassOf ?T.
+            }.
+
+            _:t log:notIncludes {
+                ?cm log:equalTo dtou:SuperClassFrom.
+                ?T rdfs:subClassOf ?T_p.
+            }.
+        }.
+
+        _:t log:notIncludes {
+            _:t log:notIncludes {
+                ?dm log:equalTo dtou:Exact.
+                ?N log:equalTo ?N_p.
+            }.
+
+            _:t log:notIncludes {
+                ?dm log:equalTo dtou:SubClassFrom.
+                ?N_p rdfs:subClassOf ?N.
+            }.
+
+            _:t log:notIncludes {
+                ?dm log:equalTo dtou:SuperClassFrom.
+                ?N rdfs:subClassOf ?N_p.
+            }.
+        }.
+
+        # ?matches1 a dri:MatchResult;
+        #     dri:matcher ?cm;
+        #     dri:arg1 ?T;
+        #     dri:arg2 ?T_p.
+        # ?matches2 a dri:MatchResult;
+        #     dri:matcher ?dm;
+        #     dri:arg1 ?N;
+        #     dri:arg2 ?N_p.
     }.
 } => {
     ?m a dtou:UnmatchedExpectation;
         dtou:port ?port;
-        dtou:category ?T;
-        dtou:descriptor ?N.
+        dtou:category ?T_p;
+        dtou:descriptor ?N_p.
 }.
 
 # ProhibitedUse

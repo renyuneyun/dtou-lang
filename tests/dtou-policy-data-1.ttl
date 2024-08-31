@@ -33,15 +33,24 @@ ex:compl-attr1 a dtou:Attribute;
 	dtou:class voc:complete;
 	dtou:value voc:nil.
 
-ex:sec-tag1 a dtou:SecurityTag;
+ex:sec-tag1 a dtou:RequirementTag;
+	dtou:category dtou:SecurityCategory;
+	dtou:categoryMatcher dtou:Exact;
+	dtou:descriptorMatcher dtou:SubClassFrom;
 	dtou:attribute_ref ex:sec-attr1;
 	dtou:validity_binding ex:attr1, ex:attr2.
 
-ex:per-tag1 a dtou:SecurityTag;
+ex:per-tag1 a dtou:RequirementTag;
+	dtou:category dtou:SecurityCategory;
+	dtou:categoryMatcher dtou:Exact;
+	dtou:descriptorMatcher dtou:SubClassFrom;
 	dtou:attribute_ref ex:per-attr1;
 	dtou:validity_binding ex:attr1.
 
-ex:compl-tag1 a dtou:IntegrityTag;
+ex:compl-tag1 a dtou:OfferTag;
+	dtou:category dtou:IntegrityCategory;
+	dtou:categoryMatcher dtou:Exact;
+	dtou:descriptorMatcher dtou:SuperClassFrom;
 	dtou:attribute_ref ex:compl-attr1.
 
 ex:ob1 a dtou:Obligation;
@@ -78,7 +87,7 @@ ex:data1 a dtou:Data;
 
 ex:policy1 a dtou:DataPolicy;
 	dtou:attribute ex:attr1, ex:sec-attr1, ex:per-attr1, ex:compl-attr1, ex:attr2;
-	dtou:requirement ex:sec-tag1, ex:per-tag1;
+	dtou:tag ex:sec-tag1, ex:per-tag1;
 	dtou:tag ex:compl-tag1;
 	dtou:prohibition ex:pr1, ex:pr2, ex:pr3;
 	dtou:obligation ex:ob1.
@@ -89,9 +98,12 @@ ex:data2 a dtou:Data;
 
 ex:policy2 a dtou:DataPolicy;
 	dtou:attribute ex:any-purpose-attr1;
-	dtou:tagging ex:any-purpose.
+	dtou:tag ex:any-purpose.
 
-ex:any-purpose a dtou:PurposeTag;
+ex:any-purpose a dtou:OfferTag;
+	dtou:category dtou:PurposeCategory;
+	dtou:categoryMatcher dtou:Exact;
+	dtou:descriptorMatcher dtou:SubClassFrom;
 	dtou:attribute_ref ex:any-purpose-attr1.
 
 ex:any-purpose-attr1 a dtou:Attribute;

@@ -34,29 +34,36 @@ ex:input1 a dtou:InputSpec;
 	dtou:provide ex:secure1;
 	dtou:downstream ex:ds-clinic1.
 
-ex:complete1 a dtou:IntegrityExpectation;
+ex:complete1 a dtou:Expectation;
+	dtou:category dtou:IntegrityCategory;
 	dtou:descriptor voc:complete.
 
-ex:verify-identify a dtou:PurposeExpectation;
+ex:verify-identify a dtou:Expectation;
+	dtou:category dtou:PurposeCategory;
 	dtou:descriptor <urn:dtou:purpose-verify-identity>.
 
-ex:verify-age a dtou:PurposeExpectation;
+ex:verify-age a dtou:Expectation;
+	dtou:category dtou:PurposeCategory;
 	dtou:descriptor <urn:dtou:purpose-verify-age>.
 
-ex:secure1 a dtou:SecurityProvide;
+ex:secure1 a dtou:Provide;
+	dtou:category dtou:SecurityCategory;
 	dtou:descriptor voc:secure.
 
-ex:personal1 a dtou:SecurityProvide;
+ex:personal1 a dtou:Provide;
+	dtou:category dtou:SecurityCategory;
 	dtou:descriptor voc:personal.
 
 ex:ds-clinic1 a dtou:DownstreamSpec;
 	dtou:app_name <https://gh.app/clinic>;
 	dtou:purpose ex:booking, ex:recording.
 
-ex:booking a dtou:PurposeExpectation;
+ex:booking a dtou:Expectation;
+	dtou:category dtou:PurposeCategory;
 	dtou:descriptor <urn:dtou:purpose-booking>.
 
-ex:recording a dtou:PurposeExpectation;
+ex:recording a dtou:Expectation;
+	dtou:category dtou:PurposeCategory;
 	dtou:descriptor <urn:dtou:purpose-recording>.
 
 ex:inputPort1 a dtou:Port;
@@ -71,10 +78,12 @@ ex:input2 a dtou:InputSpec;
 ex:inputPort2 a dtou:Port;
 	dtou:name "inputPort2".
 
-ex:send-confirmation a dtou:PurposeExpectation;
+ex:send-confirmation a dtou:Expectation;
+	dtou:category dtou:PurposeCategory;
 	dtou:descriptor <urn:dtou:purpose-send-confirmation>.
 
-ex:send-reminder a dtou:PurposeExpectation;
+ex:send-reminder a dtou:Expectation;
+	dtou:category dtou:PurposeCategory;
 	dtou:descriptor <urn:dtou:purpose-send-reminder>.
 
 ex:ds-clinic2 a dtou:DownstreamSpec;
