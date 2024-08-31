@@ -47,6 +47,12 @@
                rdfs:subPropertyOf owl:topObjectProperty .
 
 
+###  urn:dtou:core#category
+:category rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf owl:topObjectProperty ;
+          rdfs:range :Category .
+
+
 ###  urn:dtou:core#class
 :class rdf:type owl:ObjectProperty ;
        rdfs:subPropertyOf owl:topObjectProperty .
@@ -224,21 +230,54 @@
 :Downstream rdf:type owl:Class .
 
 
+###  urn:dtou:core#Expectation
+:Expectation rdf:type owl:Class ;
+             owl:equivalentClass [ owl:intersectionOf ( :InputCapability
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :category ;
+                                                          owl:hasValue :TaggingType
+                                                        ]
+                                                      ) ;
+                                   rdf:type owl:Class
+                                 ] ;
+             rdfs:subClassOf :InputCapability ;
+             owl:disjointWith :Provide .
+
+
+###  urn:dtou:core#InputCapability
+:InputCapability rdf:type owl:Class .
+
+
 ###  urn:dtou:core#InputSpec
 :InputSpec rdf:type owl:Class .
 
 
 ###  urn:dtou:core#Integrity
 :Integrity rdf:type owl:Class ;
-           rdfs:subClassOf :Tagging .
+           rdfs:subClassOf :Tagging ;
+           owl:disjointWith :Purpose .
+
+
+###  urn:dtou:core#IntegrityExpectation
+:IntegrityExpectation rdf:type owl:Class ;
+                      owl:equivalentClass [ owl:intersectionOf ( :InputCapability
+                                                                 [ rdf:type owl:Restriction ;
+                                                                   owl:onProperty :category ;
+                                                                   owl:hasValue :IntegrityType
+                                                                 ]
+                                                               ) ;
+                                            rdf:type owl:Class
+                                          ] ;
+                      rdfs:subClassOf :Expectation ;
+                      owl:disjointWith :PurposeExpectation .
 
 
 ###  urn:dtou:core#IntegrityTag
 :IntegrityTag rdf:type owl:Class ;
               owl:equivalentClass [ owl:intersectionOf ( :Tag
                                                          [ rdf:type owl:Restriction ;
-                                                           owl:onProperty :descriptor ;
-                                                           owl:hasValue :IntegrityCategory
+                                                           owl:onProperty :category ;
+                                                           owl:hasValue :IntegrityType
                                                          ]
                                                        ) ;
                                     rdf:type owl:Class
@@ -263,17 +302,43 @@
 :Prohibition rdf:type owl:Class .
 
 
+###  urn:dtou:core#Provide
+:Provide rdf:type owl:Class ;
+         owl:equivalentClass [ owl:intersectionOf ( :InputCapability
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :category ;
+                                                      owl:hasValue :RequirementType
+                                                    ]
+                                                  ) ;
+                               rdf:type owl:Class
+                             ] ;
+         rdfs:subClassOf :InputCapability .
+
+
 ###  urn:dtou:core#Purpose
 :Purpose rdf:type owl:Class ;
          rdfs:subClassOf :Tagging .
+
+
+###  urn:dtou:core#PurposeExpectation
+:PurposeExpectation rdf:type owl:Class ;
+                    owl:equivalentClass [ owl:intersectionOf ( :InputCapability
+                                                               [ rdf:type owl:Restriction ;
+                                                                 owl:onProperty :category ;
+                                                                 owl:hasValue :PurposeType
+                                                               ]
+                                                             ) ;
+                                          rdf:type owl:Class
+                                        ] ;
+                    rdfs:subClassOf :Expectation .
 
 
 ###  urn:dtou:core#PurposeTag
 :PurposeTag rdf:type owl:Class ;
             owl:equivalentClass [ owl:intersectionOf ( :Tag
                                                        [ rdf:type owl:Restriction ;
-                                                         owl:onProperty :descriptor ;
-                                                         owl:hasValue :PurposeCategory
+                                                         owl:onProperty :category ;
+                                                         owl:hasValue :PurposeType
                                                        ]
                                                      ) ;
                                   rdf:type owl:Class
@@ -287,16 +352,16 @@
              owl:disjointWith :Tagging .
 
 
-###  urn:dtou:core#RequirementCategory
-:RequirementCategory rdf:type owl:Class ;
-                     rdfs:subClassOf :Category ;
-                     owl:disjointWith :TaggingCategory .
-
-
 ###  urn:dtou:core#RequirementTag
 :RequirementTag rdf:type owl:Class ;
                 rdfs:subClassOf :Tag ;
                 owl:disjointWith :TaggingTag .
+
+
+###  urn:dtou:core#RequirementType
+:RequirementType rdf:type owl:Class ;
+                 rdfs:subClassOf :Category ;
+                 owl:disjointWith :TaggingType .
 
 
 ###  urn:dtou:core#Security
@@ -304,12 +369,25 @@
           rdfs:subClassOf :Requirement .
 
 
+###  urn:dtou:core#SecurityProvide
+:SecurityProvide rdf:type owl:Class ;
+                 owl:equivalentClass [ owl:intersectionOf ( :InputCapability
+                                                            [ rdf:type owl:Restriction ;
+                                                              owl:onProperty :category ;
+                                                              owl:hasValue :SecurityType
+                                                            ]
+                                                          ) ;
+                                       rdf:type owl:Class
+                                     ] ;
+                 rdfs:subClassOf :Provide .
+
+
 ###  urn:dtou:core#SecurityTag
 :SecurityTag rdf:type owl:Class ;
              owl:equivalentClass [ owl:intersectionOf ( :Tag
                                                         [ rdf:type owl:Restriction ;
-                                                          owl:onProperty :descriptor ;
-                                                          owl:hasValue :SecurityCategory
+                                                          owl:onProperty :category ;
+                                                          owl:hasValue :SecurityType
                                                         ]
                                                       ) ;
                                    rdf:type owl:Class
@@ -342,14 +420,14 @@ The new Tag type should use punning, i.e. it is both a class and an individual. 
          rdfs:subClassOf :TagName .
 
 
-###  urn:dtou:core#TaggingCategory
-:TaggingCategory rdf:type owl:Class ;
-                 rdfs:subClassOf :Category .
-
-
 ###  urn:dtou:core#TaggingTag
 :TaggingTag rdf:type owl:Class ;
             rdfs:subClassOf :Tag .
+
+
+###  urn:dtou:core#TaggingType
+:TaggingType rdf:type owl:Class ;
+             rdfs:subClassOf :Category .
 
 
 ###  urn:dtou:core#UsageContext
@@ -373,19 +451,29 @@ The new Tag type should use punning, i.e. it is both a class and an individual. 
 #    Individuals
 #################################################################
 
-###  urn:dtou:core#IntegrityCategory
-:IntegrityCategory rdf:type owl:NamedIndividual ,
-                            :TaggingCategory .
+###  urn:dtou:core#IntegrityType
+:IntegrityType rdf:type owl:NamedIndividual ,
+                        :TaggingType .
 
 
-###  urn:dtou:core#PurposeCategory
-:PurposeCategory rdf:type owl:NamedIndividual ,
-                          :TaggingCategory .
+###  urn:dtou:core#PurposeType
+:PurposeType rdf:type owl:NamedIndividual ,
+                      :TaggingType .
 
 
-###  urn:dtou:core#SecurityCategory
-:SecurityCategory rdf:type owl:NamedIndividual ,
-                           :RequirementCategory .
+###  urn:dtou:core#RequirementType
+:RequirementType rdf:type owl:NamedIndividual ,
+                          :RequirementType .
+
+
+###  urn:dtou:core#SecurityType
+:SecurityType rdf:type owl:NamedIndividual ,
+                       :RequirementType .
+
+
+###  urn:dtou:core#TaggingType
+:TaggingType rdf:type owl:NamedIndividual ,
+                      :TaggingType .
 
 
 #################################################################
@@ -405,6 +493,7 @@ The new Tag type should use punning, i.e. it is both a class and an individual. 
                 :Data
                 :DataPolicy
                 :Downstream
+                :InputCapability
                 :InputSpec
                 :Obligation
                 :ObligationClass
@@ -414,102 +503,6 @@ The new Tag type should use punning, i.e. it is both a class and an individual. 
                 :Tag
                 :UsageContext
                 :UseMode
-                :User
-              )
-] .
-
-
-[ rdf:type owl:AllDisjointClasses ;
-  owl:members ( :Action
-                :ActivationCondition
-                :App
-                :AppPolicy
-                :Attribute
-                :Category
-                :Data
-                :DataPolicy
-                :Downstream
-                :InputSpec
-                :Obligation
-                :ObligationClass
-                :OutputSpec
-                :Prohibition
-                :SuperCheckable
-                :Tag
-                :UsageContext
-                :UseMode
-                :User
-              )
-] .
-
-
-[ rdf:type owl:AllDisjointClasses ;
-  owl:members ( :Action
-                :ActivationCondition
-                :App
-                :AppPolicy
-                :Attribute
-                :Category
-                :Data
-                :DataPolicy
-                :Downstream
-                :InputSpec
-                :Obligation
-                :OutputSpec
-                :Prohibition
-                :SuperCheckable
-                :Tag
-                :UsageContext
-                :UseMode
-                :User
-              )
-] .
-
-
-[ rdf:type owl:AllDisjointClasses ;
-  owl:members ( :Action
-                :App
-                :AppPolicy
-                :Category
-                :DataPolicy
-                :InputSpec
-                :Obligation
-                :OutputSpec
-                :Prohibition
-                :SuperCheckable
-                :Tag
-                :UsageContext
-                :User
-              )
-] .
-
-
-[ rdf:type owl:AllDisjointClasses ;
-  owl:members ( :Action
-                :App
-                :AppPolicy
-                :DataPolicy
-                :InputSpec
-                :Obligation
-                :OutputSpec
-                :Prohibition
-                :SuperCheckable
-                :Tag
-                :UsageContext
-                :User
-              )
-] .
-
-
-[ rdf:type owl:AllDisjointClasses ;
-  owl:members ( :Action
-                :App
-                :AppPolicy
-                :DataPolicy
-                :Obligation
-                :Prohibition
-                :SuperCheckable
-                :Tag
                 :User
               )
 ] .

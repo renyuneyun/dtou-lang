@@ -14,12 +14,13 @@
 ###
 { ?x dtou:attribute_ref [ dtou:class ?N ].  } => { ?x dtou:descriptor ?N.  }.
 
-{ ?x a dtou:SecurityTag.  } => { ?x dtou:category dtou:SecurityType.  }.
-{ ?x a dtou:IntegrityTag.  } => { ?x dtou:category dtou:IntegrityType.  }.
-{ ?x a dtou:PurposeTag.  } => { ?x dtou:category dtou:PurposeType.  }.
-{ ?x a dtou:PurposeExpectation.  } => { ?x dtou:category dtou:PurposeType.  }.
-{ ?x a dtou:IntegrityExpectation.  } => { ?x dtou:category dtou:IntegrityType.  }.
-{ ?x a dtou:SecurityProvide.  } => { ?x dtou:category dtou:SecurityType.  }.
+# Expressed in ontology and done through OWL reasoning
+# { ?x a dtou:SecurityTag.  } => { ?x dtou:category dtou:SecurityType.  }.
+# { ?x a dtou:IntegrityTag.  } => { ?x dtou:category dtou:IntegrityType.  }.
+# { ?x a dtou:PurposeTag.  } => { ?x dtou:category dtou:PurposeType.  }.
+# { ?x a dtou:PurposeExpectation.  } => { ?x dtou:category dtou:PurposeType.  }.
+# { ?x a dtou:IntegrityExpectation.  } => { ?x dtou:category dtou:IntegrityType.  }.
+# { ?x a dtou:SecurityProvide.  } => { ?x dtou:category dtou:SecurityType.  }.
 
 # Expressed in ontology and done through OWL reasoning
 # { ?x dtou:requirement ?tagging } => { ?x dtou:tag ?tagging }.
