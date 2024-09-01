@@ -30,6 +30,18 @@
     dtou:port :inputPort1 .
 
 [] a dtou:Conflict,
+        dtou:UnmatchedExpectation ;
+    dtou:category dtou:PurposeType ;
+    dtou:descriptor <urn:dtou:purpose-booking> ;
+    dtou:port :inputPort1 .
+
+[] a dtou:Conflict,
+        dtou:UnmatchedExpectation ;
+    dtou:category dtou:PurposeType ;
+    dtou:descriptor <urn:dtou:purpose-recording> ;
+    dtou:port :inputPort1 .
+
+[] a dtou:Conflict,
         dtou:ProhibitedUse ;
     dtou:condition [ dtou:app <urn:dtou:appoint-booking> ;
             dtou:purpose <urn:dtou:purpose-verify-identity> ] .
