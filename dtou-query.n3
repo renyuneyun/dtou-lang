@@ -1,8 +1,11 @@
-@prefix list: <http://www.w3.org/2000/10/swap/list#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
-@prefix : <http://example.org/ns#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix dri: <urn:dtou:internal#>.
+@prefix voc: <urn:dtou:vocabulary#>.
+@prefix ex: <http://example.org/ns#>.
 @prefix q: <http://example.org/query/ns#>.
 
 ######
@@ -10,28 +13,28 @@
 ######
 
 # (_:s _:p _:o) log:onQuerySurface {
-# 	_:s a :RelatedDataAppInput.
+# 	_:s a dri:RelatedDataAppInput.
 # 	_:s _:p _:o.
 # }.
 
 # (_:s _:p _:o) log:onQuerySurface {
-# 	_:s a :InputPolicyForOutput.
+# 	_:s a dri:InputPolicyForOutput.
 # 	_:s _:p _:o.
 # }.
 
 # (_:s _:p _:o) log:onQuerySurface {
-# 	_:s a :DeletedAttribute.
+# 	_:s a dri:DeletedAttribute.
 # 	_:s _:p _:o.
 # }.
 
 q:query_condition
-    q:property :app, :purpose.
+    q:property dtou:app, dtou:purpose.
 
 q:query_attribute
-    q:property rdf:type, :name, :class, :value.
+    q:property rdf:type, dtou:name, dtou:class, dtou:value.
 
 {
-    ?type list:in (:UnsatisfiedRequirement :UnmatchedExpectation :ProhibitedUse).
+    ?type list:in (dtou:UnsatisfiedRequirement dtou:UnmatchedExpectation dtou:ProhibitedUse).
 
     ?s a ?type;
         ?p ?o.
@@ -40,8 +43,8 @@ q:query_attribute
 }.
 
 {
-    ?pu a :ProhibitedUse;
-        :condition ?c.
+    ?pu a dtou:ProhibitedUse;
+        dtou:condition ?c.
     ?c ?p ?o.
 
     q:query_condition q:property ?p.
@@ -50,14 +53,14 @@ q:query_attribute
 }.
 
 {
-    ?s a :ActivatedObligation;
+    ?s a dtou:ActivatedObligation;
         ?p ?o.
 } => {
     ?s ?p ?o.
 }.
 
 {
-    ?s a :OutputAttribute;
+    ?s a dtou:OutputAttribute;
         ?p ?o.
 
     q:query_attribute q:property ?p.
@@ -66,7 +69,7 @@ q:query_attribute
 }.
 
 {
-    ?type list:in (:OutputTag :OutputProhibition :OutputObligation).
+    ?type list:in (dtou:OutputTag dtou:OutputProhibition dtou:OutputObligation).
 
     ?s a ?type;
         ?p ?o.
@@ -75,10 +78,10 @@ q:query_attribute
 }.
 
 {
-    ?type list:in (:OutputProhibition :OutputObligation).
+    ?type list:in (dtou:OutputProhibition dtou:OutputObligation).
 
     ?s a ?type;
-        :activation_condition ?ac.
+        dtou:activation_condition ?ac.
     ?ac ?p ?o.
 
     q:query_condition q:property ?p.

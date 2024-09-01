@@ -1,69 +1,58 @@
-#Not yet verified. Copied from upper level. Probably correct.
+# Copied only. Not in use yet.
 
 @prefix : <http://example.org/ns#>.
 
-[] a :UnsatisfiedRequirement, :Conflict;
-  :descriptor :personal;
-  :category :SecurityType.
-[] a :UnmatchedExpectation, :Conflict;
-  :descriptor :complete;
-  :category :IntegrityType.
-[] a :ProhibitedUse, :Conflict;
-  :condition _:ac1.
-[] a :ProhibitedUse, :Conflict;
-  :condition _:ac2.
 _:sk_4 a :OutputAttribute;
+  #:port :outputPort1;
   :name :ada-p;
   :class :not-a-person;
   :value :adaa.
 _:sk_27 a :OutputAttribute;
+  #:port :outputPort1;
   :name :sec-attr;
   :class :secure;
   :value :nil.
 _:sk_31 a :OutputAttribute;
+  #:port :outputPort1;
   :name :per-attr;
   :class :personal;
   :value :nil.
 _:sk_35 a :OutputAttribute;
+  #:port :outputPort1;
   :name :compl-attr;
   :class :complete;
   :value :nil.
 _:sk_39 a :OutputAttribute;
+  #:port :outputPort1;
   :name _:e_a_1;
   :class :Purpose;
   :value :nil.
-_:sk_43 a :OutputTag, :Tag;
+_:sk_43 a :OutputTag;
   :port :outputPort1;
-  :from :per-tag1;
   :descriptor :personal;
   :attribute_ref _:sk_31;
   :validity_binding _:sk_4;
   :category :SecurityType.
-_:sk_46 a :OutputTag, :Tag;
+_:sk_46 a :OutputTag;
   :port :outputPort1;
-  :from :any-purpose;
   :descriptor :Purpose;
   :attribute_ref _:sk_39;
   :category :PurposeType.
-_:sk_61 a :OutputObligation, :Obligation;
+_:sk_61 a :OutputObligation;
   :port :outputPort1;
-  :from :ob1;
   :obligation_class :acknowledge;
   :argument (_:sk_4);
   :activation_condition [ :purpose :research ].
-_:sk_49 a :OutputProhibition, :Prohibition;
+_:sk_49 a :OutputProhibition;
   :port :outputPort1;
-  :from :pr1;
   :activation_condition _:ac1;
   :mode :Use.
-_:sk_52 a :OutputProhibition, :Prohibition;
+_:sk_52 a :OutputProhibition;
   :port :outputPort1;
-  :from :pr2;
   :activation_condition _:ac2;
   :mode :Use.
-_:sk_55 a :OutputProhibition, :Prohibition;
+_:sk_55 a :OutputProhibition;
   :port :outputPort1;
-  :from :pr3;
   :activation_condition _:ac3;
   :mode :Use.
 _:ac1 :app <urn:dtou:appoint-booking>;

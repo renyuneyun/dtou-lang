@@ -1,105 +1,109 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
-@prefix : <http://example.org/ns#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix voc: <urn:dtou:vocabulary#>.
+@prefix ex: <http://example.org/ns#>.
 
 ######
 # Data Policy
 ######
 
-:attr1 a :Attribute;
-	:name :ada-p;
-	:class :person;
-	:value :ada.
+ex:attr1 a dtou:Attribute;
+	dtou:name voc:ada-p;
+	dtou:class voc:person;
+	dtou:value voc:ada.
 
-:attr2 a :Attribute;
-	:name :test;
-	:class :testClass;
-	:value :testValue.
+ex:attr2 a dtou:Attribute;
+	dtou:name voc:test;
+	dtou:class voc:testClass;
+	dtou:value voc:testValue.
 
-:sec-attr1 a :Attribute;
-	:name :sec-attr;
-	:class :secure;
-	:value :nil.
+ex:sec-attr1 a dtou:Attribute;
+	dtou:name voc:sec-attr;
+	dtou:class voc:secure;
+	dtou:value voc:nil.
 
-:per-attr1 a :Attribute;
-	:name :per-attr;
-	:class :personal;
-	:value :nil.
+ex:per-attr1 a dtou:Attribute;
+	dtou:name voc:per-attr;
+	dtou:class voc:personal;
+	dtou:value voc:nil.
 
-:compl-attr1 a :Attribute;
-	:name :compl-attr;
-	:class :complete;
-	:value :nil.
+ex:compl-attr1 a dtou:Attribute;
+	dtou:name voc:compl-attr;
+	dtou:class voc:complete;
+	dtou:value voc:nil.
 
-:sec-tag1 a :Security;
-	:attribute_ref :sec-attr1;
-	:validity_binding :attr1, :attr2.
+ex:sec-tag1 a dtou:SecurityTag;
+	dtou:attribute_ref ex:sec-attr1;
+	dtou:validity_binding ex:attr1, ex:attr2.
 
-:per-tag1 a :Security;
-	:attribute_ref :per-attr1;
-	:validity_binding :attr1.
+ex:per-tag1 a dtou:SecurityTag;
+	dtou:attribute_ref ex:per-attr1;
+	dtou:validity_binding ex:attr1.
 
-:compl-tag1 a :Integrity;
-	:attribute_ref :compl-attr1.
+ex:compl-tag1 a dtou:IntegrityTag;
+	dtou:attribute_ref ex:compl-attr1.
 
-# Should not be activated for :research
-# (Manual) Should be activated for :verify-identity
-:ob1 a :Obligation;
-	:obligation_class :acknowledge;
-	:argument (:attr1);
-	# :validity_binding :attr1;
-	:activation_condition [
-		:purpose :research
-		# :purpose  <urn:dtou:purpose-verify-identity>
+# Should not be activated for voc:research
+# (Manual) Should be activated for voc:verify-identity
+ex:ob1 a dtou:Obligation;
+	dtou:obligation_class voc:acknowledge;
+	dtou:argument (ex:attr1);
+	# dtou:validity_binding ex:attr1;
+	dtou:activation_condition [
+		dtou:purpose voc:research
+		# dtou:purpose  <urn:dtou:purpose-verify-identity>
 	].
 
 # Should be activated by App
-:pr1 a :Prohibition;
-	:mode :Use;
-	:activation_condition [
-		:app <urn:dtou:appoint-booking>;
-		:purpose <urn:dtou:purpose-verify-identity>;
+ex:pr1 a dtou:Prohibition;
+	dtou:mode dtou:Use;
+	dtou:activation_condition [
+		dtou:app <urn:dtou:appoint-booking>;
+		dtou:purpose <urn:dtou:purpose-verify-identity>;
 	].
 
 # Should be activated by downstream
-:pr2 a :Prohibition;
-	:mode :Use;
-	:activation_condition [
-		:app <https://gh.app/clinic>;
-		:purpose <urn:dtou:purpose-booking>;
+ex:pr2 a dtou:Prohibition;
+	dtou:mode dtou:Use;
+	dtou:activation_condition [
+		dtou:app <https://gh.app/clinic>;
+		dtou:purpose <urn:dtou:purpose-booking>;
 	].
 
 # Should not be activated
-:pr3 a :Prohibition;
-	:mode :Use;
-	:activation_condition [
-		:app <https://gh.app/bad_guy>;
-		:purpose <urn:dtou:purpose-booking>;
+ex:pr3 a dtou:Prohibition;
+	dtou:mode dtou:Use;
+	dtou:activation_condition [
+		dtou:app <https://gh.app/bad_guy>;
+		dtou:purpose <urn:dtou:purpose-booking>;
 	].
 
-:data1 a :Data;
-	:uri <https://ada.site/id>;
-	:policy :policy1.
+ex:data1 a dtou:Data;
+	dtou:uri <https://ada.site/id>;
+	dtou:policy ex:policy1.
 
-:policy1 a :DataPolicy;
-	:attribute :attr1, :sec-attr1, :per-attr1, :compl-attr1, :attr2;
-	:requirement :sec-tag1, :per-tag1;
-	# :tagging :compl-tag1;
-	:prohibition :pr1, :pr2, :pr3;
-	:obligation :ob1.
+ex:policy1 a dtou:DataPolicy;
+	dtou:attribute ex:attr1, ex:sec-attr1, ex:per-attr1, ex:compl-attr1, ex:attr2;
+	dtou:requirement ex:sec-tag1, ex:per-tag1;
+	# dtou:tagging ex:compl-tag1;
+	dtou:prohibition ex:pr1, ex:pr2, ex:pr3;
+	dtou:obligation ex:ob1.
 
-:data2 a :Data;
-	:uri <https://ada.site/email>;
-	:policy :policy2.
+ex:data2 a dtou:Data;
+	dtou:uri <https://ada.site/email>;
+	dtou:policy ex:policy2.
 
-:policy2 a :DataPolicy;
-	:attribute :any-purpose-attr1;
-	:tagging :any-purpose.
+ex:policy2 a dtou:DataPolicy;
+	dtou:attribute ex:any-purpose-attr1;
+	dtou:tagging ex:any-purpose.
 
-:any-purpose a :Purpose;
-	:attribute_ref :any-purpose-attr1.
+ex:any-purpose a dtou:PurposeTag;
+	dtou:attribute_ref ex:any-purpose-attr1.
 
-:any-purpose-attr1 a :Attribute;
-	:name _:a;
-	:class :Purpose;
-	:value :nil.
+ex:any-purpose-attr1 a dtou:Attribute;
+	dtou:name _:a;
+	dtou:class dtou:Purpose;
+	dtou:value voc:nil.

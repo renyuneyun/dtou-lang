@@ -1,75 +1,87 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
-@prefix : <http://example.org/ns#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix voc: <urn:dtou:vocabulary#>.
+@prefix ex: <http://example.org/ns#>.
 
 ######
 # Usage & App Policy
 ######
 
-:usageContext1 a :UsageContext;
-	:user :rui;
-	:app [a :AppInfo; :policy :appPolicy1];
-	:time "20230823".
+ex:usageContext1 a dtou:UsageContext;
+	dtou:user voc:rui;
+	dtou:app [a dtou:AppInfo; dtou:policy ex:appPolicy1];
+	dtou:time "20230823".
 
-:rui a :User.
+voc:rui a dtou:User.
 
-:appPolicy1 a :AppPolicy;
-	:name <urn:dtou:appoint-booking>;
-	:action :book-appointment;
-	:input_spec :input1;
-	:output_spec :output1.
+ex:appPolicy1 a dtou:AppPolicy;
+	dtou:name <urn:dtou:appoint-booking>;
+	dtou:action voc:book-appointment;
+	dtou:input_spec ex:input1;
+	dtou:output_spec ex:output1.
 
-:book-appointment a :Action.
+voc:book-appointment a dtou:Action.
 
-:input1 a :InputSpec;
-	:data <https://ada.site/id>;
-	:port :inputPort1;
-	:expect :complete1;
-	:purpose :verify-identify, :verify-age;
-	# :provide :secure1, :personal1;
-	:provide :secure1;
-	:downstream :ds-clinic1.
+ex:input1 a dtou:InputSpec;
+	dtou:data <https://ada.site/id>;
+	dtou:port ex:inputPort1;
+	dtou:expect ex:complete1;
+	dtou:purpose ex:verify-identify, ex:verify-age;
+	# dtou:provide ex:secure1, ex:personal1;
+	dtou:provide ex:secure1;
+	dtou:downstream ex:ds-clinic1.
 
-:complete1 a :IntegrityExpectation;
-	:name :complete.
+ex:complete1 a dtou:IntegrityExpectation;
+	dtou:descriptor voc:complete.
 
-:verify-identify a :PurposeExpectation;
-	:name <urn:dtou:purpose-verify-identity>.
+ex:verify-identify a dtou:PurposeExpectation;
+	dtou:descriptor <urn:dtou:purpose-verify-identity>.
 
-:verify-age a :PurposeExpectation;
-	:name <urn:dtou:purpose-verify-age>.
+ex:verify-age a dtou:PurposeExpectation;
+	dtou:descriptor <urn:dtou:purpose-verify-age>.
 
-:secure1 a :SecurityProvide;
-	:name :secure.
+ex:secure1 a dtou:SecurityProvide;
+	dtou:descriptor voc:secure.
 
-:personal1 a :SecurityProvide;
-	:name :personal.
+ex:personal1 a dtou:SecurityProvide;
+	dtou:descriptor voc:personal.
 
-:ds-clinic1 a :DownstreamSpec;
-	:app_name <https://gh.app/clinic>;
-	:purpose :booking, :recording.
+ex:ds-clinic1 a dtou:DownstreamSpec;
+	dtou:app_name <https://gh.app/clinic>;
+	dtou:purpose ex:booking, ex:recording.
 
-:booking a :PurposeExpectation;
-	:name <urn:dtou:purpose-booking>.
+ex:booking a dtou:PurposeExpectation;
+	dtou:descriptor <urn:dtou:purpose-booking>.
 
-:recording a :PurposeExpectation;
-	:name <urn:dtou:purpose-recording>.
+ex:recording a dtou:PurposeExpectation;
+	dtou:descriptor <urn:dtou:purpose-recording>.
 
-:inputPort1 a :Port;
-	:name "inputPort1".
+ex:inputPort1 a dtou:Port;
+	dtou:name "inputPort1".
 
-:output1 a :OutputSpec;
-	:port :outputPort1;
-	:from :inputPort1;
-	:refinement :re-delete-test;
-	:refinement :re-edit-ada-p.
+ex:output1 a dtou:OutputSpec;
+	dtou:port ex:outputPort1;
+	dtou:from ex:inputPort1;
+	dtou:refinement ex:re-delete-test;
+	dtou:refinement ex:re-edit-ada-p.
 
 # attribute(test, testClass, testValue) cease to exist
-:re-delete-test a :Delete;
-	:filter :filter-test.
+ex:re-delete-test a dtou:Delete;
+	dtou:filter ex:filter-test.
 
 # attribute(ada-p, person, ada) becomes attribute(ada-p, not-a-person, adaa)
-:re-edit-ada-p a :Edit;
-	:filter :filter-ada-p;
-	:new_class :not-a-person;
-	:new_value :adaa.
+ex:re-edit-ada-p a dtou:Edit;
+	dtou:filter ex:filter-ada-p;
+	dtou:new_class voc:not-a-person;
+	dtou:new_value voc:adaa.
+
+ex:filter-ada-p a dtou:Filter;
+	dtou:name voc:ada-p;
+	dtou:class voc:person;
+	dtou:value voc:ada.
+
+ex:filter-test a dtou:Filter;
+	dtou:name voc:test;
+	dtou:class voc:testClass;
+	dtou:value voc:testValue.

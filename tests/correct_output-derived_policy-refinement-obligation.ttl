@@ -1,0 +1,18 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix voc: <urn:dtou:vocabulary#>.
+@prefix ex: <http://example.org/ns#>.
+
+_:sk_4 a dtou:OutputAttribute;
+  #dtou:port ex:outputPort1;
+  dtou:name voc:ada-p;
+  dtou:class voc:not-a-person;
+  dtou:value voc:adaa.
+_:sk_61 a dtou:OutputObligation;
+  dtou:port ex:outputPort1;
+  dtou:obligation_class voc:acknowledge;
+  dtou:argument (_:sk_4);
+  dtou:activation_condition [ dtou:purpose voc:research ].

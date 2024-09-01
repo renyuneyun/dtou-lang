@@ -1,0 +1,53 @@
+@prefix : <http://example.org/ns#> .
+@prefix dtou: <urn:dtou:core#> .
+@prefix voc: <urn:dtou:vocabulary#> .
+
+:inputPort1 a dtou:Port ;
+    dtou:name "inputPort1" .
+
+[] a dtou:Conflict,
+        dtou:UnsatisfiedRequirement ;
+    dtou:category dtou:SecurityType ;
+    dtou:descriptor voc:personal ;
+    dtou:port :inputPort1 .
+
+[] a dtou:Conflict,
+        dtou:UnmatchedExpectation ;
+    dtou:category dtou:IntegrityType ;
+    dtou:descriptor voc:complete ;
+    dtou:port :inputPort1 .
+
+[] a dtou:Conflict,
+        dtou:UnmatchedExpectation ;
+    dtou:category dtou:PurposeType ;
+    dtou:descriptor <urn:dtou:purpose-verify-identity> ;
+    dtou:port :inputPort1 .
+
+[] a dtou:Conflict,
+        dtou:UnmatchedExpectation ;
+    dtou:category dtou:PurposeType ;
+    dtou:descriptor <urn:dtou:purpose-verify-age> ;
+    dtou:port :inputPort1 .
+
+[] a dtou:Conflict,
+        dtou:UnmatchedExpectation ;
+    dtou:category dtou:PurposeType ;
+    dtou:descriptor <urn:dtou:purpose-booking> ;
+    dtou:port :inputPort1 .
+
+[] a dtou:Conflict,
+        dtou:UnmatchedExpectation ;
+    dtou:category dtou:PurposeType ;
+    dtou:descriptor <urn:dtou:purpose-recording> ;
+    dtou:port :inputPort1 .
+
+[] a dtou:Conflict,
+        dtou:ProhibitedUse ;
+    dtou:condition [ dtou:app <urn:dtou:appoint-booking> ;
+            dtou:purpose <urn:dtou:purpose-verify-identity> ] .
+
+[] a dtou:Conflict,
+        dtou:ProhibitedUse ;
+    dtou:condition [ dtou:app <https://gh.app/clinic> ;
+            dtou:purpose <urn:dtou:purpose-booking> ] .
+

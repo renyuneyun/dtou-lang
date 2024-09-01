@@ -24,7 +24,8 @@ runTest() {
 	correctResult=$4
 	#eye --quiet --nope --blogic ../dtou-lang-reasoning.n3 ../dtou-lang-general.n3s ../dtou-lang.n3s $dataPol $appPol --query $query --output $OUTPUT_TMP  # N3; older version eye reasoner argument (e.g. v5.2.2)
 	#eye --quiet --nope --blogic ../dtou-lang-reasoning.n3s ../dtou-lang-general.n3s ../dtou-lang.n3s $dataPol $appPol --query $query --output $OUTPUT_TMP  # RDF Surafaces; older version eye reasoner argument (e.g. v5.2.2)
-	eye --quiet --nope --no-bnode-relabeling ../dtou-lang-reasoning.n3 ../dtou-lang-general.n3s ../dtou-lang.n3s $dataPol $appPol --query $query --output $OUTPUT_TMP  # N3, with some RDF Surfaces not finished conversion; newer eye reasoner argument (e.g. 10.19.6)
+	#eye --quiet --nope --no-bnode-relabeling ../dtou-lang-reasoning.n3 ../dtou-lang-general.n3s ../dtou-lang.n3s $dataPol $appPol --query $query --output $OUTPUT_TMP  # N3, with some RDF Surfaces not finished conversion; newer eye reasoner argument (e.g. 10.19.6)
+	eye --quiet --nope ../dtou-lang-reasoning.n3 dtou-policy-vocabulary.ttl $dataPol $appPol --query $query --output $OUTPUT_TMP  # N3, with some RDF Surfaces not finished conversion; newer eye reasoner argument (e.g. 10.19.6)
 
 	# rdf-diff $correctResult $OUTPUT_TMP
 	# return $?
@@ -53,12 +54,15 @@ wrap() {
 }
 
 
-wrap "Only attribute propagation" runTest dtou-policy-data_attributes.ttl dtou-policy-app_propagate-only.ttl query-derived-policy.n3 correct-output_attribute-propagate-only.ttl
-wrap "Only tag propagation" runTest dtou-policy-data_tag.ttl dtou-policy-app_propagate-only.ttl query-derived-policy.n3 correct-output_tag-propagate-only.ttl
-wrap "Only prohibition propagation" runTest dtou-policy-data_prohibition.ttl dtou-policy-app_propagate-only.ttl query-derived-policy.n3 correct-output_prohibition-propagate-only.ttl
-wrap "Only obligation propagation" runTest dtou-policy-data_obligation.ttl dtou-policy-app_propagate-only.ttl query-derived-policy.n3 correct-output_obligation-propagate-only.ttl
-wrap "Full data policy propagation" runTest dtou-policy-data-1.ttl dtou-policy-app_propagate-only.ttl query-derived-policy.n3 correct-output_derived_propagate-only.ttl  # The "correct" output is only after a brief verification. Something is not correct with the definition (see commented-out lines in "correct" output)
-wrap "Full data policy with refinement" runTest dtou-policy-data-1.ttl dtou-policy-app-1.ttl query-derived-policy.n3 correct-output_derived-policy_refinement.ttl  # The "correct" output is only after a brief verification. Something is not correct with the definition (see commented-out lines in "correct" output)
-wrap "Conflict" runTest dtou-policy-data-1.ttl dtou-policy-app_propagate-only.ttl query-conflict.n3 correct-output_conflict.ttl
-wrap "Activated Obligation" runTest dtou-policy-data-1.ttl dtou-policy-app_propagate-only.ttl query-obligation.n3 correct-output_obligation.ttl  # The "correct" output may not be correct; eye has some issues before v10.19.6 (#113)
-
+wrap "Only attribute propagation" runTest dtou-policy-data-1.ttl dtou-policy-app-propagate_only.ttl query-derived_policy-attribute.n3 correct_output-derived_policy-propagate_only-attribute.ttl
+wrap "Only tag propagation" runTest dtou-policy-data-1.ttl dtou-policy-app-propagate_only.ttl query-derived_policy-tag.n3 correct_output-derived_policy-propagate_only-tag.ttl
+wrap "Only prohibition propagation" runTest dtou-policy-data-1.ttl dtou-policy-app-propagate_only.ttl query-derived_policy-prohibition.n3 correct_output-derived_policy-propagate_only-prohibition.ttl
+wrap "Only obligation propagation" runTest dtou-policy-data-1.ttl dtou-policy-app-propagate_only.ttl query-derived_policy-obligation.n3 correct_output-derived_policy-propagate_only-obligation.ttl
+wrap "Full data policy propagation" runTest dtou-policy-data-1.ttl dtou-policy-app-propagate_only.ttl query-derived_policy.n3 correct_output-derived_policy-propagate_only.ttl  # The "correct" output is only after a brief verification. Something is not correct with the definition (see commented-out lines in "correct" output)
+wrap "Only attribute with refinement" runTest dtou-policy-data-1.ttl dtou-policy-app-1.ttl query-derived_policy-attribute.n3 correct_output-derived_policy-refinement-attribute.ttl
+wrap "Only tag with refinement" runTest dtou-policy-data-1.ttl dtou-policy-app-1.ttl query-derived_policy-tag.n3 correct_output-derived_policy-refinement-tag.ttl
+wrap "Only prohibition with refinement" runTest dtou-policy-data-1.ttl dtou-policy-app-1.ttl query-derived_policy-prohibition.n3 correct_output-derived_policy-refinement-prohibition.ttl
+wrap "Only obligation with refinement" runTest dtou-policy-data-1.ttl dtou-policy-app-1.ttl query-derived_policy-obligation.n3 correct_output-derived_policy-refinement-obligation.ttl
+wrap "Full data policy with refinement" runTest dtou-policy-data-1.ttl dtou-policy-app-1.ttl query-derived_policy.n3 correct_output-derived_policy-refinement.ttl
+wrap "Conflict" runTest dtou-policy-data-1.ttl dtou-policy-app-propagate_only.ttl query-conflict.n3 correct_output-conflict.ttl
+wrap "Activated Obligation" runTest dtou-policy-data-1.ttl dtou-policy-app-propagate_only.ttl query-activated_obligation.n3 correct_output-activated_obligation.ttl

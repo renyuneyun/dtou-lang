@@ -1,0 +1,100 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix voc: <urn:dtou:vocabulary#>.
+@prefix ex: <http://example.org/ns#>.
+
+{
+	#( rdf:type dtou:name dtou:class dtou:value dtou:port ) list:iterate ( ?i ?p ).
+	( dtou:name dtou:class dtou:value dtou:port ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputAttribute;
+		?p ?o.
+} => {
+	?a a dtou:OutputAttribute;
+		?p ?o.
+}.
+
+{
+	#( rdf:type dtou:category dtou:attribute_ref dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
+	( dtou:category dtou:attribute_ref dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputTag;
+		?p ?o.
+} => {
+	?a a dtou:OutputTag;
+		?p ?o.
+}.
+
+{
+	?a a dtou:OutputTag;
+		dtou:port ?port.
+	?port ?p ?o.
+} => {
+	?a a dtou:OutputTag;
+		dtou:port ?port.
+	?port ?p ?o.
+}.
+
+{
+	#( rdf:type dtou:activation_condition dtou:mode dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
+	( dtou:activation_condition dtou:mode dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputProhibition;
+		?p ?o.
+} => {
+	?a a dtou:OutputProhibition;
+		?p ?o.
+}.
+
+{
+	( dtou:app dtou:purpose dtou:user ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputProhibition;
+		dtou:activation_condition ?o0.
+	?o0 ?p ?o1.
+} => {
+	?a dtou:activation_condition ?o0.
+	?o0 ?p ?o1.
+}.
+
+{
+	( dtou:port ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputProhibition;
+		?p ?o0.
+	?o0 ?p1 ?o1.
+} => {
+	?a a dtou:OutputProhibition;
+		?p ?o0.
+	?o0 ?p1 ?o1.
+}.
+
+
+{
+	#( rdf:type dtou:activation_condition dtou:argument dtou:obligation_class dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
+	( dtou:activation_condition dtou:argument dtou:obligation_class dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputObligation;
+		?p ?o.
+} => {
+	?a a dtou:OutputObligation;
+		?p ?o.
+}.
+
+{
+	( dtou:app dtou:purpose dtou:user ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputObligation;
+		dtou:activation_condition ?o0.
+	?o0 ?p ?o1.
+} => {
+	?a dtou:activation_condition ?o0.
+	?o0 ?p ?o1.
+}.
+
+{
+	( dtou:port ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputObligation;
+		?p ?o0.
+	?o0 ?p1 ?o1.
+} => {
+	?a a dtou:OutputObligation;
+		?p ?o0.
+	?o0 ?p1 ?o1.
+}.

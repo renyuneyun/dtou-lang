@@ -1,0 +1,10 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix dri: <urn:dtou:internal#>.
+
+{ ?x a dri:Debug;
+    ?p ?o.
+} => {
+    ?x ?p ?o.
+}.

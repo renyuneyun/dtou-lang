@@ -1,8 +1,9 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix list: <http://www.w3.org/2000/10/swap/list#> .
-@prefix dtou: <http://example.org/ns#>.
-@prefix dri: <http://example.org/ns2#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix dri: <urn:dtou:internal#>.
+@prefix : <http://example.org/ns#>.
 
 ######
 # Helper implications for the language
@@ -13,15 +14,26 @@
 ###
 { ?x dtou:attribute_ref [ dtou:class ?N ].  } => { ?x dtou:descriptor ?N.  }.
 
-{ ?x a dtou:Security.  } => { ?x dtou:category dtou:SecurityType.  }.
-{ ?x a dtou:Integrity.  } => { ?x dtou:category dtou:IntegrityType.  }.
-{ ?x a dtou:Purpose.  } => { ?x dtou:category dtou:PurposeType.  }.
+{ ?x a dtou:SecurityTag.  } => { ?x dtou:category dtou:SecurityType.  }.
+{ ?x a dtou:IntegrityTag.  } => { ?x dtou:category dtou:IntegrityType.  }.
+{ ?x a dtou:PurposeTag.  } => { ?x dtou:category dtou:PurposeType.  }.
 { ?x a dtou:PurposeExpectation.  } => { ?x dtou:category dtou:PurposeType.  }.
 { ?x a dtou:IntegrityExpectation.  } => { ?x dtou:category dtou:IntegrityType.  }.
 { ?x a dtou:SecurityProvide.  } => { ?x dtou:category dtou:SecurityType.  }.
 
 { ?x dtou:requirement ?tagging } => { ?x dtou:tag ?tagging }.
 { ?x dtou:tagging ?tagging } => { ?x dtou:tag ?tagging }.
+{ ?x a dtou:DataPolicy; dtou:purpose ?purpose } => { ?x dtou:tagging ?purpose }.
+
+{ ?x a dtou:InputSpec; dtou:purpose ?purpose } => { ?x dtou:expect ?purpose }.
+{ ?x a dtou:InputSpec; dtou:downstream [ dtou:purpose ?purpose ]. } => { ?x dtou:purpose ?purpose. }.
+
+###
+# Additional helper for reasoning (subclassing of items to be checked, e.g. tags)
+###
+
+{ ?x dtou:descriptor ?d. } => { ?d dri:hasEffectiveSuper ?d. }.
+{ ?x dri:hasEffectiveSuper ?d. ?d rdfs:subClassOf ?dp. } => { ?x dri:hasEffectiveSuper ?dp. }.  # Only use super classes for simplicity and generally better performance (than using sub-classes)
 
 ### Helper to check condition is activated or not (and by the current app or downstream)
 ### {{{
@@ -56,7 +68,7 @@
     _:t log:notIncludes {
         _:t log:notIncludes {
             ?ac dtou:purpose ?P.
-            ?input dtou:purpose [ dtou:descriptor ?P ].
+            ?input dtou:purpose [ dtou:descriptor [ dri:hasEffectiveSuper ?P ] ].
         }.
 
         ?ac dtou:purpose ?P0.
@@ -76,7 +88,7 @@
     ?data dtou:policy [ ?p [ dtou:activation_condition ?ac ] ].
 
     ?input dtou:downstream ?ds.
-    
+
     _:t log:notIncludes {
         _:t log:notIncludes {
             ?ac dtou:app ?N.
@@ -89,7 +101,7 @@
     _:t log:notIncludes {
         _:t log:notIncludes {
             ?ac dtou:purpose ?P.
-            ?ds dtou:purpose [ dtou:descriptor ?P ].
+            ?ds dtou:purpose [ dtou:descriptor [ dri:hasEffectiveSuper ?P ] ].
         }.
 
         ?ac dtou:purpose ?P0.
@@ -147,13 +159,17 @@
         ]
     ].
 
+    ?input dtou:port ?port.
+
     _:t log:notIncludes {
             ?input dtou:provide ?provide.
+            ?N dri:hasEffectiveSuper ?Ns.
             ?provide dtou:category ?T;
-                dtou:descriptor ?N.
+                dtou:descriptor ?Ns.
     }.
 } => {
     ?m a dtou:UnsatisfiedRequirement;
+        dtou:port ?port;
         dtou:category ?T;
         dtou:descriptor ?N.
 }.
@@ -171,16 +187,20 @@
         dtou:descriptor ?N
         ].
 
+    ?input dtou:port ?port.
+
     _:t log:notIncludes {
+        ?N dri:hasEffectiveSuper ?Ns.
         ?data dtou:policy [
             dtou:tagging [
                 dtou:category ?T;
-                dtou:descriptor ?N
+                dtou:descriptor ?Ns
             ]
         ].
-    }
+    }.
 } => {
     ?m a dtou:UnmatchedExpectation;
+        dtou:port ?port;
         dtou:category ?T;
         dtou:descriptor ?N.
 }.
@@ -237,4 +257,3 @@
         dtou:obligation_class ?ob;
         dtou:argument ?args.
 }.
-

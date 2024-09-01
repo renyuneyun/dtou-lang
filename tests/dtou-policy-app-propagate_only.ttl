@@ -1,7 +1,5 @@
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
-@prefix list: <http://www.w3.org/2000/10/swap/list#>.
 @prefix dtou: <urn:dtou:core#>.
 @prefix voc: <urn:dtou:vocabulary#>.
 @prefix ex: <http://example.org/ns#>.
@@ -83,43 +81,7 @@ ex:ds-clinic2 a dtou:DownstreamSpec;
 
 ex:output1 a dtou:OutputSpec;
 	dtou:port ex:outputPort1;
-	dtou:from ex:inputPort1, ex:inputPort2;
-	# dtou:refinement ex:re-delete-all;
+	dtou:from ex:inputPort1;
 	dtou:refinement ex:re-delete-test;
 	dtou:refinement ex:re-edit-ada-p.
-	# dtou:refinement ex:re-edit-ada-p.
 
-ex:outputPort1 a dtou:Port;
-	dtou:name "output".
-
-# all attributes cease to exist
-ex:re-delete-all a dtou:Delete;
-	dtou:filter ex:filter-all.
-
-# attribute(test, testClass, testValue) cease to exist
-ex:re-delete-test a dtou:Delete;
-	dtou:filter ex:filter-test.
-
-# attribute(ada-p, person, ada) cease to exist
-ex:re-delete-ada-p a dtou:Delete;
-	dtou:filter ex:filter-ada-p.
-
-# attribute(ada-p, person, ada) becomes attribute(ada-p, not-a-person, adaa)
-ex:re-edit-ada-p a dtou:Edit;
-	dtou:filter ex:filter-ada-p;
-	dtou:new_class voc:not-a-person;
-	dtou:new_value voc:adaa.
-
-ex:filter-all a dtou:Filter.
-
-# Not in-use. Mainly for testing
-ex:filter-ada-p a dtou:Filter;
-	dtou:name voc:ada-p;
-	dtou:class voc:person;
-	dtou:value voc:ada.
-
-# Not in-use. Mainly for testing
-ex:filter-test a dtou:Filter;
-	dtou:name voc:test;
-	dtou:class voc:testClass;
-	dtou:value voc:testValue.

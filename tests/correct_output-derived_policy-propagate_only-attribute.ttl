@@ -1,0 +1,33 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix voc: <urn:dtou:vocabulary#>.
+@prefix ex: <http://example.org/ns#>.
+
+[] a dtou:OutputAttribute ;
+    dtou:class voc:person ;
+    dtou:name voc:ada-p ;
+    dtou:value voc:ada .
+
+[] a dtou:OutputAttribute ;
+    dtou:class voc:secure ;
+    dtou:name voc:sec-attr ;
+    dtou:value voc:nil .
+
+[] a dtou:OutputAttribute ;
+    dtou:class voc:personal ;
+    dtou:name voc:per-attr ;
+    dtou:value voc:nil .
+
+[] a dtou:OutputAttribute ;
+    dtou:class voc:complete ;
+    dtou:name voc:compl-attr ;
+    dtou:value voc:nil .
+
+[] a dtou:OutputAttribute ;
+    dtou:class voc:testClass ;
+    dtou:name voc:test ;
+    dtou:value voc:testValue .
+
