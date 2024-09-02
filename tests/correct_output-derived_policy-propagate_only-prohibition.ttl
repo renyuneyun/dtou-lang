@@ -7,21 +7,23 @@
 @prefix ex: <http://example.org/ns#>.
 
 [] a dtou:OutputProhibition;
-    dtou:activation_condition [ dtou:app <urn:dtou:appoint-booking> ;
-            dtou:purpose <urn:dtou:purpose-verify-identity> ] ;
-    dtou:mode dtou:Use ;
-    dtou:port ex:outputPort1 .
-
-[] a dtou:OutputProhibition;
-    dtou:activation_condition [ dtou:app <https://gh.app/clinic> ;
-            dtou:purpose <urn:dtou:purpose-booking> ] ;
-    dtou:mode dtou:Use ;
-    dtou:port ex:outputPort1 .
-
-[] a dtou:OutputProhibition;
-    dtou:mode dtou:Use;
     dtou:activation_condition [
-            dtou:app <https://not.exist/app>;
-            dtou:purpose <urn:dtou:purpose-booking>;
+        dtou:mode dtou:use;
+        dtou:app <urn:dtou:appoint-booking> ;
+        dtou:purpose <urn:dtou:purpose-verify-identity> ] ;
+    dtou:port ex:outputPort1 .
+
+[] a dtou:OutputProhibition;
+    dtou:activation_condition [
+        dtou:mode dtou:use;
+        dtou:app <https://gh.app/clinic> ;
+        dtou:purpose <urn:dtou:purpose-booking> ] ;
+    dtou:port ex:outputPort1 .
+
+[] a dtou:OutputProhibition;
+    dtou:activation_condition [
+        dtou:mode dtou:use;
+        dtou:app <https://not.exist/app>;
+        dtou:purpose <urn:dtou:purpose-booking>;
 	];
     dtou:port ex:outputPort1 .

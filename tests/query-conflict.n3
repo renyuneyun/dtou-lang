@@ -24,7 +24,7 @@
 }.
 
 {
-	( dtou:app dtou:purpose dtou:user ) list:iterate ( ?i ?p ).
+	( dtou:mode dtou:app dtou:purpose dtou:user ) list:iterate ( ?i ?p ).
 	?a a dtou:ProhibitedUse;
 		dtou:condition ?o0.
 	?o0 ?p ?o1.

@@ -17,7 +17,18 @@
 }.
 
 {
-	( dtou:activation_condition dtou:port ) list:iterate ( ?i ?p ).
+	( dtou:mode dtou:app dtou:purpose dtou:user ) list:iterate ( ?i ?p ).
+	?a a dtou:OutputObligation;
+		dtou:activation_condition ?o0.
+	?o0 ?p ?o1.
+} => {
+	?a a dtou:OutputObligation;
+		dtou:activation_condition ?o0.
+	?o0 ?p ?o1.
+}.
+
+{
+	( dtou:port ) list:iterate ( ?i ?p ).
 	?a a dtou:OutputObligation;
 		?p ?o0.
 	?o0 ?p1 ?o1.

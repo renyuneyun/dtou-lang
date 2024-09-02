@@ -9,22 +9,25 @@
 ######
 
 ex:pr1 a dtou:Prohibition;
-	dtou:mode dtou:Use;
 	dtou:activation_condition [
+		a dtou:ActivationCondition;
+		dtou:mode dtou:use;
 		dtou:app <urn:dtou:appoint-booking>;
 		dtou:purpose <urn:dtou:purpose-verify-identity>;
 	].
 
 ex:pr2 a dtou:Prohibition;
-	dtou:mode dtou:Use;
 	dtou:activation_condition [
+		a dtou:ActivationCondition;
+		dtou:mode dtou:use;
 		dtou:app <urn:dtou:appoint-booking>;
 		dtou:purpose <urn:dtou:purpose-not-exist>;
 	].
 
 ex:pr3 a dtou:Prohibition;
-	dtou:mode dtou:Share;
 	dtou:activation_condition [
+		a dtou:ActivationCondition;
+		dtou:mode dtou:share;
 		dtou:purpose dtou:Purpose;
 	].
 
@@ -43,6 +46,7 @@ ex:policy2 a dtou:DataPolicy;
 	dtou:prohibition ex:pr4.
 
 ex:pr4 a dtou:Prohibition;
-	dtou:mode dtou:Aggregate;
 	dtou:activation_condition [
+		a dtou:ActivationCondition;
+		dtou:mode dtou:aggregate;
 	].

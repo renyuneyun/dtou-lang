@@ -29,6 +29,9 @@
 { ?x a dtou:InputSpec; dtou:purpose ?purpose } => { ?x dtou:expect ?purpose. ?purpose dtou:category dtou:PurposeCategory. }.
 { ?x a dtou:InputSpec; dtou:downstream [ dtou:purpose ?purpose ]. } => { ?x dtou:purpose ?purpose. }.
 
+{ ?x a dtou:InputSpec; dtou:expect ?expect. } => { ?x dtou:capability ?expect. }.
+{ ?x a dtou:InputSpec; dtou:provide ?provide. } => { ?x dtou:capability ?provide. }.
+
 ###
 # Additional helper for reasoning (subclassing of items to be checked, e.g. tags)
 ###
@@ -38,6 +41,53 @@
 
 
 ### Helper to check condition is activated or not (and by the current app or downstream)
+### {{{ Translate short-hand syntax to extended syntax
+#### For FieldMatcher
+{
+    ?x a dri:RelatedDataAppInput;
+        dri:usage ?usage;
+        dri:data ?data;
+        dri:app ?app;
+        dri:input ?input.
+
+    ?data dtou:policy [ ?p [ dtou:activation_condition ?ac ] ].
+
+    ( dtou:app dtou:user ) list:iterate (?index ?p1).
+    ( dtou:appField dtou:userField ) list:iterate (?index ?field).
+
+    ?ac ?p1 ?v.
+} => {
+    ?ac dtou:matches [
+        a dtou:FieldMatcher;
+        dtou:field ?field;
+        dtou:value ?v;
+    ].
+}.
+#### For CategoryMatcher
+{
+    ?x a dri:RelatedDataAppInput;
+        dri:usage ?usage;
+        dri:data ?data;
+        dri:app ?app;
+        dri:input ?input.
+
+    ?data dtou:policy [ ?p [ dtou:activation_condition ?ac ] ].
+
+    ( dtou:requirement dtou:offer dtou:integrity dtou:purpose dtou:security ) list:iterate (?index ?p1).
+    ( dtou:RequirementCategory dtou:OfferCategory dtou:IntegrityCategory dtou:PurposeCategory dtou:SecurityCategory dtou:userField ) list:iterate (?index ?category).
+
+    ?ac ?p1 ?o.
+} => {
+    ?ac dtou:matches [
+        a dtou:CategoryMatcher;
+        dtou:source dtou:current, dtou:downstream;
+        dtou:category ?category;
+        dtou:descriptor ?o;
+        dtou:categoryMatcher dtou:exactly;
+        dtou:descriptorMatcher dtou:subClassFrom;
+    ].
+}.
+### }}}
 ### {{{
 # For current App
 {
@@ -49,70 +99,82 @@
 
     ?data dtou:policy [ ?p [ dtou:activation_condition ?ac ] ].
 
-    _:t log:notIncludes {
-        _:t log:notIncludes {
-            ?ac dtou:user ?U.
-            ?usage dtou:user ?U.
-        }.
+    (
+        {
+            ?ac dtou:matches ?matcher.
+            ?matcher a dtou:FieldMatcher.
+        }
 
-        ?ac dtou:user ?U0.
-    }.
+        {
+            ?matcher dtou:field ?field;
+                dtou:value ?value.
 
-    _:t log:notIncludes {
-        _:t log:notIncludes {
-            ?ac dtou:app ?N.
-            ?app dtou:name ?N.
-        }.
+            _:t log:notIncludes {
+                _:t log:notIncludes {
+                    ?field log:equalTo dtou:appField.
+                    _:t log:notIncludes {
+                        _:t log:notIncludes {
+                            ?app dtou:name ?value.
+                        }.
+                        _:t log:notIncludes {
+                            ?input dtou:downstream [ dtou:app_name ?value ].
+                        }
+                    }
+                }.
+                _:t log:notIncludes {
+                    ?field log:equalTo dtou:userField.
+                    _:t log:notIncludes {
+                        _:t log:notIncludes {
+                            ?usage dtou:user ?value.
+                        }.
+                        _:t log:notIncludes {
+                            ?input dtou:downstream [ dtou:user ?value ].
+                        }
+                    }
+                }.
+            }.
+        }
+    ) log:forAllIn _:t.
 
-        ?ac dtou:app ?N0.
-    }.
+    (
+        {
+            ?ac dtou:matches ?matcher.
+            ?matcher a dtou:CategoryMatcher.
+        }
+        {
+            ?matcher dtou:category ?category;
+                dtou:descriptor ?descriptor;
+                dtou:categoryMatcher ?cm;
+                dtou:descriptorMatcher ?dm.
 
-    _:t log:notIncludes {
-        _:t log:notIncludes {
-            ?ac dtou:purpose ?P.
-            ?input dtou:purpose [ dtou:descriptor [ rdfs:subClassOf ?P ] ].
-        }.
+            ?input dtou:capability [
+                dtou:category ?category_p;
+                dtou:descriptor ?descriptor_p;
+            ].
 
-        ?ac dtou:purpose ?P0.
-    }.
+            ?category log:equalTo ?category_p.
+
+            _:t log:notIncludes {
+                _:t log:notIncludes {
+                    ?dm log:equalTo dtou:exactly.
+                    ?descriptor log:equalTo ?descriptor_p.
+                }.
+
+                _:t log:notIncludes {
+                    ?dm log:equalTo dtou:subClassFrom.
+                    ?descriptor_p rdfs:subClassOf ?descriptor.
+                }.
+
+                _:t log:notIncludes {
+                    ?dm log:equalTo dtou:superClassFrom.
+                    ?descriptor rdfs:subClassOf ?descriptor_p.
+                }.
+            }.
+        }
+    ) log:forAllIn _:t.
 } => {
-    ?ac a dri:MetCondition;
-        dri:met_by dri:Current.
+    ?ac a dri:MetCondition.
 }.
-# For downstream
-{
-    ?x a dri:RelatedDataAppInput;
-        dri:usage ?usage;
-        dri:data ?data;
-        dri:app ?app;
-        dri:input ?input.
-
-    ?data dtou:policy [ ?p [ dtou:activation_condition ?ac ] ].
-
-    ?input dtou:downstream ?ds.
-
-    _:t log:notIncludes {
-        _:t log:notIncludes {
-            ?ac dtou:app ?N.
-            ?ds dtou:app_name ?N.
-        }.
-
-        ?ac dtou:app ?N0.
-    }.
-
-    _:t log:notIncludes {
-        _:t log:notIncludes {
-            ?ac dtou:purpose ?P.
-            ?ds dtou:purpose [ dtou:descriptor [ rdfs:subClassOf ?P ] ].
-        }.
-
-        ?ac dtou:purpose ?P0.
-    }.
-} => {
-    ?ac a dri:MetCondition;
-        dri:met_by dri:Downstream.
-}.
-### }}}
 
 ###
 # Included in appendix
@@ -184,15 +246,15 @@
 # } <= {
 #     _:t log:notIncludes {
 #         _:t1 log:notIncludes {
-#             ?matcher log:equalTo dtou:Exact.
+#             ?matcher log:equalTo dtou:exactly.
 #             ?arg1 log:equalTo ?arg2.
 #         }.
 #         _:t2 log:notIncludes {
-#             ?matcher log:equalTo dtou:SubClassFrom.
+#             ?matcher log:equalTo dtou:subClassFrom.
 #             ?arg2 rdfs:subClassOf ?arg1.
 #         }.
 #         _:t3 log:notIncludes {
-#             ?matcher log:equalTo dtou:SuperClassFrom.
+#             ?matcher log:equalTo dtou:superClassFrom.
 #             ?arg1 rdfs:subClassOf ?arg2.
 #         }.
 #     }
@@ -228,34 +290,34 @@
 
         _:t log:notIncludes {
             _:t log:notIncludes {
-                ?cm log:equalTo dtou:Exact.
+                ?cm log:equalTo dtou:exactly.
                 ?T log:equalTo ?T_p.
             }.
 
             _:t log:notIncludes {
-                ?cm log:equalTo dtou:SubClassFrom.
+                ?cm log:equalTo dtou:subClassFrom.
                 ?T_p rdfs:subClassOf ?T.
             }.
 
             _:t log:notIncludes {
-                ?cm log:equalTo dtou:SuperClassFrom.
+                ?cm log:equalTo dtou:superClassFrom.
                 ?T rdfs:subClassOf ?T_p.
             }.
         }.
 
         _:t log:notIncludes {
             _:t log:notIncludes {
-                ?dm log:equalTo dtou:Exact.
+                ?dm log:equalTo dtou:exactly.
                 ?N log:equalTo ?N_p.
             }.
 
             _:t log:notIncludes {
-                ?dm log:equalTo dtou:SubClassFrom.
+                ?dm log:equalTo dtou:subClassFrom.
                 ?N_p rdfs:subClassOf ?N.
             }.
 
             _:t log:notIncludes {
-                ?dm log:equalTo dtou:SuperClassFrom.
+                ?dm log:equalTo dtou:superClassFrom.
                 ?N rdfs:subClassOf ?N_p.
             }.
         }.
@@ -306,34 +368,34 @@
 
         _:t log:notIncludes {
             _:t log:notIncludes {
-                ?cm log:equalTo dtou:Exact.
+                ?cm log:equalTo dtou:exactly.
                 ?T log:equalTo ?T_p.
             }.
 
             _:t log:notIncludes {
-                ?cm log:equalTo dtou:SubClassFrom.
+                ?cm log:equalTo dtou:subClassFrom.
                 ?T_p rdfs:subClassOf ?T.
             }.
 
             _:t log:notIncludes {
-                ?cm log:equalTo dtou:SuperClassFrom.
+                ?cm log:equalTo dtou:superClassFrom.
                 ?T rdfs:subClassOf ?T_p.
             }.
         }.
 
         _:t log:notIncludes {
             _:t log:notIncludes {
-                ?dm log:equalTo dtou:Exact.
+                ?dm log:equalTo dtou:exactly.
                 ?N log:equalTo ?N_p.
             }.
 
             _:t log:notIncludes {
-                ?dm log:equalTo dtou:SubClassFrom.
+                ?dm log:equalTo dtou:subClassFrom.
                 ?N_p rdfs:subClassOf ?N.
             }.
 
             _:t log:notIncludes {
-                ?dm log:equalTo dtou:SuperClassFrom.
+                ?dm log:equalTo dtou:superClassFrom.
                 ?N rdfs:subClassOf ?N_p.
             }.
         }.
@@ -366,12 +428,13 @@
     
     ?data dtou:policy [
         dtou:prohibition [
-            dtou:mode dtou:Use;
             dtou:activation_condition ?ac
         ]
     ].
 
-    ?ac a dri:MetCondition.
+    ?ac a dri:MetCondition;
+        dtou:mode ?mode.
+    ?mode list:in ( dtou:use dtou:share ).
 
     # ?app dtou:name ?N.
     # ?input dtou:purpose ?P.
@@ -380,7 +443,6 @@
 } => {
     ?m a dtou:ProhibitedUse;
         dtou:port ?port;
-        dtou:mode dtou:Use;
         dtou:condition ?ac.
 }.
 {
@@ -394,36 +456,13 @@
     
     ?data dtou:policy [
         dtou:prohibition [
-            dtou:mode dtou:Share;
             dtou:activation_condition ?ac
         ]
     ].
 
     ?ac a dri:MetCondition;
-        dri:met_by dri:Downstream.
-} => {
-    ?m a dtou:ProhibitedUse;
-        dtou:port ?port;
-        dtou:mode dtou:Share;
-        dtou:condition ?ac.
-}.
-{
-    ?x a dri:RelatedDataAppInput;
-        dri:usage ?usage;
-        dri:data ?data;
-        dri:app ?app;
-        dri:input ?input.
-
-    ?input dtou:port ?port.
-    
-    ?data dtou:policy [
-        dtou:prohibition [
-            dtou:mode dtou:Aggregate;
-            dtou:activation_condition ?ac
-        ]
-    ].
-
-    ?ac a dri:MetCondition.
+        dtou:mode ?mode.
+    ?mode log:equalTo dtou:aggregate.
     
     ?input dtou:port ?port.
     ?app dtou:output_spec ?output_spec.
@@ -435,7 +474,6 @@
 } => {
     ?m a dtou:ProhibitedUse;
         dtou:port ?port;
-        dtou:mode dtou:Aggregate;
         dtou:condition ?ac.
 }.
 
@@ -594,8 +632,7 @@
 
     ?output dtou:port ?p.
     ?policy dtou:prohibition ?pr.
-    ?pr dtou:mode ?m;
-        dtou:activation_condition ?ac.
+    ?pr dtou:activation_condition ?ac.
 
     (
         { ?pr dtou:validity_binding ?vb. }
@@ -603,7 +640,6 @@
     ) log:forAllIn _:t.
 } => {
     ?mm a dtou:Prohibition, dtou:OutputProhibition;
-        dtou:mode ?m;
         dtou:activation_condition ?ac;
         dtou:port ?p;
         dri:from ?pr.

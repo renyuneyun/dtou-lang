@@ -8,7 +8,7 @@
 
 {
 	#( rdf:type dtou:activation_condition dtou:mode dtou:port ) list:iterate ( ?i ?p ).
-	( dtou:activation_condition dtou:mode dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
+	( dtou:activation_condition dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
 	?a a dtou:OutputProhibition;
 		?p ?o.
 } => {
@@ -17,7 +17,7 @@
 }.
 
 {
-	( dtou:app dtou:purpose dtou:user ) list:iterate ( ?i ?p ).
+	( dtou:mode dtou:app dtou:purpose dtou:user ) list:iterate ( ?i ?p ).
 	?a a dtou:OutputProhibition;
 		dtou:activation_condition ?o0.
 	?o0 ?p ?o1.

@@ -8,20 +8,22 @@
 
 _:sk_49 a dtou:OutputProhibition;
   dtou:port ex:outputPort1;
-  dtou:activation_condition _:ac1;
-  dtou:mode dtou:Use.
+  dtou:activation_condition _:ac1.
 _:sk_52 a dtou:OutputProhibition;
   dtou:port ex:outputPort1;
-  dtou:activation_condition _:ac2;
-  dtou:mode dtou:Use.
+  dtou:activation_condition _:ac2.
 [] a dtou:OutputProhibition;
-    dtou:mode dtou:Use;
     dtou:activation_condition [
-            dtou:app <https://not.exist/app>;
-            dtou:purpose <urn:dtou:purpose-booking>;
+      dtou:mode dtou:use;
+      dtou:app <https://not.exist/app>;
+      dtou:purpose <urn:dtou:purpose-booking>;
 	  ];
     dtou:port ex:outputPort1 .
-_:ac1 dtou:app <urn:dtou:appoint-booking>;
+_:ac1
+  dtou:mode dtou:use;
+  dtou:app <urn:dtou:appoint-booking>;
   dtou:purpose <urn:dtou:purpose-verify-identity>.
-_:ac2 dtou:app <https://gh.app/clinic>;
+_:ac2
+  dtou:mode dtou:use;
+  dtou:app <https://gh.app/clinic>;
   dtou:purpose <urn:dtou:purpose-booking>.

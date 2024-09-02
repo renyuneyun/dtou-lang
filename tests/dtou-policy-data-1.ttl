@@ -35,22 +35,22 @@ ex:compl-attr1 a dtou:Attribute;
 
 ex:sec-tag1 a dtou:RequirementTag;
 	dtou:category dtou:SecurityCategory;
-	dtou:categoryMatcher dtou:Exact;
-	dtou:descriptorMatcher dtou:SubClassFrom;
+	dtou:categoryMatcher dtou:exactly;
+	dtou:descriptorMatcher dtou:subClassFrom;
 	dtou:attribute_ref ex:sec-attr1;
 	dtou:validity_binding ex:attr1, ex:attr2.
 
 ex:per-tag1 a dtou:RequirementTag;
 	dtou:category dtou:SecurityCategory;
-	dtou:categoryMatcher dtou:Exact;
-	dtou:descriptorMatcher dtou:SubClassFrom;
+	dtou:categoryMatcher dtou:exactly;
+	dtou:descriptorMatcher dtou:subClassFrom;
 	dtou:attribute_ref ex:per-attr1;
 	dtou:validity_binding ex:attr1.
 
 ex:compl-tag1 a dtou:OfferTag;
 	dtou:category dtou:IntegrityCategory;
-	dtou:categoryMatcher dtou:Exact;
-	dtou:descriptorMatcher dtou:SuperClassFrom;
+	dtou:categoryMatcher dtou:exactly;
+	dtou:descriptorMatcher dtou:superClassFrom;
 	dtou:attribute_ref ex:compl-attr1.
 
 ex:ob1 a dtou:Obligation;
@@ -61,22 +61,22 @@ ex:ob1 a dtou:Obligation;
 	].
 
 ex:pr1 a dtou:Prohibition;
-	dtou:mode dtou:Use;
 	dtou:activation_condition [
+		dtou:mode dtou:use;
 		dtou:app <urn:dtou:appoint-booking>;
 		dtou:purpose <urn:dtou:purpose-verify-identity>;
 	].
 
 ex:pr2 a dtou:Prohibition;
-	dtou:mode dtou:Use;
 	dtou:activation_condition [
+		dtou:mode dtou:use;
 		dtou:app <https://gh.app/clinic>;
 		dtou:purpose <urn:dtou:purpose-booking>;
 	].
 
 ex:pr3 a dtou:Prohibition;
-	dtou:mode dtou:Use;
 	dtou:activation_condition [
+		dtou:mode dtou:use;
 		dtou:app <https://not.exist/app>;
 		dtou:purpose <urn:dtou:purpose-booking>;
 	].
@@ -102,8 +102,8 @@ ex:policy2 a dtou:DataPolicy;
 
 ex:any-purpose a dtou:OfferTag;
 	dtou:category dtou:PurposeCategory;
-	dtou:categoryMatcher dtou:Exact;
-	dtou:descriptorMatcher dtou:SubClassFrom;
+	dtou:categoryMatcher dtou:exactly;
+	dtou:descriptorMatcher dtou:subClassFrom;
 	dtou:attribute_ref ex:any-purpose-attr1.
 
 ex:any-purpose-attr1 a dtou:Attribute;

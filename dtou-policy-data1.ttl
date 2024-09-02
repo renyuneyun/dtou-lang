@@ -37,22 +37,22 @@ ex:compl-attr1 a dtou:Attribute;
 
 ex:sec-tag a dtou:RequirementTag;
 	dtou:category dtou:SecurityCategory;
-	dtou:categoryMatcher dtou:Exact;
-	dtou:descriptorMatcher dtou:SubClassFrom;
+	dtou:categoryMatcher dtou:exactly;
+	dtou:descriptorMatcher dtou:subClassFrom;
 	dtou:attribute_ref ex:sec-attr1;
 	dtou:validity_binding ex:attr1, ex:attr2.
 
 ex:per-tag1 a dtou:RequirementTag;
 	dtou:category dtou:SecurityCategory;
-	dtou:categoryMatcher dtou:Exact;
-	dtou:descriptorMatcher dtou:SubClassFrom;
+	dtou:categoryMatcher dtou:exactly;
+	dtou:descriptorMatcher dtou:subClassFrom;
 	dtou:attribute_ref ex:per-attr1;
 	dtou:validity_binding ex:attr1.
 
 ex:compl-tag1 a dtou:OfferTag;
 	dtou:category dtou:IntegrityCategory;
-	dtou:categoryMatcher dtou:Exact;
-	dtou:descriptorMatcher dtou:SuperClassFrom;
+	dtou:categoryMatcher dtou:exactly;
+	dtou:descriptorMatcher dtou:superClassFrom;
 	dtou:attribute_ref ex:compl-attr1.
 
 # Should not be activated for voc:research
@@ -61,33 +61,59 @@ ex:ob1 a dtou:Obligation;
 	dtou:obligation_class voc:acknowledge;
 	dtou:argument (ex:attr1);
 	# dtou:validity_binding ex:attr1;
-	dtou:activation_condition [
+	dtou:onCondition [
 		dtou:purpose voc:research
 		# dtou:purpose  <urn:dtou:purpose-verify-identity>
 	].
 
 # Should be activated by App
+### short-hand syntax
 ex:pr1 a dtou:Prohibition;
-	dtou:mode dtou:Use;
-	dtou:activation_condition [
+	dtou:onCondition [
+		a dtou:ActivationCondition;
+		dtou:mode dtou:use;
 		dtou:app <urn:dtou:appoint-booking>;
-		dtou:purpose <urn:dtou:purpose-verify-identity>;
+		dtou:matches [
+			a dtou:CapabilityMatcher;
+			dtou:category dtou:PurposeCategory;
+			dtou:categoryMatcher dtou:exactly;
+			dtou:descriptorMatcher dtou:subClassFrom;
+			dtou:descriptor <urn:dtou:purpose-verify-identity>;
+		];
 	].
 
 # Should be activated by downstream
 ex:pr2 a dtou:Prohibition;
-	dtou:mode dtou:Use;
-	dtou:activation_condition [
-		dtou:app <https://gh.app/clinic>;
-		dtou:purpose <urn:dtou:purpose-booking>;
+	dtou:onCondition [
+		a dtou:ActivationCondition;
+		dtou:mode dtou:use;
+		dtou:matches [
+			a dtou:ContextMatcher;
+			dtou:field dtou:appField;
+			dtou:value <https://gh.app/clinic>;
+		]
+		dtou:matches [
+			a dtou:CapabilityMatcher;
+			dtou:category dtou:PurposeCategory;
+			dtou:categoryMatcher dtou:exactly;
+			dtou:descriptorMatcher dtou:subClassFrom;
+			dtou:descriptor <urn:dtou:purpose-booking>;
+		];
 	].
 
 # Should not be activated
 ex:pr3 a dtou:Prohibition;
-	dtou:mode dtou:Use;
-	dtou:activation_condition [
+	dtou:onCondition [
+		a dtou:ActivationCondition;
+		dtou:mode dtou:use;
 		dtou:app <https://gh.app/bad_guy>;
-		dtou:purpose <urn:dtou:purpose-booking>;
+		dtou:matches [
+			a dtou:CapabilityMatcher;
+			dtou:category dtou:PurposeCategory;
+			dtou:categoryMatcher dtou:exactly;
+			dtou:descriptorMatcher dtou:subClassFrom;
+			dtou:descriptor <urn:dtou:purpose-booking>>;
+		];
 	].
 
 ex:data1 a dtou:Data;
@@ -111,8 +137,8 @@ ex:policy2 a dtou:DataPolicy;
 
 ex:any-purpose a dtou:OfferTag;
 	dtou:category dtou:PurposeCategory;
-	dtou:categoryMatcher dtou:Exact;
-	dtou:descriptorMatcher dtou:SuperClassFrom;
+	dtou:categoryMatcher dtou:exactly;
+	dtou:descriptorMatcher dtou:superClassFrom;
 	dtou:attribute_ref ex:any-purpose-attr1.
 
 ex:any-purpose-attr1 a dtou:Attribute;

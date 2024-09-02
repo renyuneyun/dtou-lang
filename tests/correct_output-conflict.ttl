@@ -38,14 +38,16 @@
 [] a dtou:Conflict,
         dtou:ProhibitedUse ;
     dtou:port :inputPort1 ;
-    dtou:mode dtou:Use;
-    dtou:condition [ dtou:app <urn:dtou:appoint-booking> ;
-            dtou:purpose <urn:dtou:purpose-verify-identity> ] .
+    dtou:condition [
+        dtou:mode dtou:use;
+        dtou:app <urn:dtou:appoint-booking> ;
+        dtou:purpose <urn:dtou:purpose-verify-identity> ] .
 
 [] a dtou:Conflict,
         dtou:ProhibitedUse ;
     dtou:port :inputPort1 ;
-    dtou:mode dtou:Use;
-    dtou:condition [ dtou:app <https://gh.app/clinic> ;
-            dtou:purpose <urn:dtou:purpose-booking> ] .
+    dtou:condition [
+        dtou:mode dtou:use;
+        dtou:app <https://gh.app/clinic> ;
+        dtou:purpose <urn:dtou:purpose-booking> ] .
 
