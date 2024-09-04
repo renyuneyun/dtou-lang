@@ -39,7 +39,6 @@
 { ?c1 rdfs:subClassOf ?c2. ?c2 rdfs:subClassOf ?c3. } => { ?c1 rdfs:subClassOf ?c3. }.
 { ?x dtou:descriptor ?d. } => { ?d rdfs:subClassOf ?d. }.
 
-
 ### Helper to check condition is activated or not (and by the current app or downstream)
 ### {{{ Translate short-hand syntax to extended syntax
 #### For FieldMatcher
@@ -173,7 +172,9 @@
         }
     ) log:forAllIn _:t.
 } => {
-    ?ac a dri:MetCondition.
+    ?m a dri:MetCondition;
+        dri:condition ?ac;
+        dri:input ?input.
 }.
 
 ###
@@ -432,8 +433,9 @@
         ]
     ].
 
-    ?ac a dri:MetCondition;
-        dtou:mode ?mode.
+    ?mc a dri:MetCondition;
+        dri:condition ?ac.
+    ?ac dtou:mode ?mode.
     ?mode list:in ( dtou:use dtou:share ).
 
     # ?app dtou:name ?N.
@@ -460,8 +462,9 @@
         ]
     ].
 
-    ?ac a dri:MetCondition;
-        dtou:mode ?mode.
+    ?mc a dri:MetCondition;
+        dri:condition ?ac.
+    ?ac dtou:mode ?mode.
     ?mode log:equalTo dtou:aggregate.
     
     ?input dtou:port ?port.
@@ -497,7 +500,8 @@
         ]
     ].
 
-    ?ac a dri:MetCondition.
+    ?mc a dri:MetCondition;
+        dri:condition ?ac.
 } => {
     ?m a dtou:ActivatedObligation;
         dtou:obligation_class ?ob;
@@ -534,13 +538,11 @@
     ?m a dtou:OutputAttribute;
         dtou:name ?n;
         dtou:class ?t;
-        dtou:value ?v;
-        dri:link [
-            a dri:ForwardLink;
-            dri:origin ?attr;
-            dri:port ?p;
-            dri:ref ?m
-        ].
+        dtou:value ?v.
+    ?fl a dri:ForwardLink;
+        dri:origin ?attr;
+        dri:port ?p;
+        dri:ref ?m.
 }.
 # For Edit
 {
@@ -571,13 +573,11 @@
     ?m a dtou:OutputAttribute;
         dtou:name ?n;
         dtou:class ?t;
-        dtou:value ?v;
-        dri:link [
-            a dri:ForwardLink;
-            dri:origin ?attr;
-            dri:port ?p;
-            dri:ref ?m
-        ].
+        dtou:value ?v.
+    ?fl a dri:ForwardLink;
+        dri:origin ?attr;
+        dri:port ?p;
+        dri:ref ?m.
 }.
 
 {
@@ -604,14 +604,21 @@
     ?ot a dtou:Tag, dtou:OutputTag;
         dtou:category ?t;
         dtou:attribute_ref ?ar;
-        dtou:port ?p;
-        dri:from ?tagging.
+        dtou:port ?p.
+
+    ?fl_ a dri:ForwardLink;
+        dri:origin ?tagging;
+        dri:port ?p;
+        dri:ref ?ot.
 }.
 
 {
     ?ot a dtou:OutputTag;
-        dtou:port ?p;
-        dri:from ?tagging.
+        dtou:port ?p.
+
+    ?fl0 a dri:ForwardLink;
+        dri:origin ?tagging;
+        dri:ref ?ot.
 
     # Note: cannot put to previous axiom (through log:collectAllIn), otherwise it will require existence of dtou:validity_binding
     ?tagging dtou:validity_binding ?vb.
@@ -641,14 +648,22 @@
 } => {
     ?mm a dtou:Prohibition, dtou:OutputProhibition;
         dtou:activation_condition ?ac;
-        dtou:port ?p;
-        dri:from ?pr.
+        dtou:port ?p.
+
+    ?fl a dri:ForwardLink;
+        dri:origin ?pr;
+        dri:port ?p;
+        dri:ref ?mm.
 }.
 
 {
     ?m a dtou:Prohibition;
-        dtou:port ?p;
-        dtou:from ?pr.
+        dtou:port ?p.
+
+    ?fl0 a dri:ForwardLink;
+        dri:origin ?pr;
+        dri:port ?p;
+        dri:ref ?m.
 
     ?pr dtou:validity_binding ?vb.
 
@@ -693,14 +708,22 @@
         dtou:obligation_class ?oc;
         dtou:argument ?args;
         dtou:activation_condition ?ac;
-        dtou:port ?p;
-        dri:from ?ob.
+        dtou:port ?p.
+
+    ?fl_ a dri:ForwardLink;
+        dri:origin ?ob;
+        dri:port ?p;
+        dri:ref ?M.
 }.
 
 {
     ?m a dtou:OutputObligation;
-        dtou:port ?p;
-        dtou:from ?ob.
+        dtou:port ?p.
+
+    ?fl0 a dri:ForwardLink;
+        dri:origin ?ob;
+        dri:port ?p;
+        dri:ref ?m.
 
     ?ob dtou:validity_binding ?vb.
 
