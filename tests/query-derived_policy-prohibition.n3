@@ -6,11 +6,13 @@
 @prefix voc: <urn:dtou:vocabulary#>.
 @prefix ex: <http://example.org/ns#>.
 
+:let :ignored dtou:descriptor;
+	:ignoredSecondary dtou:descriptor, dtou:activation_condition.
+
 {
-	#( rdf:type dtou:activation_condition dtou:mode dtou:port ) list:iterate ( ?i ?p ).
-	( dtou:activation_condition dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
 	?a a dtou:OutputProhibition;
 		?p ?o.
+	_:t log:notIncludes { :let :ignored ?p }.
 } => {
 	?a a dtou:OutputProhibition;
 		?p ?o.
@@ -28,23 +30,12 @@
 }.
 
 {
-	( dtou:port ) list:iterate ( ?i ?p ).
 	?a a dtou:OutputProhibition;
 		?p ?o0.
+	_:t log:notIncludes { :let :ignoredSecondary ?p }.
 	?o0 ?p1 ?o1.
 } => {
 	?a a dtou:OutputProhibition;
 		?p ?o0.
-	?o0 ?p1 ?o1.
-}.
-
-{
-	( rdf:type dtou:name dtou:class dtou:value ) list:iterate ( ?i ?p1 ).
-	?a a dtou:OutputProhibition;
-		dtou:validity_binding ?o0.
-	?o0 ?p1 ?o1.
-} => {
-	?a a dtou:OutputProhibition;
-		dtou:validity_binding ?o0.
 	?o0 ?p1 ?o1.
 }.

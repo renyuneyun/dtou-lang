@@ -601,7 +601,7 @@
         { ?fl2 a dri:ForwardLink; dri:origin ?vb; dri:port ?p. }
     ) log:forAllIn _:t.
 } => {
-    ?ot a dtou:Tag, dtou:OutputTag;
+    ?ot a dtou:OutputTag;
         dtou:category ?t;
         dtou:attribute_ref ?ar;
         dtou:port ?p.
@@ -646,7 +646,7 @@
         { ?fl2 a dri:ForwardLink; dri:origin ?vb; dri:port ?p. }
     ) log:forAllIn _:t.
 } => {
-    ?mm a dtou:Prohibition, dtou:OutputProhibition;
+    ?mm a dtou:OutputProhibition;
         dtou:activation_condition ?ac;
         dtou:port ?p.
 
@@ -704,7 +704,7 @@
         ?args
     ) log:collectAllIn _:t.
 } => {
-    ?M a dtou:Obligation, dtou:OutputObligation;
+    ?M a dtou:OutputObligation;
         dtou:obligation_class ?oc;
         dtou:argument ?args;
         dtou:activation_condition ?ac;

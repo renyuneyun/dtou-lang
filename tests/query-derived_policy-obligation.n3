@@ -6,11 +6,13 @@
 @prefix voc: <urn:dtou:vocabulary#>.
 @prefix ex: <http://example.org/ns#>.
 
+:let :ignored dtou:descriptor;
+	:ignoredSecondary dtou:descriptor, dtou:activation_condition.
+
 {
-	#( rdf:type dtou:activation_condition dtou:argument dtou:obligation_class dtou:port ) list:iterate ( ?i ?p ).
-	( dtou:activation_condition dtou:argument dtou:obligation_class dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
 	?a a dtou:OutputObligation;
 		?p ?o.
+	_:t log:notIncludes { :let :ignored ?p }.
 } => {
 	?a a dtou:OutputObligation;
 		?p ?o.
@@ -28,24 +30,13 @@
 }.
 
 {
-	( dtou:port ) list:iterate ( ?i ?p ).
 	?a a dtou:OutputObligation;
 		?p ?o0.
+	_:t log:notIncludes { :let :ignoredSecondary ?p }.
 	?o0 ?p1 ?o1.
 } => {
 	?a a dtou:OutputObligation;
 		?p ?o0.
-	?o0 ?p1 ?o1.
-}.
-
-{
-	( rdf:type dtou:name dtou:class dtou:value ) list:iterate ( ?i ?p1 ).
-	?a a dtou:OutputObligation;
-		dtou:validity_binding ?o0.
-	?o0 ?p1 ?o1.
-} => {
-	?a a dtou:OutputObligation;
-		dtou:validity_binding ?o0.
 	?o0 ?p1 ?o1.
 }.
 
@@ -53,9 +44,7 @@
 	?a a dtou:OutputObligation;
 		dtou:argument ?arg.
     ?arg list:iterate ( ?i2 ?o0 ).
-	( rdf:type dtou:name dtou:class dtou:value ) list:iterate ( ?i ?p1 ).
-	?o0 a dtou:OutputAttribute;
-        ?p1 ?o1.
+	?o0 ?p1 ?o1.
 } => {
 	?o0 ?p1 ?o1.
 }.

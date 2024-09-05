@@ -5,32 +5,25 @@
 @prefix dtou: <urn:dtou:core#>.
 @prefix voc: <urn:dtou:vocabulary#>.
 @prefix ex: <http://example.org/ns#>.
+@prefix : <urn:example:ns#>.
+
+:let :ignored dtou:descriptor;
+	:ignoredSecondary dtou:descriptor, dtou:activation_condition.
 
 {
-	#( rdf:type dtou:category dtou:attribute_ref dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
-	( dtou:category dtou:attribute_ref dtou:validity_binding dtou:port ) list:iterate ( ?i ?p ).
 	?a a dtou:OutputTag;
 		?p ?o.
+
+	_:t log:notIncludes { :let :ignored ?p }.
 } => {
 	?a a dtou:OutputTag;
 		?p ?o.
 }.
 
 {
-	?a a dtou:OutputTag;
-		dtou:port ?port.
-	?port ?p ?o.
-} => {
-	?a a dtou:OutputTag;
-		dtou:port ?port.
-	?port ?p ?o.
-}.
-
-{
-	( dtou:attribute_ref dtou:validity_binding ) list:iterate ( ?i ?p ).
-	( rdf:type dtou:name dtou:class dtou:value ) list:iterate ( ?i2 ?p1 ).
 	?a a dtou:OutputTag;
 		?p ?o0.
+	_:t log:notIncludes { :let :ignoredSecondary ?p }.
 	?o0 ?p1 ?o1.
 } => {
 	?a a dtou:OutputTag;
