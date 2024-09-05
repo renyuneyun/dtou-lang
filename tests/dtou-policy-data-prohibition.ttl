@@ -31,21 +31,51 @@ ex:pr3 a dtou:Prohibition;
 		dtou:purpose dtou:Purpose;
 	].
 
+# ex:pr4 a dtou:Prohibition;
+# 	dtou:activation_condition [
+# 		a dtou:ActivationCondition;
+# 		dtou:mode dtou:use;
+# 		dtou:matches [
+# 			a dtou:CategoryMatcher;
+# 			dtou:category dtou:AppCategory;
+# 			dtou:categoryMatcher dtou:exactly;
+# 			dtou:descriptorMatcher dtou:subClassFrom;
+# 			dtou:descriptor <urn:dtou:appoint-booking>;
+# 		];
+# 		dtou:purpose dtou:Purpose;
+# 	].
+
+ex:pr4 a dtou:Prohibition;
+	dtou:activation_condition [
+		a dtou:ActivationCondition;
+		dtou:mode dtou:use;
+		dtou:matches [
+			a dtou:CategoryMatcher;
+			dtou:category dtou:AppCategory;
+			dtou:categoryMatcher dtou:exactly;
+			dtou:descriptorMatcher dtou:subClassFrom;
+			dtou:descriptor ex:UnexpectedApp;
+		];
+		dtou:purpose dtou:Purpose;
+	].
+
+<urn:dtou:appoint-booking> rdfs:subClassOf ex:UnexpectedApp.
+
 ex:data1 a dtou:Data;
 	dtou:uri <https://ada.site/id>;
 	dtou:policy ex:policy1.
 
 ex:policy1 a dtou:DataPolicy;
-	dtou:prohibition ex:pr1, ex:pr2, ex:pr3.
+	dtou:prohibition ex:pr1, ex:pr2, ex:pr3, ex:pr4.
 
 ex:data2 a dtou:Data;
 	dtou:uri <https://ada.site/email>;
 	dtou:policy ex:policy2.
 
 ex:policy2 a dtou:DataPolicy;
-	dtou:prohibition ex:pr4.
+	dtou:prohibition ex:pr5.
 
-ex:pr4 a dtou:Prohibition;
+ex:pr5 a dtou:Prohibition;
 	dtou:activation_condition [
 		a dtou:ActivationCondition;
 		dtou:mode dtou:aggregate;

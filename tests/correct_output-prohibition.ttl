@@ -39,3 +39,10 @@ ex:inputPort2 a dtou:Port ;
         dtou:ProhibitedUse ;
     dtou:port ex:inputPort2 ;
     dtou:condition [ dtou:mode dtou:aggregate ] .
+
+[] a dtou:Conflict,
+        dtou:ProhibitedUse ;
+    dtou:port ex:inputPort1 ;
+    dtou:condition [
+        dtou:mode dtou:use;
+		dtou:purpose dtou:Purpose ] .

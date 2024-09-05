@@ -11,6 +11,7 @@
 
 ###
 # General helper
+# May be replaced by OWL or other types of general reasoning rules as they are the basic rules of the language itself
 ###
 { ?x dtou:attribute_ref [ dtou:class ?N ].  } => { ?x dtou:descriptor ?N.  }.
 
@@ -31,6 +32,111 @@
 
 { ?x a dtou:InputSpec; dtou:expect ?expect. } => { ?x dtou:capability ?expect. }.
 { ?x a dtou:InputSpec; dtou:provide ?provide. } => { ?x dtou:capability ?provide. }.
+
+###
+# Special rules as of the language, but not the vocabulary
+# Currently, it only contains the injected capabilities
+###
+
+dtou:UserCategory rdfs:subClassOf dtou:Category.
+dtou:AppCategory rdfs:subClassOf dtou:Category.
+dtou:DownstreamAppCategory rdfs:subClassOf dtou:UserCategory.
+dtou:DownstreamAppCategory rdfs:subClassOf dtou:AppCategory.
+
+{
+    ?usage a dtou:UsageContext;
+        dtou:user ?user.
+} => {
+    ?m a dri:InjectedCapability;
+        dri:for ?usage;
+        dtou:capability [
+            a dtou:Capability;
+            dtou:category dtou:UserCategory;
+            dtou:descriptor ?user;
+        ].
+}.
+
+{
+    ?usage a dtou:UsageContext;
+        dtou:app [ dtou:policy ?app ].
+    ?app a dtou:AppPolicy;
+        dtou:name ?name.
+} => {
+    ?m a dri:InjectedCapability;
+        dri:for ?app;
+        dtou:capability [
+            a dtou:Capability;
+            dtou:category dtou:AppCategory;
+            dtou:descriptor ?name;
+        ].
+}.
+
+{
+    ?usage a dtou:UsageContext;
+        dtou:app [ dtou:policy ?app ].
+    ?app a dtou:AppPolicy;
+        dtou:input_spec ?input.
+    ?input dtou:downstream ?downstream.
+    ?downstream dtou:app_name ?name.
+} => {
+    ?m a dri:InjectedCapability;
+        dri:for ?input;
+        dtou:capability [
+            a dtou:Capability;
+            dtou:category dtou:DownstreamAppCategory;
+            dtou:descriptor ?name;
+        ];
+}.
+
+{
+    ?usage a dtou:UsageContext;
+        dtou:app [ dtou:policy ?app ].
+    ?app a dtou:AppPolicy;
+        dtou:input_spec ?input.
+    ?input dtou:downstream ?downstream.
+    ?downstream dtou:user ?user.
+} => {
+    ?m a dri:InjectedCapability;
+        dri:for ?input;
+        dtou:capability [
+            a dtou:Capability;
+            dtou:category dtou:DownstreamUserCategory;
+            dtou:descriptor ?user;
+        ];
+}.
+
+# All injected capabilities for the usage context are also for the app
+{
+    ?usage a dtou:UsageContext;
+        dtou:app [ dtou:policy ?app ].
+    ?m a dri:InjectedCapability;
+        dri:for ?usage.
+} => {
+    ?m dri:for ?app.
+}.
+
+# All injected capabilities for the app are also for its inputs
+{
+    ?usage a dtou:UsageContext;
+        dtou:app [ dtou:policy ?app ].
+    ?app a dtou:AppPolicy;
+        dtou:input_spec ?input.
+    ?m a dri:InjectedCapability;
+        dri:for ?app.
+} => {
+    ?m dri:for ?input.
+}.
+
+# Inject capabilities into input spec
+{
+    ?app a dtou:AppPolicy;
+        dtou:input_spec ?input.
+    ?m a dri:InjectedCapability;
+        dri:for ?input;
+        dtou:capability ?c.
+} => {
+    ?input dtou:capability ?c.
+}.
 
 ###
 # Additional helper for reasoning (subclassing of items to be checked, e.g. tags)
