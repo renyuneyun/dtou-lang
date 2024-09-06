@@ -1,0 +1,69 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix voc: <urn:dtou:example-vocabulary#>.
+@prefix ex: <http://example.org/ns#>.
+
+######
+# Usage & App Policy
+######
+
+ex:usageContext1 a dtou:UsageContext;
+	dtou:user voc:rui;
+	dtou:app [a dtou:AppInfo; dtou:policy ex:appPolicy1];
+	dtou:time "20230823".
+
+voc:rui a dtou:User.
+
+ex:appPolicy1 a dtou:AppPolicy;
+	dtou:name <urn:dtou:appoint-booking>;
+	dtou:action voc:book-appointment;
+	dtou:input_spec ex:input1, ex:input2;
+	dtou:output_spec ex:output1.
+
+voc:book-appointment a dtou:Action.
+
+ex:input1 a dtou:InputSpec;
+	dtou:data <https://ada.site/id>;
+	dtou:port ex:inputPort1;
+	dtou:purpose ex:verify-identify;
+	# dtou:purpose ex:verify-identify, ex:verify-age;
+	dtou:provide ex:secure1;
+	dtou:downstream ex:ds-clinic1.
+
+ex:verify-identify a dtou:PurposeExpectation;
+	dtou:descriptor <urn:dtou:purpose-verify-identity>.
+
+# ex:verify-age a dtou:PurposeExpectation;
+# 	dtou:descriptor <urn:dtou:purpose-verify-age>.
+
+ex:secure1 a dtou:SecurityProvide;
+	dtou:descriptor voc:secure.
+
+ex:personal1 a dtou:SecurityProvide;
+	dtou:descriptor voc:personal.
+
+ex:ds-clinic1 a dtou:DownstreamSpec;
+	dtou:app_name <https://gh.app/clinic>;
+	dtou:purpose ex:booking.
+	# dtou:purpose ex:booking, ex:recording.
+
+ex:booking a dtou:PurposeExpectation;
+	dtou:descriptor <urn:dtou:purpose-booking>.
+
+# ex:recording a dtou:PurposeExpectation;
+# 	dtou:descriptor <urn:dtou:purpose-recording>.
+
+ex:inputPort1 a dtou:Port;
+	dtou:name "inputPort1".
+
+ex:input2 a dtou:InputSpec;
+	dtou:data <https://ada.site/email>;
+	dtou:port ex:inputPort2.
+
+ex:inputPort2 a dtou:Port;
+	dtou:name "inputPort2".
+
+ex:output1 a dtou:OutputSpec;
+	dtou:port ex:outputPort1;
+	dtou:from ex:inputPort1, ex:inputPort2.

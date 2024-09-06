@@ -13,7 +13,7 @@
 }.
 
 {
-	( dtou:port) list:iterate ( ?i ?p ).
+	( dtou:port ) list:iterate ( ?i ?p ).
 	?a a dtou:Conflict;
 		?p ?o0.
 	?o0 ?p1 ?o1.

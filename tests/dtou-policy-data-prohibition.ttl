@@ -1,0 +1,48 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix voc: <urn:dtou:example-vocabulary#>.
+@prefix ex: <http://example.org/ns#>.
+
+######
+# Data Policy
+######
+
+ex:pr1 a dtou:Prohibition;
+	dtou:mode dtou:Use;
+	dtou:activation_condition [
+		dtou:app <urn:dtou:appoint-booking>;
+		dtou:purpose <urn:dtou:purpose-verify-identity>;
+	].
+
+ex:pr2 a dtou:Prohibition;
+	dtou:mode dtou:Use;
+	dtou:activation_condition [
+		dtou:app <urn:dtou:appoint-booking>;
+		dtou:purpose <urn:dtou:purpose-not-exist>;
+	].
+
+ex:pr3 a dtou:Prohibition;
+	dtou:mode dtou:Share;
+	dtou:activation_condition [
+		dtou:purpose dtou:Purpose;
+	].
+
+ex:data1 a dtou:Data;
+	dtou:uri <https://ada.site/id>;
+	dtou:policy ex:policy1.
+
+ex:policy1 a dtou:DataPolicy;
+	dtou:prohibition ex:pr1, ex:pr2, ex:pr3.
+
+ex:data2 a dtou:Data;
+	dtou:uri <https://ada.site/email>;
+	dtou:policy ex:policy2.
+
+ex:policy2 a dtou:DataPolicy;
+	dtou:prohibition ex:pr4.
+
+ex:pr4 a dtou:Prohibition;
+	dtou:mode dtou:Aggregate;
+	dtou:activation_condition [
+	].
