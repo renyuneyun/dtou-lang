@@ -32,8 +32,9 @@
 # Additional helper for reasoning (subclassing of items to be checked, e.g. tags)
 ###
 
-{ ?x dtou:descriptor ?d. } => { ?d dri:hasEffectiveSuper ?d. }.
-{ ?x dri:hasEffectiveSuper ?d. ?d rdfs:subClassOf ?dp. } => { ?x dri:hasEffectiveSuper ?dp. }.  # Only use super classes for simplicity and generally better performance (than using sub-classes)
+{ ?x dtou:descriptor ?d. } => { ?d rdfs:subClassOf ?d. }.
+{ ?c1 rdfs:subClassOf ?c2. ?c2 rdfs:subClassOf ?c3. } => { ?c1 rdfs:subClassOf ?c3. }.
+
 
 ### Helper to check condition is activated or not (and by the current app or downstream)
 ### {{{
@@ -68,7 +69,7 @@
     _:t log:notIncludes {
         _:t log:notIncludes {
             ?ac dtou:purpose ?P.
-            ?input dtou:purpose [ dtou:descriptor [ dri:hasEffectiveSuper ?P ] ].
+            ?input dtou:purpose [ dtou:descriptor [ rdfs:subClassOf ?P ] ].
         }.
 
         ?ac dtou:purpose ?P0.
@@ -101,7 +102,7 @@
     _:t log:notIncludes {
         _:t log:notIncludes {
             ?ac dtou:purpose ?P.
-            ?ds dtou:purpose [ dtou:descriptor [ dri:hasEffectiveSuper ?P ] ].
+            ?ds dtou:purpose [ dtou:descriptor [ rdfs:subClassOf ?P ] ].
         }.
 
         ?ac dtou:purpose ?P0.
@@ -188,7 +189,7 @@
 
     _:t log:notIncludes {
             ?input dtou:provide ?provide.
-            ?N dri:hasEffectiveSuper ?Ns.
+            ?N rdfs:subClassOf ?Ns.
             ?provide dtou:category ?T;
                 dtou:descriptor ?Ns.
     }.
@@ -215,7 +216,7 @@
     ?input dtou:port ?port.
 
     _:t log:notIncludes {
-        ?N dri:hasEffectiveSuper ?Ns.
+        ?N rdfs:subClassOf ?Ns.
         ?data dtou:policy [
             dtou:tagging [
                 dtou:category ?T;

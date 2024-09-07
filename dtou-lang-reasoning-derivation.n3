@@ -32,8 +32,8 @@
 # Additional helper for reasoning (subclassing of items to be checked, e.g. tags)
 ###
 
-{ ?x dtou:descriptor ?d. } => { ?d dri:hasEffectiveSuper ?d. }.
-{ ?x dri:hasEffectiveSuper ?d. ?d rdfs:subClassOf ?dp. } => { ?x dri:hasEffectiveSuper ?dp. }.  # Only use super classes for simplicity and generally better performance (than using sub-classes)
+{ ?x dtou:descriptor ?d. } => { ?d rdfs:subClassOf ?d. }.
+{ ?c1 rdfs:subClassOf ?c2. ?c2 rdfs:subClassOf ?c3. } => { ?c1 rdfs:subClassOf ?c3. }.
 
 
 ###
