@@ -1,0 +1,48 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix voc: <urn:dtou:vocabulary#>.
+@prefix ppa: <urn:pp-analyze:core#>.
+@prefix ex: <http://example.org/ns#>.
+
+{
+	?a a dtou:Conflict;
+		?p ?o.
+} => {
+	?a ?p ?o.
+}.
+
+{
+	( dtou:port ) list:iterate ( ?i ?p ).
+	?a a dtou:Conflict;
+		?p ?o0.
+	?o0 ?p1 ?o1.
+} => {
+	?a a dtou:Conflict;
+		?p ?o0.
+	?o0 ?p1 ?o1.
+}.
+
+{
+    ?a a dtou:Conflict;
+        dtou:port ?port.
+    ?policy dtou:input_spec ?input_spec.
+    ?input_spec dtou:port ?port;
+        ppa:text ?text;
+        dtou:data ?data.
+} => {
+    ?a ppa:text ?text;
+        dtou:data ?data.
+}.
+
+{
+	( dtou:mode dtou:app dtou:purpose dtou:user ) list:iterate ( ?i ?p ).
+	?a a dtou:ProhibitedUse;
+		dtou:condition ?o0.
+	?o0 ?p ?o1.
+} => {
+	?a a dtou:ProhibitedUse;
+		dtou:condition ?o0.
+	?o0 ?p ?o1.
+}.
