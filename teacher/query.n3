@@ -35,15 +35,35 @@
 	?o0 ?p ?o1.
 }.
 
-# {
-# 	?a a dtou:Conflict;
-# 		dtou:port ?port.
+{
+	?a a dtou:ProhibitedUse;
+		dtou:condition ?o0.
+	?o0 dtou:user ?o1.
+} => {
+	?a a dtou:ProhibitedUse;
+		dtou:condition ?o0;
+		dtou:category vt:UserCategory.
+}.
 
-#     ?ap a dtou:AppPolicy;
-#         dtou:input_spec ?is.
-#     ?is dtou:port ?port;
-#         dtou:data ?data.
-# } => {
-# 	?a a dtou:Conflict;
-# 		dtou:data ?data.
-# }.
+{
+	?a a dtou:ProhibitedUse;
+		dtou:condition ?o0.
+	?o0 dtou:mode dtou:share.
+} => {
+	?a a dtou:ProhibitedUse;
+		dtou:condition ?o0;
+		dtou:category vt:SharingBehaviourCategory.
+}.
+
+{
+	?a a dtou:Conflict;
+		dtou:port ?port.
+
+    ?ap a dtou:AppPolicy;
+        dtou:input_spec ?is.
+    ?is dtou:port ?port;
+        dtou:data ?data.
+} => {
+	?a a dtou:Conflict;
+		dtou:data ?data.
+}.
