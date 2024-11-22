@@ -340,7 +340,7 @@ dtou:DownstreamAppCategory rdfs:subClassOf dtou:AppCategory.
 ######
 
 # # MatchResult
-# # matches( ?matcher, ?arg1, ?arg2 ) <==> 
+# # matches( ?matcher, ?arg1, ?arg2 ) <==>
 # #   ?matcher = Exact /\ ?arg1 = ?arg2
 # #   \/ ?matcher = SubClassFrom /\ ?arg2 rdfs:subClassOf ?arg1
 # #   \/ ?matcher = SuperClassFrom /\ ?arg1 rdfs:subClassOf ?arg2
@@ -367,7 +367,7 @@ dtou:DownstreamAppCategory rdfs:subClassOf dtou:AppCategory.
 # }.
 
 # UnsatisfiedRequirement
-# unsatisfied_requirement( ?port, ?category, ?descriptor ) <==> 
+# unsatisfied_requirement( ?port, ?category, ?descriptor ) <==>
 #   related_data_app_input( ?usage, ?data, ?app, ?input ) /\ {?data.policy.tag [a RequirementTag; category ?category; categoryMatcher ?cm; descriptorMatcher ?dm; descriptor ?descriptor]]} /\ {?input.port ?port} /\ ~ \exists ({?input.provide [category ?category'; descriptor ?descriptor']} /\ matches(?cm, ?category, ?category') /\ matches(?dm, ?descriptor, ?descriptor')).
 {
     ?x a dri:RelatedDataAppInput;
@@ -375,6 +375,8 @@ dtou:DownstreamAppCategory rdfs:subClassOf dtou:AppCategory.
         dri:data ?data;
         dri:app ?app;
         dri:input ?input.
+
+    ?data dtou:uri ?uri.
 
     ?data dtou:policy [
         dtou:tag [
@@ -441,7 +443,8 @@ dtou:DownstreamAppCategory rdfs:subClassOf dtou:AppCategory.
     ?m a dtou:UnsatisfiedRequirement;
         dtou:port ?port;
         dtou:category ?T;
-        dtou:descriptor ?N.
+        dtou:descriptor ?N;
+        dtou:data ?uri.
 }.
 
 # UnmatchedExpectation
@@ -453,6 +456,8 @@ dtou:DownstreamAppCategory rdfs:subClassOf dtou:AppCategory.
         dri:data ?data;
         dri:app ?app;
         dri:input ?input.
+
+    ?data dtou:uri ?uri.
 
     ?input dtou:expect [
         dtou:category ?T_p;
@@ -519,7 +524,8 @@ dtou:DownstreamAppCategory rdfs:subClassOf dtou:AppCategory.
     ?m a dtou:UnmatchedExpectation;
         dtou:port ?port;
         dtou:category ?T_p;
-        dtou:descriptor ?N_p.
+        dtou:descriptor ?N_p;
+        dtou:data ?uri.
 }.
 
 # ProhibitedUse
@@ -530,8 +536,10 @@ dtou:DownstreamAppCategory rdfs:subClassOf dtou:AppCategory.
         dri:app ?app;
         dri:input ?input.
 
+    ?data dtou:uri ?uri.
+
     ?input dtou:port ?port.
-    
+
     ?data dtou:policy [
         dtou:prohibition [
             dtou:activation_condition ?ac
@@ -549,7 +557,8 @@ dtou:DownstreamAppCategory rdfs:subClassOf dtou:AppCategory.
 } => {
     ?m a dtou:ProhibitedUse;
         dtou:port ?port;
-        dtou:condition ?ac.
+        dtou:condition ?ac;
+        dtou:data ?uri.
 }.
 {
     ?x a dri:RelatedDataAppInput;
@@ -558,8 +567,10 @@ dtou:DownstreamAppCategory rdfs:subClassOf dtou:AppCategory.
         dri:app ?app;
         dri:input ?input.
 
+    ?data dtou:uri ?uri.
+
     ?input dtou:port ?port.
-    
+
     ?data dtou:policy [
         dtou:prohibition [
             dtou:activation_condition ?ac
@@ -569,7 +580,7 @@ dtou:DownstreamAppCategory rdfs:subClassOf dtou:AppCategory.
     ?ac a dri:MetCondition;
         dtou:mode ?mode.
     ?mode log:equalTo dtou:aggregate.
-    
+
     ?input dtou:port ?port.
     ?app dtou:output_spec ?output_spec.
     ?output_spec dtou:from ?port.
@@ -580,7 +591,8 @@ dtou:DownstreamAppCategory rdfs:subClassOf dtou:AppCategory.
 } => {
     ?m a dtou:ProhibitedUse;
         dtou:port ?port;
-        dtou:condition ?ac.
+        dtou:condition ?ac;
+        dtou:data ?uri.
 }.
 
 { ?x a dtou:UnsatisfiedRequirement.  } => { ?x a dtou:Conflict.  }.
@@ -625,7 +637,7 @@ dtou:DownstreamAppCategory rdfs:subClassOf dtou:AppCategory.
     ?attr dtou:name ?n;
         dtou:class ?t;
         dtou:value ?v.
-    
+
     _:t log:notIncludes {
         ?output dtou:refinement ?refi.
         ?refi
@@ -662,7 +674,7 @@ dtou:DownstreamAppCategory rdfs:subClassOf dtou:AppCategory.
     ?attr dtou:name ?n;
         dtou:class ?t1;
         dtou:value ?v1.
-    
+
     ?output dtou:refinement ?refi.
     ?refi a dtou:Edit;
         dtou:filter ?filter;

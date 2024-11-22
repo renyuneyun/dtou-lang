@@ -35,16 +35,15 @@
 	?o0 ?p ?o1.
 }.
 
-{
-	?a a dtou:Conflict;
-		dtou:port ?port.
-	?port ?p1 ?o1.
+# {
+# 	?a a dtou:Conflict;
+# 		dtou:port ?port.
 
-    ?ap a dtou:AppPolicy;
-        dtou:input_spec ?is.
-    ?is dtou:port ?port;
-        dtou:data ?data.
-} => {
-	?a a dtou:Conflict;
-		dtou:data ?data.
-}.
+#     ?ap a dtou:AppPolicy;
+#         dtou:input_spec ?is.
+#     ?is dtou:port ?port;
+#         dtou:data ?data.
+# } => {
+# 	?a a dtou:Conflict;
+# 		dtou:data ?data.
+# }.
