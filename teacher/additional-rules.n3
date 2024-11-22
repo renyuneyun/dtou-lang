@@ -3,7 +3,13 @@
 @prefix list: <http://www.w3.org/2000/10/swap/list#> .
 @prefix dtou: <urn:dtou:core#>.
 @prefix dri: <urn:dtou:internal#>.
+@prefix vt: <urn:dtou:vocabulary-teacher#> .
 @prefix : <http://example.org/ns#>.
+
+###
+# To simplify platform's app policy writing.
+# Automatically convert `dtou:purpose ?purpose` to the expected long form.
+###
 
 {
     ?x a dtou:InputSpec;
@@ -37,4 +43,26 @@
         dtou:category dtou:PurposeCategory;
         dtou:descriptor ?purpose.
 
+}.
+
+###
+# To handle different data types
+###
+
+{
+    ?x a dtou:InputSpec;
+        dtou:data vt:CustomerData.
+
+    ( vt:Communication vt:TeachingActivity vt:UploadedMaterials ) list:iterate ( ?i ?dt ).
+} => {
+    ?x dtou:data ?dt.
+}.
+
+{
+    ?x a dtou:InputSpec;
+        dtou:data vt:CustomerPersonalData.
+
+    ( vt:PersonalInfo ) list:iterate ( ?i ?dt ).
+} => {
+    ?x dtou:data ?dt.
 }.
