@@ -1,0 +1,5 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dtou: <urn:dtou:core#>.
+@prefix vt: <urn:dtou:vocabulary-teacher#>.
+
+vt:UserCategory rdfs:subClassOf dtou:Category.

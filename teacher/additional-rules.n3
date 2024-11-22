@@ -1,0 +1,40 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix dtou: <urn:dtou:core#>.
+@prefix dri: <urn:dtou:internal#>.
+@prefix : <http://example.org/ns#>.
+
+{
+    ?x a dtou:InputSpec;
+        dtou:purpose ?purpose.
+
+    _:t log:notIncludes {
+        ?purpose a dtou:Expectation;
+    }.
+} => {
+    ?x dtou:purpose ?P1.
+
+    ?P1 a dtou:Expectation;
+        dtou:category dtou:PurposeCategory;
+        dtou:descriptor ?purpose.
+
+}.
+
+{
+    ?x a dtou:InputSpec;
+        dtou:downstream [
+            dtou:purpose ?purpose
+        ].
+
+    _:t log:notIncludes {
+        ?purpose a dtou:Expectation;
+    }.
+} => {
+    ?x dtou:purpose ?P1.
+
+    ?P1 a dtou:Expectation;
+        dtou:category dtou:PurposeCategory;
+        dtou:descriptor ?purpose.
+
+}.
