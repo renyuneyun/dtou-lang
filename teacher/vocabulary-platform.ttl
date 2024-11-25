@@ -4,19 +4,35 @@
 vt:AccessAccountInformationForLegalRequirements rdfs:subClassOf vt:ComplyWithLaw,
         vt:InvestigateAccount .
 
+vt:Advertiser rdfs:subClassOf vt:ContractedVendor .
+
+vt:AdvertisingPlatform rdfs:subClassOf vt:ContractedVendor .
+
+vt:AsLongAsNecessaryForPurpose rdfs:subClassOf vt:Indefinitely .
+
+vt:AssistInSecurityMaintenance rdfs:subClassOf vt:MaintainSecurityOfService .
+
+vt:Automated rdfs:subClassOf vt:ProcessingMethod .
+
 vt:ChangeAccountPassword rdfs:subClassOf vt:Purpose .
+
+vt:ChangeAccountSettings rdfs:subClassOf vt:RestrictAccount .
 
 vt:DeleteDataWithinSixMonthAfterAccountDeletion rdfs:subClassOf vt:AfterAccountDeletion,
         vt:DeleteData,
         vt:WithinSixMonth .
 
-vt:DeleteDataWithinSixMonthUponRequest rdfs:subClassOf vt:DeleteData,
+vt:DeleteDataWithinSixMonthUponRequest rdfs:subClassOf vt:DeleteDataUponRequest,
         vt:UponRequest,
         vt:WithinSixMonth .
 
-vt:DevelopNewService rdfs:subClassOf vt:ServiceProvision .
+vt:DeliverAdvertisement rdfs:subClassOf vt:ProvideAdvertisement .
 
-vt:DoCommunication rdfs:subClassOf vt:Purpose .
+vt:DeliverPushNotification rdfs:subClassOf vt:ProvideService .
+
+vt:DesignatedOtherUsers rdfs:subClassOf vt:OtherUsers .
+
+vt:DeviceOfUser rdfs:subClassOf vt:User .
 
 vt:DownloadableUponRequest rdfs:subClassOf vt:Downloadable,
         vt:UponRequest .
@@ -24,33 +40,61 @@ vt:DownloadableUponRequest rdfs:subClassOf vt:Downloadable,
 vt:EmailAddress rdfs:subClassOf vt:CustomerPersonalData,
         vt:ServiceData .
 
+vt:ExplicitlyInstructed rdfs:subClassOf vt:Purpose .
+
+vt:GovernmentAuthorities rdfs:subClassOf vt:Person .
+
 vt:ImproveReliabilityOfService rdfs:subClassOf vt:ImproveService .
+
+vt:InUK rdfs:subClassOf vt:WorldWide .
+
+vt:InUS rdfs:subClassOf vt:OutsideUK,
+        vt:WorldWide .
+
+vt:InternalTraining rdfs:subClassOf vt:ImproveService .
 
 vt:KeepSecurityMeasureRobust rdfs:subClassOf vt:ImproveSecurityOfService .
 
 vt:MaintainService rdfs:subClassOf vt:ProvideService .
 
+vt:Manual rdfs:subClassOf vt:ProcessingMethod .
+
+vt:MeasureAdvertisement rdfs:subClassOf vt:ProvideAdvertisement .
+
 vt:MeasurePerformance rdfs:subClassOf vt:Purpose .
+
+vt:Merger rdfs:subClassOf vt:CorporateTransaction .
 
 vt:Name rdfs:subClassOf vt:CustomerPersonalData,
         vt:ServiceData .
 
-vt:OptimizeService rdfs:subClassOf vt:ImproveService .
+vt:NotificationProvider rdfs:subClassOf vt:ContractedVendor .
 
-vt:ProtectPublic rdfs:subClassOf vt:Protection .
+vt:OptimiseService rdfs:subClassOf vt:ImproveService .
+
+vt:ProtectLives rdfs:subClassOf vt:ProtectPublic .
 
 vt:ProtectUsers rdfs:subClassOf vt:Protection .
 
-vt:ProtectVendor rdfs:subClassOf vt:Protection .
+vt:ProtectVendorRightsAndProperty rdfs:subClassOf vt:ProtectVendor .
 
-vt:ProvidePersonalizedService rdfs:subClassOf vt:Personalization,
-        vt:ProvideService .
+vt:ProvideCustomerServiceSupport rdfs:subClassOf vt:ProvideSupport .
 
-vt:ProvideSupport rdfs:subClassOf vt:Purpose .
+vt:ProvideRecommendation rdfs:subClassOf vt:ProvidePersonalisedService .
 
 vt:ResolveTechnicalIssue rdfs:subClassOf vt:ImproveService .
 
 vt:RestrictAccountFunctionality rdfs:subClassOf vt:RestrictAccount .
+
+vt:SaleOfAssets rdfs:subClassOf vt:CorporateTransaction .
+
+vt:SchoolAdmin rdfs:subClassOf vt:Person .
+
+vt:SellData rdfs:subClassOf vt:Purpose .
+
+vt:SendOffers rdfs:subClassOf vt:SendMarketingCommunication .
+
+vt:ServiceProvider rdfs:subClassOf vt:Person .
 
 vt:ShareToPublicWithConsent rdfs:subClassOf vt:Share .
 
@@ -58,15 +102,16 @@ vt:ShareWithPartners rdfs:subClassOf vt:Share .
 
 vt:ShareWithSchoolAdmin rdfs:subClassOf vt:Share .
 
-vt:StoreAtAnyCountry rdfs:subClassOf vt:StoreLocation .
-
-vt:StoreInUSA rdfs:subClassOf vt:StoreLocation .
-
 vt:SuspendAccountAccess rdfs:subClassOf vt:RestrictAccount .
+
+vt:TargetedAdvertisment rdfs:subClassOf vt:ProvideAdvertisement .
 
 vt:TerminateAccountAccess rdfs:subClassOf vt:RestrictAccount .
 
-vt:UnderUSALaw rdfs:subClassOf vt:UnderLaw .
+vt:TrainAIModel rdfs:subClassOf vt:ImproveAndDevelopService,
+        vt:Purpose .
+
+vt:UnderUSLaw rdfs:subClassOf vt:UnderLaw .
 
 vt:ViewAccountActivity rdfs:subClassOf vt:InvestigateAccount .
 
@@ -74,39 +119,87 @@ vt:ViewAccountInformation rdfs:subClassOf vt:InvestigateAccount .
 
 vt:ViewAccountStatistics rdfs:subClassOf vt:InvestigateAccount .
 
+vt:WithinSixMonths rdfs:subClassOf vt:WithinOneYear .
+
 vt:AfterAccountDeletion rdfs:subClassOf vt:AtTriggerCondition .
 
 vt:ComplyWithLaw rdfs:subClassOf vt:Purpose .
 
 vt:CustomerData rdfs:subClassOf vt:Data .
 
-vt:Downloadable rdfs:subClassOf vt:StorageDeletion .
+vt:DeleteDataUponRequest rdfs:subClassOf vt:DeleteData .
 
-vt:ImproveSecurityOfService rdfs:subClassOf vt:ImproveService .
+vt:DevelopNewService rdfs:subClassOf vt:ServiceProvision .
 
-vt:Personalization rdfs:subClassOf vt:Purpose .
+vt:DoCommunication rdfs:subClassOf vt:Purpose .
+
+vt:Downloadable rdfs:subClassOf vt:StorageRetentionDeletion .
+
+vt:FiveYearsOrMore rdfs:subClassOf vt:Indefinitely .
+
+vt:ImproveAndDevelopService rdfs:subClassOf vt:DevelopNewService,
+        vt:ImproveService .
+
+vt:ImproveSecurityOfService rdfs:subClassOf vt:MaintainSecurityOfService .
+
+vt:OtherUsers rdfs:subClassOf vt:Person .
+
+vt:OutsideUK rdfs:subClassOf vt:WorldWide .
+
+vt:Personalisation rdfs:subClassOf vt:Purpose .
+
+vt:ProtectPublic rdfs:subClassOf vt:Protection .
+
+vt:ProtectVendor rdfs:subClassOf vt:Protection .
+
+vt:ProvidePersonalisedService rdfs:subClassOf vt:Personalisation,
+        vt:ProvideService .
+
+vt:ProvideSupport rdfs:subClassOf vt:DoCommunication .
+
+vt:RetentionPeriod rdfs:subClassOf vt:StorageRetentionDeletion .
+
+vt:SendMarketingCommunication rdfs:subClassOf vt:ProvideAdvertisement .
+
+vt:StorageLocation rdfs:subClassOf vt:StorageRetentionDeletion .
+
+vt:User rdfs:subClassOf vt:Person .
+
+vt:WithinOneYear rdfs:subClassOf vt:WithinThreeYears .
+
+vt:WithinThreeYears rdfs:subClassOf vt:FiveYearsOrMore .
+
+vt:CorporateTransaction rdfs:subClassOf vt:Purpose .
 
 vt:CustomerPersonalData rdfs:subClassOf vt:CustomerData .
 
-vt:DeleteData rdfs:subClassOf vt:StorageDeletion .
+vt:DeleteData rdfs:subClassOf vt:StorageRetentionDeletion .
 
-vt:ProvideService rdfs:subClassOf vt:ServiceProvision .
+vt:Indefinitely rdfs:subClassOf vt:RetentionPeriod .
+
+vt:MaintainSecurityOfService rdfs:subClassOf vt:ImproveService .
 
 vt:ServiceData rdfs:subClassOf vt:Data .
-
-vt:StoreLocation rdfs:subClassOf vt:StorageDeletion .
 
 vt:UponRequest rdfs:subClassOf vt:AtTriggerCondition .
 
 vt:WithinSixMonth rdfs:subClassOf vt:Time .
 
+vt:ContractedVendor rdfs:subClassOf vt:Person .
+
 vt:Protection rdfs:subClassOf vt:Purpose .
 
-vt:RestrictAccount rdfs:subClassOf vt:Purpose .
+vt:ProvideService rdfs:subClassOf vt:ServiceProvision .
 
 vt:ServiceProvision rdfs:subClassOf vt:Purpose .
 
-vt:ImproveService rdfs:subClassOf vt:ServiceProvision .
+vt:WorldWide rdfs:subClassOf vt:StorageLocation .
 
 vt:InvestigateAccount rdfs:subClassOf vt:Purpose .
+
+vt:ProvideAdvertisement rdfs:subClassOf vt:Purpose .
+
+vt:RestrictAccount rdfs:subClassOf vt:Purpose .
+
+vt:ImproveService rdfs:subClassOf vt:ServiceProvision .
 

@@ -49,6 +49,7 @@
 # To handle different data types
 ###
 
+# Google
 {
     ?x a dtou:InputSpec;
         dtou:data vt:CustomerData.
@@ -58,11 +59,32 @@
     ?x dtou:data ?dt.
 }.
 
+# Google
 {
     ?x a dtou:InputSpec;
         dtou:data vt:CustomerPersonalData.
 
     ( vt:PersonalInfo ) list:iterate ( ?i ?dt ).
+} => {
+    ?x dtou:data ?dt.
+}.
+
+# Microsoft
+{
+    ?x a dtou:InputSpec;
+        dtou:data vt:Data.
+
+    ( vt:Communication vt:PersonalInfo vt:ServiceData vt:TeachingActivity vt:UploadedMaterials ) list:iterate ( ?i ?dt ).
+} => {
+    ?x dtou:data ?dt.
+}.
+
+# Microsoft
+{
+    ?x a dtou:InputSpec;
+        dtou:data vt:PersonalData.
+
+    ( vt:Communication vt:PersonalInfo vt:UploadedMaterials ) list:iterate ( ?i ?dt ).
 } => {
     ?x dtou:data ?dt.
 }.
